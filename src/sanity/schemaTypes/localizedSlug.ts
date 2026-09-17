@@ -1,26 +1,23 @@
 import { defineField, defineType } from "sanity";
 import { i18n } from "@/i18n.config";
 
+/**
+ * Slug stored as slug.<lang>.current (the webhook, IndexNow and the loaders
+ * read slug[language]). Only the field of the document's own language is shown.
+ */
 export default defineType({
   name: "localizedSlug",
   title: "Localized Slug",
   type: "object",
-  fieldsets: [
-    {
-      title: "Translations",
-      name: "translations",
-      options: { collapsible: true, collapsed: false },
-    },
-  ],
   fields: i18n.languages.map((lang) =>
     defineField({
       name: lang.id,
-      title: lang.title,
+      title: `Slug (${lang.title})`,
       type: "slug",
-      fieldset: lang.isDefault ? undefined : "translations",
+      hidden: ({ document }) => Boolean(document?.language) && document?.language !== lang.id,
       options: {
-        source: "title",
+        source: (doc: Record<string, unknown>) => String(doc.title ?? doc.cardTitle ?? doc.label ?? doc.h1 ?? ""),
       },
-    })
+    }),
   ),
 });

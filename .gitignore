@@ -42,5 +42,11 @@ next-env.d.ts
 __pycache__/
 *.pyc
 
+# raw DataForSEO responses (CSV and .md in research/ are committed)
+/research/keywords/raw/
+
 # files queued for manual deletion
 /_to_delete
+
+# Sanity dataset exports
+/backups/

@@ -676,6 +676,9 @@
     font-size: 14.5px;
     font-weight: 500;
     line-height: 1.3;
+    // Long PL/RU words must not leave the narrow card.
+    hyphens: auto;
+    overflow-wrap: break-word;
   }
 
   em {

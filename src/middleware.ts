@@ -1,7 +1,10 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 
 import { defaultLocale, locales } from "@/i18n.config";
+import { intlPathnames } from "@/lib/routing";
+
+const pathnames = intlPathnames();
 
 export default async function middleware(request: NextRequest) {
   const handleI18nRouting = createIntlMiddleware({
@@ -10,9 +13,17 @@ export default async function middleware(request: NextRequest) {
     localePrefix: "as-needed",
     localeDetection: false,
     alternateLinks: false,
+    // Localised section segments: /pl/uslugi → app/[lang]/services; /pl/services → redirect to /pl/uslugi.
+    pathnames,
   });
 
-  return handleI18nRouting(request);
+  const response = handleI18nRouting(request);
+  // next-intl redirects with 307; these URL moves are permanent.
+  const location = response.headers.get("location");
+  if (response.status === 307 && location) {
+    return NextResponse.redirect(location, 308);
+  }
+  return response;
 }
 
 export const config = {

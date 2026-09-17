@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { getContent, localeParams, pageMetadata } from "@/content";
-import { PostCard, SectionHead } from "@/app/components/site/Blocks";
+import { getContent, latestPosts, localeParams, pageMetadata } from "@/content";
+import { FaqSection, PostCard, SectionHead } from "@/app/components/site/Blocks";
 import DataSheet, { type SheetColumn, type SheetRow } from "@/app/components/site/DataSheet";
 import { EmailSignup } from "@/app/components/site/Forms";
 import s from "../pages.module.scss";
@@ -8,7 +8,7 @@ import s from "../pages.module.scss";
 export const generateStaticParams = localeParams;
 
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
-  return pageMetadata(params.lang, getContent(params.lang).templates.seo, () => "/free-templates");
+  return pageMetadata(params.lang, (await getContent(params.lang)).templates.seo, () => "/free-templates");
 }
 
 /** Preview of the open-to-buy sheet (placeholder figures). */
@@ -42,9 +42,9 @@ const OTB_ROWS: SheetRow[] = [
   { cells: ["M3", 455, 402, 88, 53], trend: "down" },
 ];
 
-export default function FreeTemplatesPage({ params }: { params: { lang: string } }) {
+export default async function FreeTemplatesPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  const c = getContent(lang);
+  const c = await getContent(lang);
   const p = c.templates;
 
   return (
@@ -115,11 +115,12 @@ export default function FreeTemplatesPage({ params }: { params: { lang: string }
       <section className="container section">
         <SectionHead title={p.relatedTitle} />
         <div className="grid-3">
-          {c.posts.slice(0, 3).map((post, i) => (
-            <PostCard key={post.slug} lang={lang} post={post} index={i} />
+          {latestPosts(c, 3).map((post, i) => (
+            <PostCard key={post.key} lang={lang} post={post} index={i} />
           ))}
         </div>
       </section>
+      {p.faq && p.faq.length > 0 && <FaqSection title={p.faqTitle ?? p.h1} items={p.faq} />}
     </>
   );
 }

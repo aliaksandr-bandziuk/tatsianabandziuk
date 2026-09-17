@@ -1,0 +1,45 @@
+# EN seeds · market: United Kingdom (main), United States (volumes and ideas) · language: en
+# assortment / range / merchandise planning
+assortment planning
+assortment planning retail
+range planning fashion
+range planning retail
+merchandise planning
+merchandise planning retail
+assortment planning consultant
+# open-to-buy and planning in Excel
+open to buy
+open to buy retail
+otb planning
+open to buy template excel
+buy plan template
+retail planning excel template
+# sell-through, size curves, stock
+sell through rate
+sell through rate formula
+size curve retail
+weeks of cover retail
+# pricing and markdown
+retail pricing strategy
+price architecture retail
+retail pricing analysis
+markdown strategy retail
+markdown optimization
+# Power BI and KPI reporting
+power bi retail dashboard
+retail kpi dashboard
+power bi for retail
+dax sell through
+# product data / PLM / PIM
+product data management
+product information management fashion
+plm fashion
+product data quality
+product attribute standardization
+# consulting and roles
+retail analytics consultant
+retail analytics consulting
+fashion retail analytics
+fashion analytics consultant
+freelance retail analyst
+merchandise planning consultant

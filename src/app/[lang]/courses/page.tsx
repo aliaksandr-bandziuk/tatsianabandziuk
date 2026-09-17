@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getContent, localeParams, localizeHref, pageMetadata } from "@/content";
-import { NumberedList } from "@/app/components/site/Blocks";
+import { FaqSection, NumberedList } from "@/app/components/site/Blocks";
 import { EmailSignup } from "@/app/components/site/Forms";
 import s from "../pages.module.scss";
 
 export const generateStaticParams = localeParams;
 
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
-  return pageMetadata(params.lang, getContent(params.lang).courses.seo, () => "/courses");
+  return pageMetadata(params.lang, (await getContent(params.lang)).courses.seo, () => "/courses");
 }
 
-export default function CoursesPage({ params }: { params: { lang: string } }) {
+export default async function CoursesPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  const c = getContent(lang);
+  const c = await getContent(lang);
   const p = c.courses;
 
   return (
@@ -60,6 +60,7 @@ export default function CoursesPage({ params }: { params: { lang: string } }) {
           </p>
         </div>
       </section>
+      {p.faq && p.faq.length > 0 && <FaqSection title={p.faqTitle ?? p.h1} items={p.faq} />}
     </>
   );
 }

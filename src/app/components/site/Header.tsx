@@ -1,16 +1,20 @@
 import Link from "next/link";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
-import { getContent, localizeHref } from "@/content";
-import { DesktopNav, LangSwitch, MobileMenu } from "./HeaderClient";
+import { calculatorHref, getContent, languageAliases, localizeHref, serviceHref } from "@/content";
+import { DesktopNav, LangSwitch, MobileMenu, type NavEntry } from "./HeaderClient";
 import s from "./header.module.scss";
 
-export default function Header({ lang }: { lang: string }) {
-  const c = getContent(lang);
-  const privacySlugs = {
-    en: getContent("en").privacy.slug,
-    pl: getContent("pl").privacy.slug,
-    ru: getContent("ru").privacy.slug,
+export default async function Header({ lang }: { lang: string }) {
+  const c = await getContent(lang);
+  const aliases = await languageAliases();
+
+  // Sections whose pages open as a submenu under their nav item.
+  const submenus: Record<string, NavEntry["children"]> = {
+    "/services": c.services.map((x) => ({ label: x.breadcrumb, href: serviceHref(lang, x.slug) })),
+    "/tools": c.calculators.map((x) => ({ label: x.breadcrumb, href: calculatorHref(lang, x.slug) })),
   };
+  const nav: NavEntry[] = c.ui.nav.map((item) => (submenus[item.href]?.length ? { ...item, children: submenus[item.href] } : item));
+
   const cta = { label: c.ui.bookConsultation, href: `${localizeHref(lang, "/contact")}#enquiry` };
   return (
     <header className={s.header}>
@@ -19,17 +23,16 @@ export default function Header({ lang }: { lang: string }) {
           <span className={s.brandName}>{c.person.name}</span>
           <span className={s.brandTag}>{c.ui.tagline}</span>
         </Link>
-        <DesktopNav lang={lang} nav={c.ui.nav} />
+        <DesktopNav lang={lang} nav={nav} />
         <div className={s.actions}>
-          <LangSwitch lang={lang} privacySlugs={privacySlugs} label={c.ui.switchLanguage} />
+          <LangSwitch lang={lang} aliases={aliases} label={c.ui.switchLanguage} />
           <ConsultationButton href={cta.href} className={`btn btn-sm ${s.cta}`}>
             {cta.label}
           </ConsultationButton>
           <MobileMenu
             lang={lang}
-            nav={c.ui.nav}
+            nav={nav}
             cta={cta}
-            privacySlugs={privacySlugs}
             labels={{ menu: c.ui.menu, close: c.ui.close, language: c.ui.switchLanguage }}
           />
         </div>

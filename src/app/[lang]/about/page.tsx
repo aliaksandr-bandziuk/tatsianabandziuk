@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getContent, localeParams, pageMetadata } from "@/content";
-import { Accent, CtaPanel, FactPanel, NumberedList, Photo, RecommendationWide, Timeline } from "@/app/components/site/Blocks";
+import { Accent, CtaPanel, FactPanel, FaqSection, NumberedList, Photo, RecommendationWide, Timeline, accentText } from "@/app/components/site/Blocks";
+import CredentialsGallery from "@/app/components/site/CredentialsGallery";
 import JsonLd from "@/app/components/site/JsonLd";
 import { PERSON_ID } from "@/lib/schema/identity";
 import { SITE_URL } from "@/lib/site";
@@ -10,12 +11,12 @@ import s from "../pages.module.scss";
 export const generateStaticParams = localeParams;
 
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
-  return pageMetadata(params.lang, getContent(params.lang).about.seo, () => "/about");
+  return pageMetadata(params.lang, (await getContent(params.lang)).about.seo, () => "/about");
 }
 
-export default function AboutPage({ params }: { params: { lang: string } }) {
+export default async function AboutPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  const c = getContent(lang);
+  const c = await getContent(lang);
   const a = c.about;
   const url = `${SITE_URL}${localizeHref(lang, "/about")}`;
   const schema = {
@@ -26,7 +27,17 @@ export default function AboutPage({ params }: { params: { lang: string } }) {
     name: a.seo.title,
     description: a.seo.description,
     inLanguage: lang,
-    mainEntity: { "@id": PERSON_ID },
+    mainEntity: {
+      "@id": PERSON_ID,
+      hasCredential: a.credentials.items.map((it) => ({
+        "@type": "EducationalOccupationalCredential",
+        name: it.title,
+        dateCreated: it.year.match(/\d{4}/g)?.pop(),
+        credentialCategory: it.id.startsWith("bseu") ? "degree" : "certificate",
+        recognizedBy: { "@type": "EducationalOrganization", name: it.institution },
+        image: `${SITE_URL}${it.image}`,
+      })),
+    },
   };
 
   return (
@@ -114,7 +125,18 @@ export default function AboutPage({ params }: { params: { lang: string } }) {
         </div>
       </section>
 
+      <section className={`section ${s.credSection}`} aria-labelledby="credentials-title">
+        <div className={`container ${s.credHead}`} data-reveal>
+          <h2 id="credentials-title" className="h2">
+            {a.credentials.title}
+          </h2>
+          <p className="body-lg">{a.credentials.intro}</p>
+        </div>
+        <CredentialsGallery data={a.credentials} />
+      </section>
+
       <RecommendationWide title={a.recommendationTitle} note={c.ui.recommendationPlaceholder} item={a.recommendation} />
+      {a.faq && a.faq.length > 0 && <FaqSection title={a.faqTitle ?? accentText(a.h1)} items={a.faq} />}
       <CtaPanel lang={lang} title={a.ctaTitle} text={a.ctaText} note={a.ctaNote} signature={c.person.signature} />
     </>
   );

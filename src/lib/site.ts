@@ -24,4 +24,18 @@ export const ROUTES = {
   caseStudy: "case-studies",
   post: "blog",
   category: "blog/category",
+  calculator: "tools",
+} as const;
+
+/**
+ * Search indexing switch. The site stays closed (robots.txt disallow, noindex
+ * meta, X-Robots-Tag header, no IndexNow pings) until SITE_INDEXING=on is set
+ * in the environment — so a fresh Vercel deploy or preview is never indexed.
+ */
+export const INDEXING_ALLOWED = process.env.SITE_INDEXING === "on";
+
+export const NOINDEX_ROBOTS = {
+  index: false,
+  follow: false,
+  googleBot: { index: false, follow: false, noimageindex: true },
 } as const;

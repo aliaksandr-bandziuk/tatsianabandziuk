@@ -16,6 +16,12 @@ const nextConfig = {
     ],
   },
 
+  // Closed to search engines until SITE_INDEXING=on (see src/lib/site.ts).
+  async headers() {
+    if (process.env.SITE_INDEXING === "on") return [];
+    return [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noimageindex" }] }];
+  },
+
   async redirects() {
     return STATIC_REDIRECTS;
   },

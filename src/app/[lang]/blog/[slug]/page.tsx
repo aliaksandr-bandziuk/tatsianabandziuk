@@ -1,39 +1,60 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { categoryHref, dateLabel, getContent, localizeHref, pageMetadata, postHref } from "@/content";
-import { Accent, Breadcrumbs, PostCard, accentText } from "@/app/components/site/Blocks";
+import { bySlug, categoryByKey, categoryHref, dateLabel, getContent, itemMetadata, latestPosts, localizeHref, postHref, slugParams } from "@/content";
+import type { ArticleBlock } from "@/content/types";
+import { Accent, Breadcrumbs, FaqSection, accentText } from "@/app/components/site/Blocks";
+import { RelatedCalculators, RelatedPosts } from "@/app/components/site/Related";
 import { ArticleAside, ArticleBody, articleStyles as a } from "@/app/components/site/Article";
 import JsonLd from "@/app/components/site/JsonLd";
 import { PERSON_ID } from "@/lib/schema/identity";
-import { LOCALES, SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
 import s from "../../pages.module.scss";
 
 type Params = { lang: string; slug: string };
 
-
-export function generateStaticParams() {
-  return LOCALES.flatMap((lang) => getContent(lang).posts.map((p) => ({ lang, slug: p.slug })));
-}
-
-function find(params: Params) {
-  return getContent(params.lang).posts.find((p) => p.slug === params.slug);
+export async function generateStaticParams() {
+  return slugParams("post");
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const post = find(params);
+  const post = bySlug("post", await getContent(params.lang), params.slug);
   if (!post) return {};
-  const meta = pageMetadata(params.lang, post.seo, () => `/blog/${post.slug}`, { type: "article" });
-  return { ...meta, openGraph: { ...meta.openGraph, type: "article", publishedTime: post.date, authors: [getContent(params.lang).person.name] } };
+  const meta = await itemMetadata("post", params.lang, post, { type: "article" });
+  return { ...meta, openGraph: { ...meta.openGraph, type: "article", publishedTime: post.date, authors: [(await getContent(params.lang)).person.name] } };
 }
 
-export default function PostPage({ params }: { params: Params }) {
+type VideoBlock = Extract<ArticleBlock, { type: "video" }>;
+
+function videoSchema(v: VideoBlock, lang: string) {
+  return {
+    "@type": "VideoObject",
+    name: v.title,
+    description: v.description,
+    uploadDate: v.uploadDate,
+    ...(v.duration ? { duration: v.duration } : {}),
+    thumbnailUrl: `https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`,
+    embedUrl: `https://www.youtube-nocookie.com/embed/${v.youtubeId}`,
+    contentUrl: `https://www.youtube.com/watch?v=${v.youtubeId}`,
+    inLanguage: lang,
+    ...(v.transcript?.length ? { transcript: v.transcript.join(" ") } : {}),
+  };
+}
+
+export default async function PostPage({ params }: { params: Params }) {
   const { lang } = params;
-  const c = getContent(lang);
-  const post = find(params);
+  const c = await getContent(lang);
+  const post = bySlug("post", c, params.slug);
   if (!post) notFound();
-  const cat = c.categories.find((x) => x.slug === post.category);
-  const related = c.posts.filter((p) => p.slug !== post.slug).sort((x, y) => Number(y.category === post.category) - Number(x.category === post.category)).slice(0, 3);
+  const cat = categoryByKey(c, post.category);
+  // Same category first, then finished articles, then newest.
+  const related = latestPosts(c, c.posts.length, post.key)
+    .sort((x, y) => Number(y.category === post.category) - Number(x.category === post.category))
+    .slice(0, 3);
   const url = `${SITE_URL}${postHref(lang, post.slug)}`;
+  const videos = post.body.filter((b): b is VideoBlock => b.type === "video");
+  // Calculators of the same service, except the ones already embedded in the text.
+  const embedded = new Set(post.body.flatMap((b) => (b.type === "calculator" ? [b.kind] : [])));
+  const calculators = c.calculators.filter((x) => x.serviceKey === post.serviceKey && !embedded.has(x.kind));
 
   const schema = {
     "@context": "https://schema.org",
@@ -50,6 +71,7 @@ export default function PostPage({ params }: { params: Params }) {
     publisher: { "@id": PERSON_ID },
     articleSection: cat?.label,
     isPartOf: { "@id": `${SITE_URL}${localizeHref(lang, "/blog")}#blog` },
+    ...(videos.length ? { video: videos.map((v) => videoSchema(v, lang)) } : {}),
   };
 
   return (
@@ -88,16 +110,9 @@ export default function PostPage({ params }: { params: Params }) {
         </article>
         <ArticleAside lang={lang} post={post} />
       </section>
-      <section className="container section">
-        <h2 className="h2-sm" style={{ marginBottom: 26 }} data-reveal>
-          {c.ui.relatedArticles}
-        </h2>
-        <div className="grid-3">
-          {related.map((p, i) => (
-            <PostCard key={p.slug} lang={lang} post={p} withCover={false} index={i} />
-          ))}
-        </div>
-      </section>
+      {post.faq && post.faq.length > 0 && <FaqSection title={post.faqTitle ?? accentText(post.h1)} items={post.faq} />}
+      <RelatedCalculators lang={lang} items={calculators} />
+      <RelatedPosts lang={lang} posts={related} />
     </>
   );
 }

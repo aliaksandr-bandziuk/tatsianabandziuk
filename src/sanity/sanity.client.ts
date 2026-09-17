@@ -30,13 +30,13 @@ export const SANITY_CACHE_TAG = "sanity";
  * a few seconds of staleness right after a publish, exactly when the webhook
  * triggers regeneration, and freeze the old content for a day.
  */
-const sanityClient = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: false,
-  token,
-});
+// Created on first use, so a missing project id surfaces as a failed fetch
+// (the content loader then falls back) instead of crashing every import.
+let sanityClient: ReturnType<typeof createClient> | undefined;
+function getClient() {
+  sanityClient ??= createClient({ projectId, dataset, apiVersion, useCdn: false, token });
+  return sanityClient;
+}
 
 type NextFetchOptions = { revalidate?: number | false; tags?: string[] };
 type SanityFetchOptions = {
@@ -68,11 +68,11 @@ function withSanityCache(options: SanityFetchOptions = {}): SanityFetchOptions {
 
 export const client = {
   fetch<R = any>(query: string, params: QueryParams = {}, options: SanityFetchOptions = {}): Promise<R> {
-    return sanityClient.fetch<R>(query, params, withSanityCache(options) as never);
+    return getClient().fetch<R>(query, params, withSanityCache(options) as never);
   },
 };
 
-const builder = ImageUrlBuilder(sanityClient);
+const builder = ImageUrlBuilder({ projectId, dataset });
 
 export function urlFor(source: any) {
   return builder.image(source);

@@ -3,8 +3,10 @@ import DataSheet from "./DataSheet";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
 import type { ReactNode } from "react";
 import type { ArticleBlock, Post } from "@/content/types";
-import { getContent, localizeHref, serviceHref } from "@/content";
+import { calculatorByKind, calculatorHref, getContent, localizeHref, serviceByKey, serviceHref } from "@/content";
 import { ArticleCurve } from "./Charts";
+import Calculator from "./Calculator";
+import VideoEmbed from "./VideoEmbed";
 import s from "./article.module.scss";
 
 const DAX_FUNCTIONS = /\b(SUMX?|CALCULATE|REMOVEFILTERS|DIVIDE|FILTER|ALL|VALUES|AVERAGEX?|COUNTROWS|SELECTEDVALUE|DATESYTD|TOTALYTD|SAMEPERIODLASTYEAR|VAR|RETURN)\b/g;
@@ -23,7 +25,10 @@ function highlight(code: string): ReactNode[] {
   return out;
 }
 
-export function ArticleBody({ blocks, lang = "en" }: { blocks: ArticleBlock[]; lang?: string }) {
+/** `standalone`: rendered on the calculator page itself, so no link to it. */
+export async function ArticleBody({ blocks, lang = "en", standalone = false }: { blocks: ArticleBlock[]; lang?: string; standalone?: boolean }) {
+  const c = await getContent(lang);
+  const ui = c.ui;
   return (
     <div className={s.body}>
       {blocks.map((b, i) => {
@@ -78,16 +83,42 @@ export function ArticleBody({ blocks, lang = "en" }: { blocks: ArticleBlock[]; l
                 ))}
               </ul>
             );
+          case "calculator": {
+            const page = standalone ? undefined : calculatorByKind(c, b.kind);
+            return (
+              <div key={i}>
+                <Calculator kind={b.kind} title={b.title} labels={b.labels} note={b.note} hint={ui.calculatorHint} lang={lang} />
+                {page && (
+                  <p style={{ margin: "-14px 0 26px" }}>
+                    <Link className="link" href={calculatorHref(lang, page.slug)}>
+                      {ui.calculatorMore}
+                    </Link>
+                  </p>
+                )}
+              </div>
+            );
+          }
+          case "video":
+            return (
+              <VideoEmbed
+                key={i}
+                youtubeId={b.youtubeId}
+                title={b.title}
+                transcript={b.transcript}
+                playLabel={ui.video.play}
+                transcriptLabel={ui.video.transcript}
+              />
+            );
         }
       })}
     </div>
   );
 }
 
-export function ArticleAside({ lang, post }: { lang: string; post: Post }) {
-  const c = getContent(lang);
+export async function ArticleAside({ lang, post }: { lang: string; post: Post }) {
+  const c = await getContent(lang);
   const headings = post.body.filter((b): b is Extract<ArticleBlock, { type: "h2" }> => b.type === "h2");
-  const service = c.services.find((sv) => sv.slug === post.serviceSlug);
+  const service = serviceByKey(c, post.serviceKey);
   return (
     <aside className={s.aside}>
       {headings.length > 1 && (

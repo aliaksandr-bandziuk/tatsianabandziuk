@@ -3,6 +3,7 @@ import StatusBar from "@/app/components/site/StatusBar";
 import SmoothScroll from "@/app/components/site/SmoothScroll";
 import PageLoader from "@/app/components/site/PageLoader";
 import { getContent, localizeHref } from "@/content";
+import type { SiteContent } from "@/content/types";
 import { ConsultationModalProvider } from "@/app/components/site/ConsultationModal";
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
@@ -14,7 +15,7 @@ import SchemaIdentity from "../components/seo/SchemaIdentity/SchemaIdentity";
 import Header from "../components/site/Header";
 import Footer from "../components/site/Footer";
 import Reveal from "../components/site/Reveal";
-import { LOCALES, SITE_NAME, SITE_URL, isLocale } from "@/lib/site";
+import { INDEXING_ALLOWED, LOCALES, NOINDEX_ROBOTS, SITE_NAME, SITE_URL, isLocale } from "@/lib/site";
 
 // Every font carries Cyrillic and Polish diacritics: the site is EN / PL / RU.
 const fontHeading = Playfair_Display({
@@ -72,6 +73,7 @@ export const metadata: Metadata = {
   },
   description:
     "Assortment planning, retail pricing analysis and Power BI reporting for fashion and retail brands. Consultant based in Warsaw, working in English, Polish and Russian.",
+  robots: INDEXING_ALLOWED ? undefined : NOINDEX_ROBOTS,
 };
 
 export const viewport: Viewport = {
@@ -80,13 +82,12 @@ export const viewport: Viewport = {
 };
 
 const MODAL_TEXT: Record<string, { title: string; text: string }> = {
-  en: { title: "Book a Retail Analytics Consultation", text: "Describe the task in a few lines. I reply within two working days with the first questions about your data." },
-  pl: { title: "Umów konsultację z analityki handlu detalicznego", text: "Opisz zadanie w kilku zdaniach. Odpowiem w ciągu dwóch dni roboczych z pierwszymi pytaniami o Twoje dane." },
-  ru: { title: "Запись на консультацию по аналитике ритейла", text: "Опишите задачу в нескольких строках. Отвечу в течение двух рабочих дней и задам первые вопросы о ваших данных." },
+  en: { title: "Book a Retail Analytics Consultation", text: "Describe the task in a few lines. I reply within one working day with the first questions about your data." },
+  pl: { title: "Umów konsultację z analityki handlu detalicznego", text: "Opisz zadanie w kilku zdaniach. Odpowiem w ciągu jednego dnia roboczego z pierwszymi pytaniami o Twoje dane." },
+  ru: { title: "Запись на консультацию по аналитике ритейла", text: "Опишите задачу в нескольких строках. Отвечу в течение одного рабочего дня и задам первые вопросы о ваших данных." },
 };
 
-function modalProps(lang: string) {
-  const c = getContent(lang);
+function modalProps(lang: string, c: SiteContent) {
   const m = MODAL_TEXT[lang] ?? MODAL_TEXT.en;
   return {
     title: m.title,
@@ -110,7 +111,7 @@ function modalProps(lang: string) {
   };
 }
 
-export default function LangLayout({
+export default async function LangLayout({
   children,
   params,
 }: {
@@ -118,6 +119,7 @@ export default function LangLayout({
   params: { lang: string };
 }) {
   if (!isLocale(params.lang)) notFound();
+  const c = await getContent(params.lang);
 
   return (
     <html lang={params.lang}>
@@ -130,16 +132,16 @@ export default function LangLayout({
         <a className="skip-link" href="#main">
           {{ en: "Skip to content", pl: "Przejdź do treści", ru: "К содержанию" }[params.lang]}
         </a>
-        <ConsultationModalProvider {...modalProps(params.lang)}>
+        <ConsultationModalProvider {...modalProps(params.lang, c)}>
           <Header lang={params.lang} />
           <main id="main">{children}</main>
           <Footer lang={params.lang} />
         </ConsultationModalProvider>
         <Reveal />
         <SmoothScroll />
-        <StatusBar lang={params.lang} labels={getContent(params.lang).ui.statusBar} />
+        <StatusBar lang={params.lang} labels={c.ui.statusBar} />
         <PageLoader
-          signature={getContent(params.lang).person.name}
+          signature={c.person.name}
           label={{ en: "Loading page…", pl: "Ładowanie strony…", ru: "Загрузка страницы…" }[params.lang] ?? "Loading page…"}
         />
 

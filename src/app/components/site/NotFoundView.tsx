@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { NotFoundContent } from "@/content/types";
 import { NotFoundChart } from "./Charts";
+import { localizePath } from "@/lib/routing";
 import s from "@/app/[lang]/pages.module.scss";
 
 type Entry = NotFoundContent & { home: string };
@@ -40,7 +41,7 @@ export default function NotFoundView({ byLang }: { byLang: Record<string, Entry>
         </h2>
         <nav className={s.linkCards}>
           {n.links.map((l) => (
-            <Link key={l.href} href={`${prefix}${l.href}`}>
+            <Link key={l.href} href={`${prefix}${localizePath(lang, l.href)}`}>
               <strong>{l.title}</strong>
               <span>{l.text}</span>
             </Link>

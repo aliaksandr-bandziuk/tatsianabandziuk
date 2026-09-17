@@ -4,18 +4,33 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { LinkItem } from "@/content/types";
+import type { LanguageAlias } from "@/content";
+import { localizePath } from "@/lib/routing";
 import { ConsultationButton } from "./ConsultationModal";
+import { useNavDropdown } from "./useNavDropdown";
 import s from "./header.module.scss";
+
+/** Main navigation item: `href` is an internal path, `children[].href` a ready public URL. */
+export type NavEntry = LinkItem & { children?: LinkItem[] };
 
 type Props = {
   lang: string;
-  nav: LinkItem[];
+  nav: NavEntry[];
   cta: { label: string; href: string };
   labels: { menu: string; close: string; language: string };
-  privacySlugs: Record<string, string>;
 };
 
 const LANGS = ["en", "pl", "ru"] as const;
+
+const SUBMENU_LABEL: Record<string, (label: string) => string> = {
+  en: (l) => `Open the ${l} submenu`,
+  pl: (l) => `Otwórz podmenu: ${l}`,
+  ru: (l) => `Открыть подменю «${l}»`,
+};
+const submenuLabel = (lang: string, label: string) => (SUBMENU_LABEL[lang] ?? SUBMENU_LABEL.en)(label);
+
+// React 18 has no `inert` prop type and renders it only as a string.
+const INERT = { inert: "" } as object;
 
 /** Path without the locale prefix: "/pl/services" → "/services". */
 function stripLocale(pathname: string): string {
@@ -24,12 +39,18 @@ function stripLocale(pathname: string): string {
   return rest || "/";
 }
 
-function withLocale(lang: string, path: string): string {
+/** Public path (no prefix) → URL with prefix. */
+function withPrefix(lang: string, path: string): string {
   if (lang === "en") return path;
   return path === "/" ? `/${lang}` : `/${lang}${path}`;
 }
 
-export function LangSwitch({ lang, privacySlugs, label }: { lang: string; privacySlugs: Record<string, string>; label: string }) {
+/** Internal path → public URL with localised segments. */
+function withLocale(lang: string, path: string): string {
+  return withPrefix(lang, path === "/" ? path : localizePath(lang, path));
+}
+
+export function LangSwitch({ lang, aliases, label }: { lang: string; aliases: LanguageAlias[]; label: string }) {
   const pathname = usePathname() ?? "/";
   const rest = stripLocale(pathname);
   const [open, setOpen] = useState(false);
@@ -61,11 +82,12 @@ export function LangSwitch({ lang, privacySlugs, label }: { lang: string; privac
       {/* The list stays in the server HTML (hidden with CSS) so crawlers see links to the other languages. */}
       <ul className={s.langList} data-open={open}>
         {LANGS.filter((l) => l !== lang).map((l) => {
-          // Legal pages have a translated slug; everything else keeps its path.
-          const target = rest === `/${privacySlugs[lang]}` ? `/${privacySlugs[l]}` : rest;
+          // Pages with translated slugs map through the aliases; fixed pages keep their path.
+          const alias = aliases.find((a) => a.paths[lang as keyof LanguageAlias['paths']] === rest);
+          const target = alias ? alias.paths[l] ?? alias.fallback[l] : rest;
           return (
             <li key={l}>
-              <Link href={withLocale(l, target)} hrefLang={l} lang={l} prefetch={false} onClick={() => setOpen(false)}>
+              <Link href={withPrefix(l, target)} hrefLang={l} lang={l} prefetch={false} onClick={() => setOpen(false)}>
                 {l}
               </Link>
             </li>
@@ -81,24 +103,92 @@ function isActive(pathname: string, lang: string, href: string) {
   return pathname === full || pathname.startsWith(`${full}/`);
 }
 
-export function DesktopNav({ lang, nav }: { lang: string; nav: LinkItem[] }) {
+/**
+ * A top-level item with a submenu: the label stays a real link to the section,
+ * the chevron is a separate button that opens the panel (hover opens it too).
+ * The panel is always in the HTML, so crawlers see every link.
+ */
+function NavItemWithSubmenu({ lang, item, active, isOpen, onOpenChange }: { lang: string; item: NavEntry; active: boolean; isOpen: boolean; onOpenChange: (open: boolean) => void }) {
   const pathname = usePathname() ?? "/";
+  const d = useNavDropdown(isOpen, onOpenChange);
   return (
-    <nav className={s.nav} aria-label="Main">
-      {nav.map((item) => (
-        <Link key={item.href} href={withLocale(lang, item.href)} aria-current={isActive(pathname, lang, item.href) ? "page" : undefined}>
+    <div
+      ref={d.rootRef}
+      className={s.navItem}
+      onMouseEnter={d.onMouseEnter}
+      onMouseLeave={d.onMouseLeave}
+      onFocusCapture={d.clearTimer}
+      onBlurCapture={d.onBlur}
+      onKeyDown={d.onKeyDown}
+    >
+      <span className={s.navTrigger}>
+        <Link href={withLocale(lang, item.href)} aria-current={active ? "page" : undefined}>
           {item.label}
         </Link>
-      ))}
+        <button
+          ref={d.buttonRef}
+          type="button"
+          className={s.chevronButton}
+          aria-expanded={isOpen}
+          aria-controls={d.panelId}
+          aria-label={submenuLabel(lang, item.label)}
+          onClick={d.onButtonClick}
+        >
+          <span className={s.chevron} data-open={isOpen || undefined} aria-hidden="true" />
+        </button>
+      </span>
+      <div id={d.panelId} className={s.submenu} data-open={isOpen || undefined}>
+        <ul>
+          {item.children!.map((child) => (
+            <li key={child.href}>
+              <Link href={child.href} aria-current={pathname === child.href ? "page" : undefined} tabIndex={isOpen ? undefined : -1} onClick={() => onOpenChange(false)}>
+                {child.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+export function DesktopNav({ lang, nav }: { lang: string; nav: NavEntry[] }) {
+  const pathname = usePathname() ?? "/";
+  const [openItem, setOpenItem] = useState<string | null>(null);
+
+  useEffect(() => setOpenItem(null), [pathname]);
+
+  return (
+    <nav className={s.nav} aria-label="Main">
+      {nav.map((item) =>
+        item.children?.length ? (
+          <NavItemWithSubmenu
+            key={item.href}
+            lang={lang}
+            item={item}
+            active={isActive(pathname, lang, item.href)}
+            isOpen={openItem === item.href}
+            onOpenChange={(open) => setOpenItem((cur) => (open ? item.href : cur === item.href ? null : cur))}
+          />
+        ) : (
+          <Link key={item.href} href={withLocale(lang, item.href)} aria-current={isActive(pathname, lang, item.href) ? "page" : undefined}>
+            {item.label}
+          </Link>
+        ),
+      )}
     </nav>
   );
 }
 
-export function MobileMenu({ lang, nav, cta, labels, privacySlugs }: Props) {
+export function MobileMenu({ lang, nav, cta, labels }: Props) {
   const [open, setOpen] = useState(false);
+  const [section, setSection] = useState<string | null>(null);
   const pathname = usePathname() ?? "/";
 
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    setOpen(false);
+    setSection(null);
+  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -125,11 +215,45 @@ export function MobileMenu({ lang, nav, cta, labels, privacySlugs }: Props) {
       </button>
       <div id="mobile-menu" className={s.mobile} data-lenis-prevent data-open={open} aria-hidden={!open}>
         <nav aria-label="Mobile">
-          {nav.map((item) => (
-            <Link key={item.href} href={withLocale(lang, item.href)} aria-current={isActive(pathname, lang, item.href) ? "page" : undefined} tabIndex={open ? 0 : -1}>
-              {item.label}
-            </Link>
-          ))}
+          {nav.map((item) => {
+            const link = (
+              <Link href={withLocale(lang, item.href)} aria-current={isActive(pathname, lang, item.href) ? "page" : undefined} tabIndex={open ? 0 : -1}>
+                {item.label}
+              </Link>
+            );
+            if (!item.children?.length) return <div key={item.href} className={s.mobileItem}>{link}</div>;
+            const expanded = section === item.href;
+            const panelId = `mobile-sub-${item.href.replace(/\W/g, "")}`;
+            return (
+              <div key={item.href} className={s.mobileItem}>
+                <div className={s.mobileRow}>
+                  {link}
+                  <button
+                    type="button"
+                    className={s.mobileToggle}
+                    aria-expanded={expanded}
+                    aria-controls={panelId}
+                    aria-label={submenuLabel(lang, item.label)}
+                    tabIndex={open ? 0 : -1}
+                    onClick={() => setSection(expanded ? null : item.href)}
+                  >
+                    <span className={s.chevron} data-open={expanded || undefined} aria-hidden="true" />
+                  </button>
+                </div>
+                <div id={panelId} className={s.mobileSub} data-open={expanded || undefined} {...(expanded && open ? {} : INERT)}>
+                  <ul>
+                    {item.children.map((child) => (
+                      <li key={child.href}>
+                        <Link href={child.href} aria-current={pathname === child.href ? "page" : undefined}>
+                          {child.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            );
+          })}
         </nav>
         <ConsultationButton href={cta.href} className={`btn btn-block ${s.btn}`} tabIndex={open ? 0 : -1} onOpen={() => setOpen(false)}>
           {cta.label}

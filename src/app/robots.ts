@@ -1,7 +1,11 @@
 import { MetadataRoute } from "next";
-import { SITE_URL } from "@/lib/site";
+import { INDEXING_ALLOWED, SITE_URL } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
+  // Closed until launch: every crawler is turned away.
+  if (!INDEXING_ALLOWED) {
+    return { rules: [{ userAgent: "*", disallow: ["/"] }] };
+  }
   return {
     rules: [
       // SEO-tool crawlers: no visitors, no search or AI visibility, only

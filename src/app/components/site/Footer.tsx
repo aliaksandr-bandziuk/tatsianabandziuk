@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getContent, localizeHref, privacyHref, serviceHref } from "@/content";
+import { calculatorHref, getContent, localizeHref, privacyHref, serviceHref } from "@/content";
 import s from "./footer.module.scss";
 
 /** Site credit: a followed link to the developer's site (no rel="nofollow" on purpose). */
@@ -9,8 +9,8 @@ const CREDITS: Record<string, { label: string; name: string; href: string }> = {
   ru: { label: "Дизайн и разработка сайта:", name: "bandziuk", href: "https://www.bandziuk.com/ru" },
 };
 
-export default function Footer({ lang }: { lang: string }) {
-  const c = getContent(lang);
+export default async function Footer({ lang }: { lang: string }) {
+  const c = await getContent(lang);
   const year = new Date().getFullYear();
   const credit = CREDITS[lang] ?? CREDITS.en;
   return (
@@ -26,6 +26,16 @@ export default function Footer({ lang }: { lang: string }) {
             {c.services.map((sv) => (
               <Link key={sv.slug} href={serviceHref(lang, sv.slug)}>
                 {sv.breadcrumb}
+              </Link>
+            ))}
+          </nav>
+          <nav className={s.col} aria-label={c.calculatorsPage.eyebrow}>
+            <Link className={s.colTitle} href={localizeHref(lang, "/tools")}>
+              {c.calculatorsPage.eyebrow}
+            </Link>
+            {c.calculators.map((calc) => (
+              <Link key={calc.slug} href={calculatorHref(lang, calc.slug)}>
+                {calc.breadcrumb}
               </Link>
             ))}
           </nav>
@@ -55,7 +65,7 @@ export default function Footer({ lang }: { lang: string }) {
             © {year} {c.person.name}
           </span>
           <span className={s.bottomLinks}>
-            <Link href={privacyHref(lang)}>{c.ui.privacy}</Link>
+            <Link href={privacyHref(c)}>{c.ui.privacy}</Link>
             <span>
               {credit.label}{" "}
               <a href={credit.href} target="_blank">

@@ -2,8 +2,9 @@ import { groq } from "next-sanity";
 import { client } from "@/sanity/sanity.client";
 import { BASE_URL, localePrefix, findAltSlug } from "@/utils/hreflang";
 import { LOCALES, ROUTES, isLocale } from "@/lib/site";
+import { localizePath } from "@/lib/routing";
 
-export type IndexNowDocType = "service" | "caseStudy" | "post";
+export type IndexNowDocType = "service" | "caseStudy" | "post" | "category" | "calculatorPage";
 
 export type IndexNowWebhookPayload = {
   _id: string;
@@ -15,6 +16,8 @@ const SEGMENT: Record<IndexNowDocType, string> = {
   service: ROUTES.service,
   caseStudy: ROUTES.caseStudy,
   post: ROUTES.post,
+  category: ROUTES.category,
+  calculatorPage: ROUTES.calculator,
 };
 
 type TranslationsResult = {
@@ -42,7 +45,7 @@ export async function resolveDocumentUrls(payload: IndexNowWebhookPayload): Prom
   const urls = new Set<string>();
   for (const locale of LOCALES) {
     const localeSlug = locale === language ? result.slug : findAltSlug(result._translations ?? [], locale);
-    if (localeSlug) urls.add(`${BASE_URL}${localePrefix(locale)}/${segment}/${localeSlug}`);
+    if (localeSlug) urls.add(`${BASE_URL}${localePrefix(locale)}${localizePath(locale, `/${segment}/${localeSlug}`)}`);
   }
   return Array.from(urls);
 }

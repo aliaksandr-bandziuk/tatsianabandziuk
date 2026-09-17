@@ -6,7 +6,7 @@
 
 ## 1. Цель сайта
 
-Сайт — профессиональная визитная карточка Татьяны Бандзюк как консультанта по аналитике в ритейле и моде.
+Сайт — профессиональная визитная карточка Татьяны Бандюк как консультанта по аналитике в ритейле и моде.
 
 Задачи сайта:
 
@@ -84,7 +84,7 @@
 
 - **Не перевод, а адаптация.** Каждая версия пишется под свои местные запросы, у каждой свои метаданные.
 - **hreflang** на всех страницах.
-- **Slug** на языке страницы (например, `/pl/uslugi/planowanie-asortymentu`) — ❓ решить вместе с исследованием запросов.
+- **Slug** на языке страницы — решено 17.09.2026: локальные слаги (польский без диакритики, русский латинской транслитерацией), варианты — в `research/keyword-map.md`.
 
 ## 5. Структура сайта
 
@@ -94,7 +94,7 @@
 
 - **H1 (EN):** Tatsiana Bandziuk, Retail and Fashion Analytics Consultant
 - **H1 (PL):** Tatsiana Bandziuk — konsultantka ds. analityki w handlu i modzie
-- **H1 (RU):** Татьяна Бандзюк — консультант по аналитике в ритейле и моде
+- **H1 (RU):** Татьяна Бандюк — консультант по аналитике в ритейле и моде
 - **Блоки:**
   - первый экран: фото (заглушка), формулировка, кнопка «Book a Consultation»;
   - H2: Retail Analytics Consulting Services — пять карточек услуг;
@@ -197,7 +197,7 @@
 
 - **`Person`:**
   - `name`;
-  - `alternateName`: Tatsiana Lustenkova, Tatiana Bandziuk, Татьяна Бандзюк;
+  - `alternateName` (обязательно, на всех языковых версиях): Tatsiana Bandziuk, Tatiana Bandziuk, Tatsiana Lustenkova, Татьяна Бандюк. На русских страницах в видимом тексте имя пишется только по-русски;
   - `jobTitle`: Retail and Fashion Analytics Consultant;
   - `alumniOf`: БГЭУ;
   - `knowsAbout`: assortment planning, retail pricing, Power BI, Excel, PLM data management;

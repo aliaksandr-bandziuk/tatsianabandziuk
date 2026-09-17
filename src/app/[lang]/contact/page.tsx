@@ -10,12 +10,12 @@ import s from "../pages.module.scss";
 export const generateStaticParams = localeParams;
 
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
-  return pageMetadata(params.lang, getContent(params.lang).contact.seo, () => "/contact");
+  return pageMetadata(params.lang, (await getContent(params.lang)).contact.seo, () => "/contact");
 }
 
-export default function ContactPage({ params }: { params: { lang: string } }) {
+export default async function ContactPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  const c = getContent(lang);
+  const c = await getContent(lang);
   const p = c.contact;
   const url = `${SITE_URL}${localizeHref(lang, "/contact")}`;
   const schema = {

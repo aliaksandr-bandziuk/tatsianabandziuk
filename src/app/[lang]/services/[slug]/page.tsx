@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { caseHref, getContent, localizeHref, pageMetadata, serviceHref } from "@/content";
+import { bySlug, caseByKey, caseHref, getContent, itemMetadata, localizeHref, serviceHref, slugParams } from "@/content";
 import {
   Accent,
   Breadcrumbs,
@@ -18,33 +18,33 @@ import {
   accentText,
 } from "@/app/components/site/Blocks";
 import JsonLd from "@/app/components/site/JsonLd";
+import { RelatedCalculators, RelatedPosts, serviceCalculators, servicePosts } from "@/app/components/site/Related";
 import { PERSON_ID, SERVICE_ID } from "@/lib/schema/identity";
-import { LOCALES, SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
 import s from "../../pages.module.scss";
 
 type Params = { lang: string; slug: string };
 
-
-export function generateStaticParams() {
-  return LOCALES.flatMap((lang) => getContent(lang).services.map((sv) => ({ lang, slug: sv.slug })));
+export async function generateStaticParams() {
+  return slugParams("service");
 }
 
-function find(params: Params) {
-  return getContent(params.lang).services.find((sv) => sv.slug === params.slug);
+async function find(params: Params) {
+  return bySlug("service", await getContent(params.lang), params.slug);
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const sv = find(params);
+  const sv = await find(params);
   if (!sv) return {};
-  return pageMetadata(params.lang, sv.seo, () => `/services/${sv.slug}`);
+  return await itemMetadata("service", params.lang, sv);
 }
 
-export default function ServicePage({ params }: { params: Params }) {
+export default async function ServicePage({ params }: { params: Params }) {
   const { lang } = params;
-  const c = getContent(lang);
-  const sv = find(params);
+  const c = await getContent(lang);
+  const sv = await find(params);
   if (!sv) notFound();
-  const related = sv.caseStudySlug ? c.caseStudies.find((cs) => cs.slug === sv.caseStudySlug) : undefined;
+  const related = caseByKey(c, sv.caseStudyKey);
   const url = `${SITE_URL}${serviceHref(lang, sv.slug)}`;
 
   const schema = {
@@ -129,6 +129,10 @@ export default function ServicePage({ params }: { params: Params }) {
           </div>
         )}
       </section>
+
+      <RelatedCalculators lang={lang} items={await serviceCalculators(lang, sv.key)} />
+
+      <RelatedPosts lang={lang} posts={await servicePosts(lang, sv.key)} />
 
       <RecommendationWide title={sv.recommendationTitle} note={c.ui.recommendationPlaceholder} item={sv.recommendation} />
 

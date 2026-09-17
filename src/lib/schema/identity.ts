@@ -39,7 +39,7 @@ export function personNode(lang: string): Graph {
     jobTitle: JOB_TITLE[lang] ?? JOB_TITLE.en,
     knowsAbout: [
       "Assortment planning",
-      "Range management",
+      "Merchandise planning",
       "Retail pricing analysis",
       "Power BI dashboards",
       "Advanced Excel modelling",

@@ -1,0 +1,41 @@
+# PL seeds · market: Poland · language: pl
+# asortyment
+planowanie asortymentu
+zarządzanie asortymentem
+analiza asortymentu
+matryca asortymentowa
+merchandise planning
+planowanie zakupów w handlu
+# open-to-buy, sell-through, rozmiary, zapasy
+open to buy
+budżet zakupowy
+sell through
+krzywa rozmiarów
+rotacja zapasów
+# ceny i obniżki
+strategia cenowa w handlu
+polityka cenowa
+architektura cenowa
+analiza cen
+strategia obniżek cen
+# Power BI, Excel, KPI
+power bi dla handlu
+dashboard power bi
+raport sprzedaży power bi
+kpi w handlu detalicznym
+wskaźniki kpi sprzedaży
+planowanie sprzedaży w excelu
+szablon excel planowanie sprzedaży
+# dane produktowe
+dane produktowe
+zarządzanie danymi produktowymi
+system pim
+plm w branży modowej
+jakość danych produktowych
+# analityka i konsulting
+analityka w handlu
+analityka sprzedaży
+analityka w branży modowej
+konsultant analityka danych
+analityk danych freelance
+retail analytics

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getContent, localeParams, pageMetadata, serviceHref } from "@/content";
-import { CtaPanel, FormatCards, RecommendationWide, ServicesGrid } from "@/app/components/site/Blocks";
+import { CtaPanel, FaqSection, FormatCards, RecommendationWide, ServicesGrid } from "@/app/components/site/Blocks";
 import JsonLd from "@/app/components/site/JsonLd";
 import { SERVICE_ID } from "@/lib/schema/identity";
 import { SITE_URL } from "@/lib/site";
@@ -9,12 +9,12 @@ import s from "../pages.module.scss";
 export const generateStaticParams = localeParams;
 
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
-  return pageMetadata(params.lang, getContent(params.lang).servicesPage.seo, () => "/services");
+  return pageMetadata(params.lang, (await getContent(params.lang)).servicesPage.seo, () => "/services");
 }
 
-export default function ServicesPage({ params }: { params: { lang: string } }) {
+export default async function ServicesPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  const c = getContent(lang);
+  const c = await getContent(lang);
   const p = c.servicesPage;
   const schema = {
     "@context": "https://schema.org",
@@ -54,6 +54,7 @@ export default function ServicesPage({ params }: { params: { lang: string } }) {
       {p.recommendation && p.recommendationTitle && (
         <RecommendationWide title={p.recommendationTitle} note={c.ui.recommendationPlaceholder} item={p.recommendation} />
       )}
+      {p.faq && p.faq.length > 0 && <FaqSection title={p.faqTitle ?? p.h1} items={p.faq} />}
       <CtaPanel lang={lang} title={p.ctaTitle ?? ""} text={p.ctaText ?? ""} signature={c.person.signature} />
     </>
   );

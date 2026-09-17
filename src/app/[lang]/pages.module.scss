@@ -234,6 +234,33 @@
   }
 }
 
+// Full-bleed band: the heading stays in the container, the card track runs to the viewport edges.
+.credSection {
+  overflow: hidden;
+  // Extra air above: the band should not sit right under the education text.
+  margin-top: clamp(40px, 6vw, 88px);
+}
+
+.credHead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px 56px;
+  align-items: end;
+  margin-bottom: 28px;
+
+  > * {
+    min-width: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .twoCol {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

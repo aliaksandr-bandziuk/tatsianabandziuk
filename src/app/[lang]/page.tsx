@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
 import Link from "next/link";
-import { getContent, localeParams, localizeHref, pageMetadata } from "@/content";
+import { getContent, latestPosts, localeParams, localizeHref, pageMetadata } from "@/content";
 import {
   Accent,
   CaseCard,
@@ -28,13 +28,13 @@ import s from "./pages.module.scss";
 export const generateStaticParams = localeParams;
 
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
-  const c = getContent(params.lang);
+  const c = await getContent(params.lang);
   return pageMetadata(params.lang, c.home.seo, () => "/", { absoluteTitle: true });
 }
 
-export default function Home({ params }: { params: { lang: string } }) {
+export default async function Home({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  const c = getContent(lang);
+  const c = await getContent(lang);
   const h = c.home;
   const contactHref = localizeHref(lang, "/contact");
 
@@ -249,8 +249,8 @@ export default function Home({ params }: { params: { lang: string } }) {
           }
         />
         <div className="grid-3">
-          {c.posts.slice(0, 3).map((p, i) => (
-            <PostCard key={p.slug} lang={lang} post={p} index={i} />
+          {latestPosts(c, 3).map((p, i) => (
+            <PostCard key={p.key} lang={lang} post={p} index={i} />
           ))}
         </div>
       </section>

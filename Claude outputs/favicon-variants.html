@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Фавиконки: варианты</title>
+<style>
+  :root { --emerald:#0f5943; --mint:#7fd4b1; --ink:#17181c; --paper:#faf8f4; --line:#d8d3c8; --muted:#4f5a53; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.5 system-ui, "Segoe UI", sans-serif; }
+  main { max-width:1100px; margin:0 auto; padding:32px 16px 64px; }
+  h1 { font:600 30px/1.2 "Playfair Display", Georgia, serif; margin:0 0 6px; }
+  .lead { color:var(--muted); margin:0 0 28px; max-width:70ch; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:18px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:18px; }
+  .card h2 { font:600 17px/1.3 system-ui, sans-serif; margin:0 0 4px; }
+  .card h2 b { display:inline-block; min-width:26px; height:26px; border-radius:6px; background:var(--emerald); color:#fff; text-align:center; line-height:26px; margin-right:8px; font-size:14px; }
+  .card p { margin:0 0 14px; color:var(--muted); font-size:14px; }
+  .sizes { display:flex; align-items:flex-end; gap:18px; margin-bottom:14px; }
+  .sizes figure { margin:0; text-align:center; font:11px/1.2 ui-monospace, Consolas, monospace; color:var(--muted); }
+  .sizes figure div { margin:0 auto 6px; }
+  .s16 { width:16px; height:16px; } .s32 { width:32px; height:32px; } .s96 { width:96px; height:96px; }
+  .sizes svg { width:100%; height:100%; display:block; }
+  .tabs { display:grid; gap:6px; }
+  .tab { display:flex; align-items:center; gap:8px; height:34px; padding:0 12px; border-radius:8px 8px 0 0; font-size:12.5px; max-width:260px; }
+  .tab.light { background:#dee1e6; color:#202124; }
+  .tab.dark { background:#35363a; color:#e8eaed; }
+  .tab .ic { width:16px; height:16px; flex:none; }
+  .tab .ic svg { width:16px; height:16px; display:block; }
+  .tab span { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .note { margin-top:28px; padding:14px 16px; border-left:3px solid var(--emerald); background:#eef3ef; border-radius:0 8px 8px 0; font-size:14px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Варианты фавиконки для tatsianabandziuk.com</h1>
+  <p class="lead">Цвета взяты с сайта: изумрудный #0f5943, мятный #7fd4b1, бумажный фон #faf8f4. У каждого варианта показаны размеры 16 px (вкладка браузера), 32 px и 96 px (закладки и иконка на телефоне), а также вид на светлой и тёмной вкладке. Самое важное — как иконка читается в 16 px.</p>
+  <div class="grid" id="grid"></div>
+  <p class="note">В превью монограммы набраны системным шрифтом с засечками. В финальной версии буквы будут набраны шрифтом Playfair Display, как заголовки сайта, и переведены в кривые. Выбранный вариант я подготовлю в форматах favicon.ico, icon.svg и apple-icon.png (180 px), и у SVG будет отдельная версия для тёмной темы.</p>
+</main>
+<script>
+const E = "#0f5943", M = "#7fd4b1", P = "#faf8f4";
+const serif = "'Playfair Display', Georgia, 'Times New Roman', serif";
+const V = [
+  { t:"Монограмма TB на изумрудном фоне", d:"Классика: инициалы с засечками, как в заголовках сайта. Строго и узнаваемо, но в 16 px две буквы получаются мелкими.",
+    s:`<svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${E}"/><text x="32" y="43" text-anchor="middle" font-family="${serif}" font-size="31" font-weight="700" fill="${P}" letter-spacing="-1">TB</text></svg>` },
+  { t:"Одна буква T в выделенной ячейке Excel", d:"Рамка выделенной ячейки с маркером заполнения в правом нижнем углу, как в Excel. Продолжает стиль форм на сайте и хорошо читается в 16 px.",
+    s:`<svg viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="${P}"/><rect x="7" y="7" width="47" height="47" rx="3" fill="#fff" stroke="${E}" stroke-width="5"/><rect x="47" y="47" width="13" height="13" rx="2" fill="${E}" stroke="${P}" stroke-width="3"/><text x="30.5" y="44" text-anchor="middle" font-family="${serif}" font-size="36" font-weight="700" fill="${E}">T</text></svg>` },
+  { t:"Растущие столбики диаграммы", d:"Простой знак аналитики: три столбика, последний выделен мятным. Без букв, поэтому читается в любом размере, но меньше связан с именем.",
+    s:`<svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${E}"/><rect x="12" y="34" width="10" height="18" rx="2" fill="${P}" opacity=".55"/><rect x="27" y="23" width="10" height="29" rx="2" fill="${P}" opacity=".8"/><rect x="42" y="12" width="10" height="40" rx="2" fill="${M}"/></svg>` },
+  { t:"Кольцевая диаграмма с выделенной долей", d:"Отсылка к Power BI и срезам на странице кейсов. Круглый силуэт выделяется среди квадратных иконок на панели вкладок.",
+    s:`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22" fill="none" stroke="${E}" stroke-opacity=".22" stroke-width="12"/><circle cx="32" cy="32" r="22" fill="none" stroke="${E}" stroke-width="12" stroke-dasharray="48 138.2" transform="rotate(-90 32 32)"/><circle cx="32" cy="32" r="22" fill="none" stroke="${M}" stroke-width="12" stroke-dasharray="20 138.2" stroke-dashoffset="-50" transform="rotate(-90 32 32)"/></svg>` },
+  { t:"Знак формулы «=T» из строки формул", d:"Нарисованный знак «=» из строки формул на сайте и буква T. Самая «экселевская» иконка, но это отсылка, понятная не всем.",
+    s:`<svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${E}"/><rect x="10" y="25" width="15" height="4.5" rx="1" fill="${M}"/><rect x="10" y="35" width="15" height="4.5" rx="1" fill="${M}"/><text x="42" y="46" text-anchor="middle" font-family="${serif}" font-size="36" font-weight="700" fill="${P}">T</text></svg>` },
+  { t:"Тепловая карта 3×3 с одной яркой ячейкой", d:"Сетка таблицы с оттенками изумрудного: это читается как данные и ассортиментная матрица. Абстрактно и спокойно, без букв.",
+    s:`<svg viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${P}"/>${[[.18,.35,.55],[.35,.7,.4],[.55,1,.25]].map((r,i)=>r.map((o,j)=>`<rect x="${8+j*17}" y="${8+i*17}" width="14" height="14" rx="2.5" fill="${o===1?M:E}" fill-opacity="${o===1?1:o}"/>`).join("")).join("")}<rect x="23.5" y="40.5" width="17" height="17" rx="3.5" fill="none" stroke="${E}" stroke-width="2.5"/></svg>` },
+];
+document.getElementById("grid").innerHTML = V.map((v,i)=>`
+  <article class="card">
+    <h2><b>${i+1}</b>${v.t}</h2>
+    <p>${v.d}</p>
+    <div class="sizes">
+      <figure><div class="s16">${v.s}</div>16</figure>
+      <figure><div class="s32">${v.s}</div>32</figure>
+      <figure><div class="s96">${v.s}</div>96</figure>
+    </div>
+    <div class="tabs">
+      <div class="tab light"><span class="ic">${v.s}</span><span>Tatsiana Bandziuk — Retail Analytics</span></div>
+      <div class="tab dark"><span class="ic">${v.s}</span><span>Tatsiana Bandziuk — Retail Analytics</span></div>
+    </div>
+  </article>`).join("");
+</script>
+</body>
+</html>

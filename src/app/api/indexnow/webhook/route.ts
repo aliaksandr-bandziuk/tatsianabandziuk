@@ -1,4 +1,5 @@
 import { timingSafeEqual } from "crypto";
+import { INDEXING_ALLOWED } from "@/lib/site";
 import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { SANITY_CACHE_TAG } from "@/sanity/sanity.client";
@@ -8,7 +9,7 @@ import {
 } from "@/lib/indexnow/resolveUrls";
 import { submitToIndexNow } from "@/lib/indexnow/submit";
 
-const TRACKED_TYPES = new Set(["service", "caseStudy", "post"]);
+const TRACKED_TYPES = new Set(["service", "caseStudy", "post", "category", "calculatorPage"]);
 
 /**
  * Shared-secret check for an incoming Sanity webhook. This is the first
@@ -55,6 +56,11 @@ export async function POST(request: NextRequest) {
   // also runs first so the URL resolution below reads fresh data. A manual
   // refresh is a POST with the secret and body {"_id":"manual","_type":"manual"}.
   revalidateTag(SANITY_CACHE_TAG);
+
+  // No IndexNow pings while the site is closed to search engines.
+  if (!INDEXING_ALLOWED) {
+    return NextResponse.json({ revalidated: true, skipped: true, reason: "indexing disabled (SITE_INDEXING)" });
+  }
 
   if (!TRACKED_TYPES.has(payload._type)) {
     return NextResponse.json({ revalidated: true, skipped: true, reason: "type not tracked" });

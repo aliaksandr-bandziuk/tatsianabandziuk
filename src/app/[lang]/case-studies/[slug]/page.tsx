@@ -2,37 +2,38 @@ import type { Metadata } from "next";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { caseHref, getContent, localizeHref, pageMetadata, serviceHref } from "@/content";
-import { Accent, Breadcrumbs, CaseCard, FactPanel, MetricsBand, NumberedList, ToolRows, accentText } from "@/app/components/site/Blocks";
+import { bySlug, caseHref, getContent, itemMetadata, localizeHref, serviceByKey, serviceHref, slugParams } from "@/content";
+import { Accent, Breadcrumbs, CaseCard, FactPanel, FaqSection, MetricsBand, NumberedList, ToolRows, accentText } from "@/app/components/site/Blocks";
 import { CaseDashboard } from "@/app/components/site/Charts";
 import JsonLd from "@/app/components/site/JsonLd";
+import { RelatedCalculators, RelatedPosts, serviceCalculators, servicePosts } from "@/app/components/site/Related";
 import { PERSON_ID } from "@/lib/schema/identity";
-import { LOCALES, SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
 import s from "../../pages.module.scss";
 
 type Params = { lang: string; slug: string };
 
-
-export function generateStaticParams() {
-  return LOCALES.flatMap((lang) => getContent(lang).caseStudies.map((cs) => ({ lang, slug: cs.slug })));
+export async function generateStaticParams() {
+  return slugParams("caseStudy");
 }
 
-function find(params: Params) {
-  return getContent(params.lang).caseStudies.find((cs) => cs.slug === params.slug);
+async function find(params: Params) {
+  return bySlug("caseStudy", await getContent(params.lang), params.slug);
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const cs = find(params);
+  const cs = await find(params);
   if (!cs) return {};
-  return pageMetadata(params.lang, cs.seo, () => `/case-studies/${cs.slug}`, { type: "article" });
+  return await itemMetadata("caseStudy", params.lang, cs, { type: "article" });
 }
 
-export default function CaseStudyPage({ params }: { params: Params }) {
+export default async function CaseStudyPage({ params }: { params: Params }) {
   const { lang } = params;
-  const c = getContent(lang);
-  const cs = find(params);
+  const c = await getContent(lang);
+  const cs = await find(params);
   if (!cs) notFound();
-  const others = c.caseStudies.filter((x) => x.slug !== cs.slug).slice(0, 3);
+  const others = c.caseStudies.filter((x) => x.key !== cs.key).slice(0, 3);
+  const service = serviceByKey(c, cs.serviceKey);
   const url = `${SITE_URL}${caseHref(lang, cs.slug)}`;
 
   const schema = {
@@ -130,9 +131,11 @@ export default function CaseStudyPage({ params }: { params: Params }) {
               <ConsultationButton href={`${localizeHref(lang, "/contact")}#enquiry`} className="btn btn-inline">
                 {c.ui.bookConsultation}
               </ConsultationButton>
-              <Link href={serviceHref(lang, cs.serviceSlug)} className="link">
-                {c.ui.relatedService}
-              </Link>
+              {service && (
+                <Link href={serviceHref(lang, service.slug)} className="link">
+                  {c.ui.relatedService}
+                </Link>
+              )}
             </div>
           </div>
           <p className="hand" style={{ fontSize: 18, margin: "20px 2px 0" }}>
@@ -140,6 +143,12 @@ export default function CaseStudyPage({ params }: { params: Params }) {
           </p>
         </div>
       </section>
+
+      <RelatedPosts lang={lang} posts={await servicePosts(lang, cs.serviceKey)} />
+
+      <RelatedCalculators lang={lang} items={await serviceCalculators(lang, cs.serviceKey)} />
+
+      {cs.faq && cs.faq.length > 0 && <FaqSection title={cs.faqTitle ?? accentText(cs.h1)} items={cs.faq} />}
 
       <section className="container section">
         <h2 className="h2-sm" style={{ marginBottom: 26 }} data-reveal>

@@ -48,7 +48,12 @@ export type Recommendation = {
 };
 
 export type Service = {
+  /** Stable id shared by all language versions (the EN slug). */
+  key: string;
+  /** URL slug in this language. */
   slug: string;
+  /** Last edit in Sanity (sitemap lastmod); absent in the fallback content. */
+  updatedAt?: string;
   number: string;
   cardTitle: string;
   cardText: string;
@@ -69,7 +74,7 @@ export type Service = {
   results: Metric[];
   toolsTitle: string;
   tools: TitledText[]; // label = monogram
-  caseStudySlug?: string;
+  caseStudyKey?: string;
   recommendationTitle: string;
   recommendation: Recommendation;
   faqTitle: string;
@@ -89,7 +94,9 @@ export type ConsultingFormat = {
 };
 
 export type CaseStudy = {
+  key: string;
   slug: string;
+  updatedAt?: string;
   topics: string[]; // filter keys: assortment | pricing | product-data | reporting
   tag: string;
   title: string;
@@ -110,14 +117,26 @@ export type CaseStudy = {
   results: Metric[];
   toolsTitle: string;
   tools: TitledText[];
-  serviceSlug: string;
+  serviceKey: string;
   serviceTitle: string;
   serviceText: string;
   serviceChips: string[];
   note: string;
+  faqTitle?: string;
+  faq?: FaqItem[];
   publishedAt: string;
   seo: Seo;
 };
+
+/**
+ * Interactive calculators embedded in articles. Field ids per kind:
+ * - marginMarkup: inputs cost, price, targetMargin · results margin, markup, profit, targetPrice
+ * - sellThrough: inputs opening, received, sold, returned · results rate, rateReceived
+ * - gmroi: inputs grossMargin, avgInventory · results gmroi
+ * - stockTurn: inputs cogs, avgInventory, periodDays, stock, weeklySales · results turns, days, weeksCover
+ * - openToBuy: inputs sales, markdowns, endStock, openingStock, onOrder · results otb
+ */
+export type CalculatorKind = "marginMarkup" | "sellThrough" | "gmroi" | "stockTurn" | "openToBuy";
 
 export type ArticleBlock =
   | { type: "p"; text: string }
@@ -127,6 +146,27 @@ export type ArticleBlock =
   | { type: "chart"; title: string; legend: string; caption: string }
   | { type: "list"; items: string[] }
   | {
+      type: "calculator";
+      kind: CalculatorKind;
+      title: string;
+      /** Labels for the inputs and results of this kind, keyed by field id (see CALCULATOR_FIELDS in ./calculators). */
+      labels: Record<string, string>;
+      note?: string;
+    }
+  | {
+      /** YouTube video: lite embed on click (youtube-nocookie.com) plus VideoObject markup. */
+      type: "video";
+      youtubeId: string;
+      title: string;
+      description: string;
+      /** ISO date of the YouTube upload. */
+      uploadDate: string;
+      /** ISO 8601 duration, e.g. "PT7M30S". */
+      duration?: string;
+      /** Short transcript or chapter summary shown under the player. */
+      transcript?: string[];
+    }
+  | {
       type: "table";
       caption?: string;
       columns: { label: string; kind?: "text" | "number"; format?: "scale" | "bars"; suffix?: string }[];
@@ -135,8 +175,11 @@ export type ArticleBlock =
     };
 
 export type Post = {
+  /** Stable id: the same topic in several languages shares a key; a language-only topic has its own. */
+  key: string;
   slug: string;
-  category: string; // category slug
+  updatedAt?: string;
+  category: string; // category key
   title: string;
   h1: AccentHeading;
   excerpt: string;
@@ -146,16 +189,44 @@ export type Post = {
   cover: CoverVariant;
   featured?: boolean;
   body: ArticleBlock[];
-  serviceSlug: string;
+  faqTitle?: string;
+  faq?: FaqItem[];
+  serviceKey: string;
+  /** true while the body is still a stand-in (listed in research/copy-report.md). */
+  placeholder?: boolean;
   seo: Seo;
 };
 
 export type Category = {
+  key: string;
   slug: string;
+  updatedAt?: string;
   label: string;
   h1: string;
   intro: string;
-  serviceSlug?: string;
+  faqTitle?: string;
+  faq?: FaqItem[];
+  serviceKey?: string;
+  seo: Seo;
+};
+
+/** Stand-alone calculator page (/tools/<slug>). The body must contain a calculator block of the same `kind`. */
+export type CalculatorPage = {
+  key: string;
+  slug: string;
+  updatedAt?: string;
+  kind: CalculatorKind;
+  cardTitle: string;
+  cardText: string;
+  breadcrumb: string;
+  h1: AccentHeading;
+  /** 1–2 sentences answering what the calculator does. */
+  lead: string;
+  body: ArticleBlock[];
+  faqTitle: string;
+  faq: FaqItem[];
+  relatedPostKey?: string;
+  serviceKey: string;
   seo: Seo;
 };
 
@@ -224,6 +295,36 @@ export type HomeContent = {
   contactNote: string;
 };
 
+export type Credential = {
+  id: string;
+  year: string;
+  institution: string;
+  title: string;
+  /** Card preview (cover for bound diplomas) and the full document shown in the viewer. */
+  thumb: string;
+  image: string;
+  width: number;
+  height: number;
+  redacted?: boolean;
+};
+
+export type CredentialsBlock = {
+  title: string;
+  intro: string;
+  items: Credential[];
+  labels: {
+    open: string;
+    close: string;
+    prev: string;
+    next: string;
+    zoomIn: string;
+    zoomOut: string;
+    track: string;
+    redactionNote: string;
+    zoomHint: string;
+  };
+};
+
 export type AboutContent = {
   seo: Seo;
   h1: AccentHeading;
@@ -242,6 +343,7 @@ export type AboutContent = {
   educationTitle: string;
   educationText: string;
   educationChips: string[];
+  credentials: CredentialsBlock;
   languagesTitle: string;
   languagesText: string;
   recommendationTitle: string;
@@ -249,6 +351,8 @@ export type AboutContent = {
   ctaTitle: string;
   ctaText: string;
   ctaNote: string;
+  faqTitle?: string;
+  faq?: FaqItem[];
 };
 
 export type ListingPage = {
@@ -260,6 +364,8 @@ export type ListingPage = {
   ctaText?: string;
   recommendationTitle?: string;
   recommendation?: Recommendation;
+  faqTitle?: string;
+  faq?: FaqItem[];
 };
 
 export type ContactContent = {
@@ -290,6 +396,8 @@ export type CoursesContent = {
   waitlistButton: string;
   meanwhile: string;
   meanwhileLink: string;
+  faqTitle?: string;
+  faq?: FaqItem[];
 };
 
 export type TemplatesContent = {
@@ -309,6 +417,8 @@ export type TemplatesContent = {
   button: string;
   courseNote: string;
   relatedTitle: string;
+  faqTitle?: string;
+  faq?: FaqItem[];
 };
 
 export type LegalContent = {
@@ -382,6 +492,11 @@ export type Ui = {
   slicer: { slicer: string; clear: string; chart: string };
   statusBar: { ready: string; average: string; count: string; sum: string; words: string; characters: string; value: string };
   pagination: { prev: string; next: string; page: string };
+  video: { play: string; transcript: string };
+  /** Shown under every calculator, e.g. that numbers stay in the browser. */
+  calculatorHint: string;
+  /** Link under an embedded calculator to its stand-alone page. */
+  calculatorMore: string;
   form: {
     name: string;
     company: string;
@@ -425,6 +540,8 @@ export type SiteContent = {
   blogPage: ListingPage;
   categories: Category[];
   posts: Post[];
+  calculatorsPage: ListingPage;
+  calculators: CalculatorPage[];
   contact: ContactContent;
   courses: CoursesContent;
   templates: TemplatesContent;

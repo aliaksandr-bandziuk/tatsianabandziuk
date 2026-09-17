@@ -4,6 +4,7 @@ import { visionTool } from "@sanity/vision";
 import { documentInternationalization } from "@sanity/document-internationalization";
 import { schemaTypes, TRANSLATED_TYPES } from "./sanity/schemaTypes";
 import { i18n } from "./i18n.config";
+import { structure } from "./sanity/structure";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID as string;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET as string;
@@ -16,7 +17,7 @@ export default defineConfig({
   dataset,
 
   plugins: [
-    structureTool(),
+    structureTool({ structure }),
     visionTool(),
     documentInternationalization({
       supportedLanguages: i18n.languages,

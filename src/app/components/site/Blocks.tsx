@@ -21,7 +21,10 @@ import CountUp from "./CountUp";
 import FaqAccordion from "./FaqAccordion";
 import JsonLd from "./JsonLd";
 import { SITE_URL } from "@/lib/site";
+import { CellFrame, cellAddr } from "./CellFrameClient";
 import s from "./blocks.module.scss";
+
+export { CellFrame, cellAddr };
 
 export function Accent({ h }: { h: AccentHeading }) {
   return (
@@ -56,22 +59,6 @@ export function Photo({ label, height, className = "" }: { label: string; height
     </div>
   );
 }
-
-/** Excel selection frame shown on hover/focus: drawn border, fill handle and cell address. */
-export function CellFrame({ addr }: { addr: string }) {
-  return (
-    <>
-      <span className="xsel" aria-hidden="true" />
-      <span className="xsel-handle" aria-hidden="true" />
-      <span className="xsel-addr" aria-hidden="true">
-        {addr}
-      </span>
-    </>
-  );
-}
-
-/** Spreadsheet address for the n-th card in a grid with `cols` columns. */
-export const cellAddr = (index: number, cols = 3) => `${"ABCDEF"[index % cols]}${Math.floor(index / cols) + 1}`;
 
 export function ServiceCard({ lang, service, index = 0 }: { lang: string; service: Service; index?: number }) {
   return (
@@ -201,8 +188,8 @@ export function ToolRows({ tools }: { tools: TitledText[] }) {
   );
 }
 
-export function CaseCard({ lang, item, index = 0, addr }: { lang: string; item: CaseStudy; index?: number; addr?: string }) {
-  const ui = getContent(lang).ui;
+export async function CaseCard({ lang, item, index = 0, addr }: { lang: string; item: CaseStudy; index?: number; addr?: string }) {
+  const ui = (await getContent(lang)).ui;
   return (
     <Link href={caseHref(lang, item.slug)} className={`lift xcell ${s.caseCard}`} data-reveal data-reveal-delay={(index % 3) * 60}>
       <CellFrame addr={addr ?? cellAddr(index)} />
@@ -223,9 +210,9 @@ export function CaseCard({ lang, item, index = 0, addr }: { lang: string; item: 
   );
 }
 
-export function PostCard({ lang, post, withCover = true, index = 0 }: { lang: string; post: Post; withCover?: boolean; index?: number }) {
-  const c = getContent(lang);
-  const cat = c.categories.find((x) => x.slug === post.category);
+export async function PostCard({ lang, post, withCover = true, index = 0 }: { lang: string; post: Post; withCover?: boolean; index?: number }) {
+  const c = await getContent(lang);
+  const cat = c.categories.find((x) => x.key === post.category);
   return (
     <Link href={postHref(lang, post.slug)} className={`lift ${s.postCard}`} data-reveal data-reveal-delay={index * 60}>
       {withCover && <Cover variant={post.cover} />}
@@ -357,8 +344,8 @@ export function FaqSection({ title, lead, items }: { title: string; lead?: strin
   );
 }
 
-export function CtaPanel({ lang, title, text, note, signature, dark = false }: { lang: string; title: string; text: string; note?: string; signature?: string; dark?: boolean }) {
-  const c = getContent(lang);
+export async function CtaPanel({ lang, title, text, note, signature, dark = false }: { lang: string; title: string; text: string; note?: string; signature?: string; dark?: boolean }) {
+  const c = await getContent(lang);
   return (
     <section className="container section">
       <div className={`panel ${s.cta} ${dark ? s.ctaDark : ""}`} data-reveal>
@@ -386,8 +373,8 @@ export function CtaPanel({ lang, title, text, note, signature, dark = false }: {
 
 export type Crumb = { label: string; href?: string };
 
-export function Breadcrumbs({ lang, items }: { lang: string; items: Crumb[] }) {
-  const c = getContent(lang);
+export async function Breadcrumbs({ lang, items }: { lang: string; items: Crumb[] }) {
+  const c = await getContent(lang);
   const all: Crumb[] = [{ label: c.ui.breadcrumbHome, href: localizeHref(lang, "/") }, ...items];
   const schema = {
     "@context": "https://schema.org",

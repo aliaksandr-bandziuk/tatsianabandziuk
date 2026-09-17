@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { caseHref, getContent, localeParams, pageMetadata } from "@/content";
-import { CaseCard, CtaPanel, cellAddr } from "@/app/components/site/Blocks";
+import { CaseCard, CtaPanel, FaqSection, cellAddr } from "@/app/components/site/Blocks";
 import CaseSlicer from "@/app/components/site/CaseSlicer";
 import JsonLd from "@/app/components/site/JsonLd";
 import { SITE_URL } from "@/lib/site";
@@ -9,12 +9,12 @@ import s from "../pages.module.scss";
 export const generateStaticParams = localeParams;
 
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
-  return pageMetadata(params.lang, getContent(params.lang).caseStudiesPage.seo, () => "/case-studies");
+  return pageMetadata(params.lang, (await getContent(params.lang)).caseStudiesPage.seo, () => "/case-studies");
 }
 
-export default function CaseStudiesPage({ params }: { params: { lang: string } }) {
+export default async function CaseStudiesPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  const c = getContent(lang);
+  const c = await getContent(lang);
   const p = c.caseStudiesPage;
   const topics = Object.entries(c.ui.topics).map(([key, label]) => ({
     key,
@@ -56,6 +56,7 @@ export default function CaseStudiesPage({ params }: { params: { lang: string } }
           ))}
         </CaseSlicer>
       </section>
+      {p.faq && p.faq.length > 0 && <FaqSection title={p.faqTitle ?? p.h1} items={p.faq} />}
       <CtaPanel lang={lang} title={p.ctaTitle ?? ""} text={p.ctaText ?? ""} signature={c.person.signature} />
     </>
   );

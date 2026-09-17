@@ -38,10 +38,12 @@
 
 .nav {
   display: flex;
+  align-items: center;
   gap: 28px;
   font-size: 14px;
 
-  a {
+  > a,
+  .navTrigger > a {
     color: var(--text-primary);
     text-decoration: none;
     padding-block: 6px;
@@ -51,6 +53,118 @@
     &[aria-current="page"] {
       color: var(--accent);
     }
+  }
+}
+
+/* ---------- submenu (pattern from giuseppeiannone) ---------- */
+
+.navItem {
+  position: relative;
+}
+
+.navTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.chevronButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+
+  &:hover,
+  &[aria-expanded="true"] {
+    color: var(--accent);
+  }
+}
+
+.chevron {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 3.5px solid transparent;
+  border-right: 3.5px solid transparent;
+  border-top: 4.5px solid currentColor;
+  transition: transform 0.2s;
+
+  &[data-open] {
+    transform: rotate(180deg);
+  }
+}
+
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: -12px;
+  z-index: 60;
+  margin-top: 10px;
+  width: max-content;
+  min-width: 180px;
+  max-width: 300px;
+  padding: 6px;
+  background: var(--bg-base);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(23, 24, 28, 0.12), 0 0 0 1px rgba(23, 24, 28, 0.06);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity 0.2s, transform 0.2s, visibility 0s linear 0.2s;
+
+  // Bridges the gap to the trigger so the pointer does not leave the item on the way down.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -12px 0 auto;
+    height: 12px;
+  }
+
+  &[data-open] {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.2s, transform 0.2s, visibility 0s;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: block;
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    line-height: 1.3;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: background-color 0.15s, color 0.15s;
+
+    &:hover,
+    &[aria-current="page"] {
+      background: var(--tint);
+      color: var(--accent);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron,
+  .submenu,
+  .mobileSub {
+    transition: none;
   }
 }
 
@@ -215,13 +329,19 @@
     nav {
       display: flex;
       flex-direction: column;
+    }
 
-      a {
+    .mobileItem {
+      border-bottom: 1px solid var(--line);
+
+      > a,
+      .mobileRow > a {
+        display: block;
+        flex: 1 1 auto;
         font: 400 28px/1.2 var(--font-heading), serif;
         color: var(--text-primary);
         text-decoration: none;
         padding: 14px 0;
-        border-bottom: 1px solid var(--line);
 
         &[aria-current="page"] {
           color: var(--accent);
@@ -231,6 +351,69 @@
 
     .btn {
       margin-top: 28px;
+    }
+  }
+
+  .mobileRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .mobileToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    margin-right: -12px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+
+    .chevron {
+      border-left-width: 5px;
+      border-right-width: 5px;
+      border-top-width: 6px;
+    }
+  }
+
+  .mobileSub {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &[data-open] {
+      grid-template-rows: 1fr;
+    }
+
+    ul {
+      overflow: hidden;
+      min-height: 0;
+      margin: 0;
+      padding: 0 0 0 18px;
+      list-style: none;
+    }
+
+    li:last-child {
+      padding-bottom: 12px;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: 16px;
+      color: var(--text-primary);
+      text-decoration: none;
+
+      &[aria-current="page"] {
+        color: var(--accent);
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getContent, localeParams, localizeHref, pageMetadata, postHref } from "@/content";
 import { CategoryChips, FeaturedPost, PostGrid } from "@/app/components/site/BlogList";
+import { FaqSection } from "@/app/components/site/Blocks";
 import { EmailSignup } from "@/app/components/site/Forms";
 import JsonLd from "@/app/components/site/JsonLd";
 import { PERSON_ID } from "@/lib/schema/identity";
@@ -10,12 +11,12 @@ import s from "../pages.module.scss";
 export const generateStaticParams = localeParams;
 
 export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
-  return pageMetadata(params.lang, getContent(params.lang).blogPage.seo, () => "/blog");
+  return pageMetadata(params.lang, (await getContent(params.lang)).blogPage.seo, () => "/blog");
 }
 
-export default function BlogPage({ params }: { params: { lang: string } }) {
+export default async function BlogPage({ params }: { params: { lang: string } }) {
   const { lang } = params;
-  const c = getContent(lang);
+  const c = await getContent(lang);
   const p = c.blogPage;
   const posts = [...c.posts].sort((a, b) => b.date.localeCompare(a.date));
   const featured = posts.find((x) => x.featured) ?? posts[0];
@@ -65,6 +66,7 @@ export default function BlogPage({ params }: { params: { lang: string } }) {
           />
         </div>
       </section>
+      {p.faq && p.faq.length > 0 && <FaqSection title={p.faqTitle ?? p.h1} items={p.faq} />}
     </>
   );
 }
