@@ -1,0 +1,236 @@
+.header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 50;
+  background: color-mix(in srgb, var(--bg-base) 92%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid color-mix(in srgb, var(--text-primary) 10%, transparent);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  min-height: 76px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-decoration: none;
+  color: var(--text-primary);
+  flex: 0 0 auto;
+}
+
+.brandName {
+  font: 500 21px/1 var(--font-heading), serif;
+  letter-spacing: -0.01em;
+}
+
+.brandTag {
+  font: 400 9.5px/1 var(--font-mono), monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.nav {
+  display: flex;
+  gap: 28px;
+  font-size: 14px;
+
+  a {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding-block: 6px;
+    transition: color 0.2s;
+
+    &:hover,
+    &[aria-current="page"] {
+      color: var(--accent);
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.langs {
+  position: relative;
+  font: 500 11px/1 var(--font-mono), monospace;
+  text-transform: uppercase;
+}
+
+.langButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--text-primary);
+  }
+}
+
+.langArrow {
+  transition: transform 0.2s;
+
+  [aria-expanded="true"] > & {
+    transform: rotate(180deg);
+  }
+}
+
+.langList {
+  // In the HTML for crawlers, visible only when open.
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  min-width: 64px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--bg-base);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(23, 24, 28, 0.12), 0 0 0 1px rgba(23, 24, 28, 0.06);
+
+  &[data-open="true"] {
+    display: block;
+    animation: langIn 0.16s var(--ease-out);
+  }
+
+  a {
+    display: block;
+    padding: 9px 12px;
+    border-radius: 6px;
+    color: var(--text-primary);
+    text-decoration: none;
+    text-align: center;
+
+    &:hover {
+      background: var(--tint);
+      color: var(--accent);
+    }
+  }
+}
+
+@keyframes langIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -4px);
+  }
+}
+
+.burger {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+
+  span {
+    position: absolute;
+    left: 11px;
+    right: 11px;
+    height: 1.5px;
+    background: var(--text-primary);
+    transition: transform 0.25s, opacity 0.2s;
+  }
+
+  span:nth-child(1) {
+    top: 17px;
+  }
+
+  span:nth-child(2) {
+    top: 25px;
+  }
+
+  &[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(4px) rotate(45deg);
+  }
+
+  &[aria-expanded="true"] span:nth-child(2) {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+}
+
+.mobile {
+  display: none;
+}
+
+@media (max-width: 1080px) {
+  .nav {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 960px) {
+  .nav,
+  .actions .cta {
+    display: none;
+  }
+
+  .burger {
+    display: block;
+  }
+
+  .inner {
+    min-height: 64px;
+  }
+
+  .mobile {
+    display: block;
+    position: fixed;
+    inset: calc(64px + env(safe-area-inset-top, 0px)) 0 0;
+    background: var(--bg-base);
+    padding: 24px var(--gutter) calc(32px + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.25s, transform 0.25s, visibility 0s linear 0.25s;
+
+    &[data-open="true"] {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+
+    nav {
+      display: flex;
+      flex-direction: column;
+
+      a {
+        font: 400 28px/1.2 var(--font-heading), serif;
+        color: var(--text-primary);
+        text-decoration: none;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+
+        &[aria-current="page"] {
+          color: var(--accent);
+        }
+      }
+    }
+
+    .btn {
+      margin-top: 28px;
+    }
+  }
+}

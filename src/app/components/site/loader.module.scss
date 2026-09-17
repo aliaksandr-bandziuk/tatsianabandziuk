@@ -1,0 +1,69 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-base);
+  opacity: 0;
+  pointer-events: none;
+
+  // Fades in, disappears at once: a ready page should not wait behind it.
+  &[data-visible="true"] {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.2s ease;
+  }
+}
+
+.word {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-signature), cursive;
+  font-weight: 400;
+  font-size: clamp(40px, 6.4vw, 88px);
+  line-height: 1.15;
+  white-space: nowrap;
+  padding: 0 0.12em;
+  color: var(--tint-3);
+
+  // The bright copy is revealed left to right, like ink filling the signature.
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    padding: inherit;
+    color: var(--emerald);
+    clip-path: inset(0 100% 0 0);
+  }
+
+  [data-visible="true"] > &::after {
+    animation: fill 1.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+}
+
+@keyframes fill {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  70%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word::after {
+    clip-path: none;
+    animation: none !important;
+  }
+}
+
+.status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}

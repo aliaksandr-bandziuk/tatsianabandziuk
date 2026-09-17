@@ -1,0 +1,83 @@
+.wrapper {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000307;
+  padding: 2rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+}
+
+.icon {
+  color: var(--corp-color);
+  opacity: 0.85;
+}
+
+.heading {
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.body {
+  font-size: clamp(0.938rem, 0.875rem + 0.25vw, 1.063rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.btnPrimary {
+  padding: 0.75rem 1.75rem;
+  background: var(--corp-color);
+  color: #000;
+  border: none;
+  font-size: 0.938rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 0.85;
+    outline: 2px solid var(--corp-color);
+    outline-offset: 3px;
+  }
+}
+
+.btnSecondary {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 0.938rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+
+  &:hover,
+  &:focus-visible {
+    border-color: rgba(255, 255, 255, 0.6);
+    color: #fff;
+    outline: 2px solid rgba(255, 255, 255, 0.4);
+    outline-offset: 3px;
+  }
+}

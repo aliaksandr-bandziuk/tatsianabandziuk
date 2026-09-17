@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Excel и Power BI на сайте — прототипы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter+Tight:wght@400;500&family=IBM+Plex+Mono:wght@400;500&family=Marck+Script&display=swap" rel="stylesheet">
+<style>
+:root{
+  --emerald:#0f5943; --emerald-2:#1b7a5c; --mint:#7fd4b1; --ink:#17181c; --paper:#faf8f4; --tint:#eef3ef; --tint-2:#e3ece5; --tint-3:#dbe6dd;
+  --sand:#f3f1ec; --line:#d5dcd7; --text-2:#5b605d; --text-3:#8a908c; --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.55 "Inter Tight",system-ui,sans-serif;padding-bottom:60px}
+.wrap{max-width:1180px;margin:0 auto;padding:48px 20px 40px}
+h1{font:400 clamp(32px,4vw,46px)/1.1 "Playfair Display",serif;margin:0 0 12px}
+.intro{color:var(--text-2);max-width:760px;margin:0 0 48px}
+section.demo{background:#fff;border-radius:16px;padding:34px;margin-bottom:32px}
+.tag{font:500 11px/1 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--emerald);display:block;margin-bottom:10px}
+h2{font:400 28px/1.2 "Playfair Display",serif;margin:0 0 8px}
+.note{color:var(--text-2);max-width:800px;margin:0 0 26px}
+.try{font-family:"Marck Script",cursive;color:var(--emerald);font-size:20px;margin:-10px 0 22px}
+@media(max-width:720px){section.demo{padding:20px}}
+
+/* ============ 1. Slicer + cross-highlight ============ */
+.bi{display:grid;grid-template-columns:230px 1fr;gap:20px}
+@media(max-width:860px){.bi{grid-template-columns:1fr}}
+.slicer{background:var(--tint);border-radius:10px;padding:16px}
+.slicer h3,.visual h3{font:500 11px "IBM Plex Mono";letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin:0 0 12px;display:flex;justify-content:space-between;align-items:center}
+.clear{border:0;background:none;color:var(--emerald);font:500 11px "IBM Plex Mono";cursor:pointer;opacity:0;transition:opacity .2s;padding:0}
+.clear.on{opacity:1}
+.slicer label{display:flex;align-items:center;gap:10px;padding:7px 6px;border-radius:6px;cursor:pointer;font-size:14px;transition:background .15s}
+.slicer label:hover{background:#fff}
+.slicer input{position:absolute;opacity:0}
+.box{width:16px;height:16px;border:1.5px solid var(--text-3);border-radius:3px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex:0 0 16px}
+.box::after{content:"";width:8px;height:4px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) scale(0);margin-top:-2px;transition:transform .2s var(--ease)}
+.slicer input:checked+.box{background:var(--emerald);border-color:var(--emerald)}
+.slicer input:checked+.box::after{transform:rotate(-45deg) scale(1)}
+.slicer input:focus-visible+.box{outline:2px solid var(--emerald);outline-offset:2px}
+.slicer .cnt{margin-left:auto;font:500 11px "IBM Plex Mono";color:var(--text-3)}
+.visual{background:var(--tint);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.bars{display:flex;align-items:flex-end;gap:14px;height:150px;padding-top:6px}
+.bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;height:100%;justify-content:flex-end;border:0;background:none;padding:0;font:inherit}
+.bar i{display:block;width:100%;max-width:64px;background:var(--emerald);border-radius:3px 3px 0 0;transition:opacity .3s,background .3s,transform .5s var(--ease);transform-origin:bottom}
+.bar b{font:500 12px "IBM Plex Mono";color:var(--ink);transition:opacity .3s}
+.bar span{font-size:12px;color:var(--text-2);text-align:center;line-height:1.2;min-height:30px;transition:opacity .3s}
+.bi.filtered .bar:not(.sel) i{opacity:.22}
+.bi.filtered .bar:not(.sel) b,.bi.filtered .bar:not(.sel) span{opacity:.45}
+.bar:hover i{background:var(--emerald-2)}
+.bar:focus-visible{outline:2px solid var(--emerald);outline-offset:4px;border-radius:4px}
+.cases{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:860px){.cases{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.cases{grid-template-columns:1fr}}
+.case{background:var(--sand);border-radius:10px;padding:16px;transition:opacity .35s,transform .35s var(--ease),filter .35s}
+.case small{font:500 10px "IBM Plex Mono";letter-spacing:.08em;text-transform:uppercase;color:var(--emerald)}
+.case p{margin:8px 0 0;font:400 17px/1.3 "Playfair Display",serif}
+.bi.filtered .case.off{opacity:.3;filter:grayscale(1);transform:scale(.98)}
+.bi.filtered .case.hit{box-shadow:inset 0 0 0 1.5px var(--emerald)}
+
+/* ============ 2. Selection frame on cards ============ */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.cards{grid-template-columns:1fr}}
+.xcard{position:relative;background:var(--tint);border-radius:12px;padding:24px 22px 22px;cursor:pointer;text-decoration:none;color:inherit;display:block;outline:none}
+.xcard h3{font:400 22px/1.2 "Playfair Display",serif;margin:12px 0 8px}
+.xcard p{margin:0;color:var(--text-2);font-size:14px}
+.xcard .mini{height:44px;display:flex;align-items:flex-end;gap:4px}
+.xcard .mini i{flex:1;background:var(--tint-3);border-radius:2px;transition:background .3s}
+.xcard:hover .mini i:nth-child(odd),.xcard:focus-visible .mini i:nth-child(odd){background:var(--emerald)}
+/* frame drawn in four sides, animated in sequence */
+.xcard .sel{position:absolute;inset:-3px;pointer-events:none;border-radius:14px}
+.xcard .sel::before,.xcard .sel::after{content:"";position:absolute;inset:0;border-radius:14px;border:2px solid var(--emerald);clip-path:inset(0 100% 100% 0);transition:clip-path .45s var(--ease)}
+.xcard .sel::after{clip-path:inset(100% 0 0 100%)}
+.xcard:hover .sel::before,.xcard:focus-visible .sel::before{clip-path:inset(0 0 50% 0)}
+.xcard:hover .sel::after,.xcard:focus-visible .sel::after{clip-path:inset(50% 0 0 0)}
+.xcard .handle{position:absolute;right:-7px;bottom:-7px;width:10px;height:10px;background:var(--emerald);border:2px solid #fff;transform:scale(0);transition:transform .3s .25s cubic-bezier(.34,1.56,.64,1);cursor:crosshair}
+.xcard:hover .handle,.xcard:focus-visible .handle{transform:scale(1)}
+.xcard .nb{position:absolute;left:14px;top:-11px;background:var(--emerald);color:#fff;font:500 11px "IBM Plex Mono";padding:3px 8px;border-radius:3px;opacity:0;transform:translateY(4px);transition:all .25s .15s var(--ease)}
+.xcard:hover .nb,.xcard:focus-visible .nb{opacity:1;transform:none}
+.xcard .arrow{font:500 13px "IBM Plex Mono";color:var(--emerald);margin-top:14px;display:inline-block;transition:transform .3s var(--ease)}
+.xcard:hover .arrow{transform:translateX(4px)}
+
+/* ============ 3. Conditional formatting + data bars ============ */
+.cf{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;align-items:start}
+@media(max-width:900px){.cf{grid-template-columns:1fr}}
+.sheetwrap{overflow-x:auto;border:1px solid var(--line)}
+table.sheet{border-collapse:collapse;width:100%;min-width:520px;font:400 13px "IBM Plex Mono";user-select:none}
+.sheet th,.sheet td{border:1px solid var(--line);padding:0;height:34px;text-align:right}
+.sheet thead th{background:#f3f5f3;color:var(--text-3);font-weight:500;height:24px;text-align:center}
+.sheet thead th.on{background:var(--tint-3);color:var(--emerald);box-shadow:inset 0 -2px var(--emerald)}
+.sheet tbody th{background:#f3f5f3;color:var(--text-3);font-weight:500;width:34px;text-align:center}
+.sheet tbody th.on{background:var(--tint-3);color:var(--emerald);box-shadow:inset -2px 0 var(--emerald)}
+.sheet td{position:relative;cursor:cell;padding:0 10px;transition:background-color .6s ease}
+.sheet td.txt{text-align:left;font-family:"Inter Tight";font-size:13px;color:var(--ink)}
+.sheet td.hdr{font-family:"Inter Tight";font-weight:500;background:#fbfcfb;text-align:left}
+.sheet td.hdr.r{text-align:right}
+.sheet td.inrange{background-image:linear-gradient(rgba(15,89,67,.10),rgba(15,89,67,.10))}
+.sheet td.active{outline:2px solid var(--emerald);outline-offset:-2px;z-index:1}
+.sheet td .db{position:absolute;left:3px;top:6px;bottom:6px;width:0;background:linear-gradient(90deg,rgba(15,89,67,.35),rgba(15,89,67,.08));border-left:2px solid var(--emerald);transition:width 1s var(--ease)}
+.sheet td .v{position:relative}
+.icon{display:inline-block;width:0;height:0;margin-right:6px;vertical-align:middle;opacity:0;transition:opacity .3s}
+.icon.up{border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:7px solid var(--emerald)}
+.icon.dn{border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid #b4412c}
+.icon.eq{width:9px;height:2px;background:#c79a2b}
+.cf.go .icon{opacity:1}
+.kpis{display:grid;gap:12px}
+.kpi{background:var(--emerald);color:#fff;border-radius:10px;padding:18px 20px}
+.kpi b{font:500 34px/1 "IBM Plex Mono";display:block}
+.kpi span{font-size:13px;color:#cfe5da}
+.kpi .track{margin-top:12px;height:8px;background:rgba(255,255,255,.14);border-radius:4px;overflow:hidden}
+.kpi .fill{height:100%;width:0;background:var(--mint);border-radius:4px;transition:width 1.2s var(--ease)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font:500 11px "IBM Plex Mono";color:var(--text-3)}
+.legend i{display:inline-block;width:28px;height:10px;vertical-align:middle;margin-right:6px;background:linear-gradient(90deg,#f7f9f7,#0f5943)}
+.hint{font-size:13px;color:var(--text-3);margin-top:10px}
+
+/* ============ 4. Status bar ============ */
+.status{position:fixed;left:0;right:0;bottom:0;z-index:50;height:30px;background:#f3f5f3;border-top:1px solid var(--line);display:flex;align-items:center;gap:18px;padding:0 16px;font:400 12px "Inter Tight";color:var(--text-2);transform:translateY(100%);transition:transform .35s var(--ease)}
+.status.on{transform:none}
+.status .ready{display:flex;align-items:center;gap:6px}
+.status .ready::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--emerald)}
+.status .agg{margin-left:auto;display:flex;gap:18px}
+.status .agg span b{font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+.status .zoom{display:flex;align-items:center;gap:8px;color:var(--text-3)}
+.status .zoom i{display:block;width:90px;height:2px;background:var(--line);position:relative}
+.status .zoom i::after{content:"";position:absolute;left:50%;top:-4px;width:2px;height:10px;background:var(--text-2)}
+@media(max-width:640px){.status .zoom{display:none}}
+.pickme{background:var(--tint);border-radius:10px;padding:18px 20px;font:400 17px/1.6 "Playfair Display",serif}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+@media(max-width:720px){.opts{grid-template-columns:1fr}}
+.opt{border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:14px;color:var(--text-2)}
+.opt b{color:var(--ink);font-weight:500;display:block;margin-bottom:4px}
+.switch{display:inline-flex;gap:4px;background:var(--tint);padding:4px;border-radius:8px;margin-top:14px}
+.switch button{border:0;background:none;padding:7px 12px;border-radius:6px;font:500 13px "Inter Tight";color:var(--text-2);cursor:pointer}
+.switch button.on{background:var(--emerald);color:#fff}
+
+@media (prefers-reduced-motion: reduce){*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Приёмы Excel и Power BI на сайте: четыре живых прототипа</h1>
+  <p class="intro">Всё на этой странице кликается, наводится и прокручивается. Тексты — заглушки в стиле сайта. После выбора встрою понравившееся в настоящие страницы: срез — на страницу кейсов, рамку выделения — на карточки услуг и кейсов, условное форматирование — в блок результатов и шаблоны, строку состояния — на весь сайт.</p>
+
+  <!-- 1 -->
+  <section class="demo">
+    <span class="tag">1 · Power BI</span>
+    <h2>Срез (slicer) с перекрёстной подсветкой кейсов и графика</h2>
+    <p class="note">Слева — срез, как в отчёте Power BI: отмечаете темы, и график и карточки кейсов реагируют одновременно — выбранное остаётся ярким, остальное гаснет. Клик по столбику графика работает так же, как в Power BI: фильтрует всё остальное. Для страницы кейсов, где сейчас обычные кнопки-фильтры.</p>
+    <p class="try">Попробуйте: отметьте «Pricing» или кликните по столбику</p>
+    <div class="bi" id="bi">
+      <div class="slicer">
+        <h3>Topic <button class="clear" id="clear" type="button">Clear ✕</button></h3>
+        <div id="slicer"></div>
+      </div>
+      <div>
+        <div class="visual">
+          <h3>Case studies by topic</h3>
+          <div class="bars" id="bars"></div>
+        </div>
+        <div class="cases" id="cases"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="demo">
+    <span class="tag">2 · Excel</span>
+    <h2>Рамка выделения ячейки при наведении на карточку</h2>
+    <p class="note">При наведении рамка «прорисовывается» от двух углов навстречу друг другу, затем выскакивает маркер автозаполнения, а над карточкой появляется адрес ячейки. Столбики мини-графика окрашиваются. Работает и с клавиатуры (Tab). Продолжает стиль формы — сайт выглядит цельным.</p>
+    <p class="try">Наведите на карточку</p>
+    <div class="cards">
+      <a class="xcard" href="#"><span class="sel"></span><span class="handle"></span><span class="nb">A1</span>
+        <div class="mini"><i style="height:40%"></i><i style="height:65%"></i><i style="height:50%"></i><i style="height:85%"></i><i style="height:70%"></i><i style="height:100%"></i></div>
+        <h3>Assortment Planning for Fashion Brands</h3><p>Range plans, option counts and size curves built from sell-through.</p><span class="arrow">Open service →</span></a>
+      <a class="xcard" href="#"><span class="sel"></span><span class="handle"></span><span class="nb">B1</span>
+        <div class="mini"><i style="height:90%"></i><i style="height:75%"></i><i style="height:80%"></i><i style="height:55%"></i><i style="height:60%"></i><i style="height:35%"></i></div>
+        <h3>Retail Pricing and Markdown Analysis</h3><p>Price ladders, entry and exit points, markdown scenarios.</p><span class="arrow">Open service →</span></a>
+      <a class="xcard" href="#"><span class="sel"></span><span class="handle"></span><span class="nb">C1</span>
+        <div class="mini"><i style="height:30%"></i><i style="height:45%"></i><i style="height:40%"></i><i style="height:60%"></i><i style="height:78%"></i><i style="height:92%"></i></div>
+        <h3>Power BI Dashboards for Retail KPIs</h3><p>One model per brand: sell-through, stock cover, returns.</p><span class="arrow">Open service →</span></a>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="demo">
+    <span class="tag">3 · Excel</span>
+    <h2>Условное форматирование и гистограммы в ячейках при прокрутке</h2>
+    <p class="note">Когда таблица появляется на экране, ячейки по очереди заливаются цветовой шкалой (чем больше значение, тем зеленее), в столбце маржи вырастают гистограммы (data bars), появляются значки-стрелки. Справа — карточки KPI, у которых шкала заполняется до значения. Для блока результатов на главной, кейсов и страницы шаблонов.</p>
+    <p class="try">Прокрутите страницу так, чтобы таблица появилась снова — или нажмите «Повторить». Выделите ячейки мышью — внизу появится строка состояния.</p>
+    <div class="cf" id="cf">
+      <div>
+        <div class="sheetwrap"><table class="sheet" id="sheet"></table></div>
+        <div class="legend"><span><i></i>Color scale: sell-through</span><span>▮ Data bars: margin</span><span>▲▼ Icon set: vs last season</span></div>
+        <div class="switch" id="replay"><button type="button" class="on">Повторить анимацию</button></div>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><b>+18 pp</b><span>sell-through on core categories</span><div class="track"><div class="fill" data-w="72"></div></div></div>
+        <div class="kpi"><b>−31%</b><span>markdown spend across two seasons</span><div class="track"><div class="fill" data-w="31"></div></div></div>
+        <div class="kpi"><b>98%</b><span>product attribute completeness in PLM</span><div class="track"><div class="fill" data-w="98"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="demo">
+    <span class="tag">4 · Excel</span>
+    <h2>Строка состояния внизу экрана при выделении</h2>
+    <p class="note">Как в Excel: выделяете числа в таблице — внизу появляются Среднее, Количество и Сумма. Выделяете текст где угодно на странице — Слова и Символы. Когда ничего не выделено, строка спрятана, чтобы не мешать чтению. Можно переключить на «всегда видна», чтобы сравнить.</p>
+    <p class="try">Выделите мышью этот абзац ниже</p>
+    <div class="pickme">Assortment planning starts with the question the buyer actually needs answered: which options, in which sizes, for which stores — and how the plan will be checked against sell-through after four weeks.</div>
+    <div class="switch" id="mode"><button type="button" class="on" data-m="auto">Появляется при выделении</button><button type="button" data-m="always">Всегда видна</button></div>
+    <div class="opts">
+      <div class="opt"><b>При выделении текста</b>«Слов: 34 · Символов: 214» — и маленькая отсылка для аналитиков, и полезно тем, кто копирует цитату.</div>
+      <div class="opt"><b>При выделении ячеек</b>«Среднее · Количество · Сумма» — ровно как в Excel. Работает в любых таблицах сайта: кейсы, шаблоны, статьи.</div>
+    </div>
+  </section>
+</div>
+
+<div class="status" id="status" aria-live="polite">
+  <span class="ready" id="ready">Ready</span>
+  <span id="addr" style="font-family:'IBM Plex Mono';color:var(--text-3)"></span>
+  <div class="agg" id="agg"></div>
+  <div class="zoom"><span>−</span><i></i><span>+</span><span>100%</span></div>
+</div>
+
+<script>
+/* ---------- 1. slicer ---------- */
+const TOPICS=[['Assortment',3],['Pricing',2],['Power BI',4],['Product data',2],['Excel models',3]];
+const CASES=[
+ {t:'Womenswear range plan rebuild',k:['Assortment','Excel models']},
+ {t:'Price ladder and margin report',k:['Pricing','Power BI']},
+ {t:'PLM product data standardisation',k:['Product data']},
+ {t:'Weekly retail trade report',k:['Power BI']},
+ {t:'Menswear size curve rebuild',k:['Assortment','Excel models','Power BI']},
+ {t:'E-commerce attribute cleaning',k:['Product data','Pricing','Assortment','Excel models','Power BI']}
+];
+const sel=new Set();
+const bi=document.getElementById('bi');
+document.getElementById('slicer').innerHTML=TOPICS.map(([t,c])=>`<label><input type="checkbox" value="${t}"><span class="box"></span>${t}<span class="cnt">${c}</span></label>`).join('');
+const max=Math.max(...TOPICS.map(x=>x[1]));
+document.getElementById('bars').innerHTML=TOPICS.map(([t,c])=>`<button class="bar" type="button" data-t="${t}" aria-pressed="false"><b>${c}</b><i style="height:${c/max*100}px"></i><span>${t}</span></button>`).join('');
+document.getElementById('cases').innerHTML=CASES.map(c=>`<div class="case" data-k="${c.k.join('|')}"><small>${c.k.join(' · ')}</small><p>${c.t}</p></div>`).join('');
+function render(){
+  bi.classList.toggle('filtered',sel.size>0);
+  document.getElementById('clear').classList.toggle('on',sel.size>0);
+  document.querySelectorAll('#slicer input').forEach(i=>i.checked=sel.has(i.value));
+  document.querySelectorAll('.bar').forEach(b=>{const on=sel.has(b.dataset.t);b.classList.toggle('sel',on);b.setAttribute('aria-pressed',on)});
+  document.querySelectorAll('.case').forEach(c=>{const hit=c.dataset.k.split('|').some(k=>sel.has(k));c.classList.toggle('hit',hit);c.classList.toggle('off',!hit)});
+}
+document.getElementById('slicer').addEventListener('change',e=>{e.target.checked?sel.add(e.target.value):sel.delete(e.target.value);render()});
+document.getElementById('bars').addEventListener('click',e=>{const b=e.target.closest('.bar');if(!b)return;const t=b.dataset.t;
+  // Power BI: plain click selects only this bar; Ctrl/Cmd+click adds to the selection
+  if(e.ctrlKey||e.metaKey){sel.has(t)?sel.delete(t):sel.add(t)}else{const only=sel.size===1&&sel.has(t);sel.clear();if(!only)sel.add(t)}
+  render()});
+document.getElementById('clear').addEventListener('click',()=>{sel.clear();render()});
+// bars grow on load
+document.querySelectorAll('.bar i').forEach((i,n)=>{i.style.transform='scaleY(0)';setTimeout(()=>i.style.transform='',200+n*90)});
+
+/* ---------- 3. conditional formatting table ---------- */
+const ROWS=[
+ ['Dresses',1240,68,42,'up'],['Knitwear',980,54,38,'eq'],['Denim',1510,74,47,'up'],
+ ['Outerwear',640,39,31,'dn'],['Accessories',720,61,55,'up'],['Footwear',560,33,29,'dn']
+];
+const sheet=document.getElementById('sheet');
+const cols=['','A','B','C','D'];
+let html='<thead><tr>'+cols.map((c,i)=>i?`<th data-col="${i}">${c}</th>`:'<th></th>').join('')+'</tr></thead><tbody>';
+html+=`<tr><th data-row="1">1</th><td class="hdr">Category</td><td class="hdr r">Units</td><td class="hdr r">Sell-through %</td><td class="hdr r">Margin %</td></tr>`;
+ROWS.forEach((r,i)=>{
+  html+=`<tr><th data-row="${i+2}">${i+2}</th><td class="txt" data-c="1" data-r="${i+2}">${r[0]}</td><td data-n="${r[1]}" data-c="2" data-r="${i+2}">${r[1].toLocaleString('en')}</td><td class="cs" data-n="${r[2]}" data-c="3" data-r="${i+2}"><span class="icon ${r[4]}"></span><span class="v">${r[2]}</span></td><td class="dbc" data-n="${r[3]}" data-c="4" data-r="${i+2}"><span class="db"></span><span class="v">${r[3]}</span></td></tr>`;
+});
+sheet.innerHTML=html+'</tbody>';
+const cf=document.getElementById('cf');
+function scale(v,min,max){const t=(v-min)/(max-min);const a=[247,249,247],b=[15,89,67];const k=t*.85;return `rgb(${a.map((x,i)=>Math.round(x+(b[i]-x)*k)).join(',')})`}
+function play(){
+  const cs=[...sheet.querySelectorAll('td.cs')];const vals=cs.map(c=>+c.dataset.n);const mn=Math.min(...vals),mx=Math.max(...vals);
+  cs.forEach((c,i)=>setTimeout(()=>{c.style.backgroundColor=scale(+c.dataset.n,mn,mx);c.style.color=(+c.dataset.n-mn)/(mx-mn)>.55?'#fff':''},120*i));
+  const dbs=[...sheet.querySelectorAll('td.dbc')];const dm=Math.max(...dbs.map(c=>+c.dataset.n));
+  dbs.forEach((c,i)=>setTimeout(()=>{c.querySelector('.db').style.width=`calc(${(+c.dataset.n/dm*100).toFixed(0)}% - 6px)`},300+120*i));
+  cf.classList.add('go');
+  document.querySelectorAll('.kpi .fill').forEach((f,i)=>setTimeout(()=>f.style.width=f.dataset.w+'%',200+i*150));
+}
+function reset(){
+  sheet.querySelectorAll('td.cs').forEach(c=>{c.style.backgroundColor='';c.style.color=''});
+  sheet.querySelectorAll('.db').forEach(d=>d.style.width='0');
+  cf.classList.remove('go');
+  document.querySelectorAll('.kpi .fill').forEach(f=>f.style.width='0');
+}
+new IntersectionObserver(([e])=>{e.isIntersecting?play():reset()},{threshold:.45}).observe(cf);
+document.querySelector('#replay button').addEventListener('click',()=>{reset();setTimeout(play,350)});
+
+/* ---------- 4. status bar ---------- */
+const status=document.getElementById('status'),agg=document.getElementById('agg'),addrEl=document.getElementById('addr');
+let mode='auto';
+const fmt=n=>n.toLocaleString('en',{maximumFractionDigits:1});
+function show(items,addr){
+  agg.innerHTML=items.map(([k,v])=>`<span>${k}: <b>${v}</b></span>`).join('');
+  addrEl.textContent=addr||'';
+  status.classList.toggle('on',mode==='always'||items.length>0);
+}
+// cell range selection
+let anchor=null,dragging=false;
+const cellAt=el=>el&&el.closest?el.closest('#sheet td'):null;
+function selectRange(a,b){
+  const r1=Math.min(+a.dataset.r,+b.dataset.r),r2=Math.max(+a.dataset.r,+b.dataset.r),c1=Math.min(+a.dataset.c,+b.dataset.c),c2=Math.max(+a.dataset.c,+b.dataset.c);
+  const nums=[];let count=0;
+  sheet.querySelectorAll('td[data-r]').forEach(td=>{const r=+td.dataset.r,c=+td.dataset.c;const inr=r>=r1&&r<=r2&&c>=c1&&c<=c2;td.classList.toggle('inrange',inr&&!(r1===r2&&c1===c2));td.classList.toggle('active',td===a);if(inr){count++;if(td.dataset.n)nums.push(+td.dataset.n)}});
+  sheet.querySelectorAll('thead th[data-col]').forEach(th=>th.classList.toggle('on',+th.dataset.col>=c1&&+th.dataset.col<=c2));
+  sheet.querySelectorAll('tbody th[data-row]').forEach(th=>th.classList.toggle('on',+th.dataset.row>=r1&&+th.dataset.row<=r2));
+  const L=' ABCD';const ref=(r1===r2&&c1===c2)?`${L[c1]}${r1}`:`${L[c1]}${r1}:${L[c2]}${r2}`;
+  if(nums.length>1){const s=nums.reduce((x,y)=>x+y,0);show([['Average',fmt(s/nums.length)],['Count',count],['Sum',fmt(s)]],ref)}
+  else if(nums.length===1){show([['Value',fmt(nums[0])]],ref)}
+  else show([['Count',count]],ref);
+}
+function clearCells(){sheet.querySelectorAll('.inrange,.active,th.on').forEach(x=>x.classList.remove('inrange','active','on'));anchor=null}
+sheet.addEventListener('mousedown',e=>{const td=cellAt(e.target);if(!td||!td.dataset.r)return;e.preventDefault();window.getSelection().removeAllRanges();anchor=td;dragging=true;selectRange(td,td)});
+sheet.addEventListener('mouseover',e=>{if(!dragging)return;const td=cellAt(e.target);if(td&&td.dataset.r)selectRange(anchor,td)});
+document.addEventListener('mouseup',()=>dragging=false);
+document.addEventListener('mousedown',e=>{if(!cellAt(e.target)&&anchor){clearCells();show([])}});
+// text selection
+document.addEventListener('selectionchange',()=>{
+  if(anchor)return;
+  const t=String(window.getSelection()).trim();
+  if(!t){show([]);return}
+  const words=t.split(/\s+/).filter(Boolean).length;
+  show([['Words',words],['Characters',t.length]]);
+});
+document.getElementById('mode').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.m;document.querySelectorAll('#mode button').forEach(x=>x.classList.toggle('on',x===b));show([...agg.querySelectorAll('span')].map(s=>[s.firstChild.textContent.replace(': ',''),s.querySelector('b').textContent]),addrEl.textContent)});
+</script>
+</body>
+</html>

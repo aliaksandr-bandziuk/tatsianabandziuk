@@ -1,0 +1,597 @@
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  > span {
+    font: 400 10px/1 var(--font-mono), monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5c6b62;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    background: var(--bg-base);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    min-height: 48px;
+    padding: 12px 16px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &::placeholder {
+      color: #9aa39c;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+
+    &[aria-invalid="true"] {
+      border-color: #b4412c;
+    }
+  }
+
+  textarea {
+    min-height: 116px;
+    resize: vertical;
+  }
+}
+
+.error {
+  font-size: 12.5px;
+  color: #b4412c;
+}
+
+.segmented {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 48px;
+  padding: 5px;
+  background: var(--bg-base);
+  border-radius: 8px;
+  border: 0;
+  margin: 0;
+
+  legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  label {
+    position: relative;
+    flex: 1;
+  }
+
+  input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  label span {
+    display: block;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px 8px;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  input:checked + span {
+    background: var(--emerald);
+    color: #fff;
+  }
+
+  input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.submitRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+
+  small {
+    max-width: 280px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-tertiary);
+  }
+}
+
+.status {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.success {
+  background: var(--bg-base);
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.check {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--emerald);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.nextList {
+  margin: 18px 0 0;
+  padding: 18px 20px;
+  list-style: none;
+  background: var(--tint);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  counter-reset: step;
+
+  li {
+    counter-increment: step;
+    display: flex;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.45;
+
+    &::before {
+      content: "0" counter(step);
+      font: 500 11px/1.8 var(--font-mono), monospace;
+      color: var(--accent);
+    }
+  }
+}
+
+.sentList {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--tint);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  b {
+    font: 500 10px/1.6 var(--font-mono), monospace;
+    color: var(--accent);
+  }
+}
+
+@media (max-width: 640px) {
+  .form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .segmented label span {
+    padding-inline: 4px;
+    font-size: 13px;
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Spreadsheet sheet: cells edge to edge, like Excel ---------- */
+.sheet {
+  --line: #d5dcd7;
+  --cell-h: 48px;
+  container-type: inline-size;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+// Every cell draws its right and bottom gridline; the grid overhangs by 1px
+// so the lines on the outer edge are clipped by the sheet's own border.
+.sheetGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  margin: 0 -1px -1px 0;
+}
+
+.single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.span {
+  grid-column: 1 / -1;
+}
+
+// Narrow sheets (popup, phones): one cell per row.
+@container (max-width: 560px) {
+  .sheetGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.addrStack {
+  display: none;
+}
+
+@container (max-width: 560px) {
+  .addrWide {
+    display: none;
+  }
+
+  .addrStack {
+    display: inline;
+  }
+}
+
+// Timeline and contact choice share a row only when there is room for both.
+@container (min-width: 561px) and (max-width: 700px) {
+  .pair {
+    grid-column: 1 / -1;
+  }
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  height: var(--cell-h);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-elevated);
+
+  // Cell fill: light green sweeps in from the left on focus.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--tint);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  // Selection frame (2px, like Excel), drawn over the gridlines around the cell.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -1px -1px -1px -1px;
+    z-index: 3;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 2px var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  > * {
+    position: relative;
+  }
+
+  &:focus-within {
+    z-index: 2;
+
+    &::before {
+      transform: scaleX(1);
+    }
+
+    &::after {
+      opacity: 1;
+    }
+  }
+
+  &[data-error="true"] {
+    z-index: 1;
+  }
+
+  &[data-error="true"]::after {
+    opacity: 1;
+    box-shadow: inset 0 0 0 2px #b4412c;
+  }
+}
+
+.multi {
+  height: 124px;
+}
+
+.addr {
+  flex: 0 0 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f5f3;
+  border-right: 1px solid var(--line);
+  font: 500 11px/1 var(--font-mono), monospace;
+  color: var(--text-tertiary);
+  transition: color 0.25s, background 0.25s;
+
+  .cell:focus-within & {
+    background: var(--tint-3);
+    color: var(--accent);
+  }
+
+  .cell:has(input:not(:placeholder-shown), textarea:not(:placeholder-shown), input[type="radio"]:checked) & {
+    color: var(--accent);
+  }
+
+  .cell[data-error="true"] & {
+    color: #b4412c;
+  }
+}
+
+.multi .addr {
+  align-items: flex-start;
+  padding-top: 18px;
+}
+
+// ƒx swaps to "=" on focus and stays "=" once the cell has a value.
+// Positions are whole pixels: a centred mark on a 47px cell lands on a half
+// pixel and one bar of the "=" renders heavier than the other.
+.fx {
+  flex: 0 0 26px;
+  position: relative;
+
+  b,
+  i {
+    position: absolute;
+    right: 0;
+    font-style: normal;
+    transition: opacity 0.25s, transform 0.35s var(--ease-out);
+  }
+
+  b {
+    top: 16px;
+    font: italic 500 13px/15px var(--font-heading), serif;
+    color: var(--text-tertiary);
+  }
+
+  // Drawn "=": two 2px bars, 3px apart.
+  i {
+    top: 20px;
+    width: 10px;
+    height: 7px;
+    opacity: 0;
+    transform: translateY(6px);
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    &::before {
+      top: 0;
+    }
+
+    &::after {
+      top: 5px;
+    }
+  }
+
+  .cell:focus-within &,
+  .cell:has(input:not(:placeholder-shown), textarea:not(:placeholder-shown)) & {
+    b {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+
+    i {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+.multi .fx b {
+  top: 18px;
+}
+
+.multi .fx i {
+  top: 22px;
+}
+
+.cellBox {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+
+  input,
+  textarea {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: none;
+    background: transparent;
+    padding: 20px 12px 5px;
+    font: 400 15px/1.35 var(--font-body), sans-serif;
+    color: var(--text-primary);
+
+    &:-webkit-autofill {
+      -webkit-text-fill-color: var(--text-primary);
+      -webkit-box-shadow: 0 0 0 1000px transparent inset;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+  }
+
+  textarea {
+    padding-top: 22px;
+    resize: none;
+  }
+
+  label {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    max-width: calc(100% - 24px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--text-tertiary);
+    transition: top 0.25s var(--ease-out), font-size 0.25s var(--ease-out), color 0.2s;
+  }
+
+  :focus + label,
+  :not(:placeholder-shown) + label,
+  [aria-invalid="true"] + label {
+    top: 5px;
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  [aria-invalid="true"] + label {
+    color: #b4412c;
+  }
+}
+
+/* Channel choice as a cell: short caption on top, three options below. */
+.choiceCell {
+  min-inline-size: 0;
+}
+
+.choiceBox {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 8px 0 12px;
+
+  legend {
+    float: left; // lets a legend sit inside the flex flow
+    width: 100%;
+    padding: 0 0 0 4px;
+    font-size: 11px;
+    line-height: 1.2;
+    color: var(--accent);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.choices {
+  display: flex;
+  gap: 4px;
+
+  label {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
+
+  input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  span {
+    display: block;
+    padding: 3px 4px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-secondary);
+    transition: background 0.2s, color 0.2s;
+  }
+
+  input:hover + span {
+    color: var(--accent);
+  }
+
+  input:checked + span {
+    background: var(--emerald);
+    color: #fff;
+  }
+
+  input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .addr {
+    flex-basis: 36px;
+  }
+
+  .fx {
+    flex-basis: 18px;
+  }
+
+  .cellBox label {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell::before,
+  .cell::after,
+  .fx b,
+  .fx i,
+  .cellBox label {
+    transition: none;
+  }
+}

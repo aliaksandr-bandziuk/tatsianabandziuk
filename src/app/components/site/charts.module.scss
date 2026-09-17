@@ -1,0 +1,258 @@
+// Chart animations run once the closest [data-reveal] ancestor becomes visible.
+// Without JS (no .js-reveal on <html>) everything is simply drawn.
+
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.grow {
+  transform-box: fill-box;
+  transform-origin: bottom;
+}
+
+.fade {
+  opacity: 1;
+}
+
+:global(.js-reveal) {
+  :global([data-reveal]):not(:global(.is-visible)) {
+    .draw {
+      stroke-dashoffset: 1;
+    }
+    .grow {
+      transform: scaleY(0);
+    }
+    .fade {
+      opacity: 0;
+    }
+    .bar {
+      transform: scaleX(0);
+    }
+  }
+
+  :global([data-reveal].is-visible) {
+    .draw {
+      transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+    }
+    .grow {
+      transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .fade {
+      transition: opacity 0.5s ease-out 1.3s;
+    }
+    .bar {
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .draw,
+  .grow,
+  .fade,
+  .bar {
+    transition: none !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
+  }
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.otb {
+  display: grid;
+  grid-template-columns: 52px repeat(4, minmax(0, 1fr));
+  gap: 2px;
+  font: 400 10px/1 var(--font-mono), monospace;
+  font-variant-numeric: tabular-nums;
+
+  span {
+    padding: 5px 6px;
+    text-align: right;
+    background: #fff;
+    color: var(--ink);
+  }
+
+  .rowHead {
+    background: transparent;
+    color: var(--text-tertiary);
+    text-align: left;
+    padding-inline: 4px;
+  }
+
+  .colHead {
+    background: #e2ebe4;
+    color: var(--muted);
+  }
+
+  .hi {
+    background: var(--emerald);
+    color: #fff;
+  }
+
+  .soft {
+    background: #d6e7dc;
+    color: var(--emerald);
+  }
+}
+
+:global(.js-reveal) :global([data-reveal].is-visible) .otb .sweep {
+  animation: sweep 1.4s ease-out 0.3s 1 both;
+}
+
+@keyframes sweep {
+  0%,
+  100% {
+    box-shadow: none;
+  }
+  40% {
+    box-shadow: inset 0 0 0 2px var(--emerald);
+  }
+}
+
+/* Dark theme: opt-in only via data-theme="dark" on <html> (the design is light). */
+:global([data-theme="dark"]) .otb span {
+    background: #232529;
+    color: var(--text-primary);
+  }
+:global([data-theme="dark"]) .otb .rowHead {
+    background: transparent;
+  }
+:global([data-theme="dark"]) .otb .colHead {
+    background: #1f3129;
+    color: var(--text-secondary);
+  }
+:global([data-theme="dark"]) .otb .hi {
+    background: var(--emerald);
+    color: #fff;
+  }
+:global([data-theme="dark"]) .otb .soft {
+    background: #1f3129;
+    color: var(--mint);
+  }
+
+
+.completeness {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.completenessRow {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) 34px;
+  gap: 8px;
+  align-items: center;
+  font: 400 9.5px/1 var(--font-mono), monospace;
+  color: var(--text-secondary);
+
+  b {
+    font-weight: 400;
+    text-align: right;
+    color: var(--accent);
+  }
+}
+
+.track {
+  position: relative;
+  height: 7px;
+  border-radius: 4px;
+  background: var(--tint-3);
+  overflow: hidden;
+}
+
+.bar {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background: var(--emerald);
+  transform-origin: left;
+}
+
+.barSoft {
+  background: var(--emerald-soft);
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 4px;
+
+  span {
+    height: 26px;
+    border-radius: 3px;
+    background: var(--tint-3);
+  }
+
+  .c1 {
+    background: var(--emerald);
+  }
+
+  .c2 {
+    background: var(--emerald-soft);
+  }
+}
+
+.hero {
+  position: relative;
+  background: var(--tint);
+  border-radius: 12px;
+  padding: 18px 20px 16px;
+}
+
+.heroHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  font: 400 10px/1 var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+
+  b {
+    font-weight: 500;
+    letter-spacing: 0;
+    font-size: 11px;
+    color: var(--accent);
+  }
+}
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font: 400 9.5px/1 var(--font-mono), monospace;
+  color: var(--text-tertiary);
+}
+
+.note {
+  position: absolute;
+  right: 16px;
+  bottom: 52px;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  font: 500 15px/1.1 var(--font-hand), cursive;
+  color: var(--accent);
+  max-width: 170px;
+  text-align: right;
+
+  @media (max-width: 480px) {
+    display: none;
+  }
+}
+
+.cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 420 / 168;
+}

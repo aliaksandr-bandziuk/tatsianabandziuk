@@ -1,0 +1,38 @@
+import { defineField, defineType } from "sanity";
+import { chartOptions, groups, languageField, orderField, placeholderField, seoField } from "../shared";
+
+export default defineType({
+  name: "service",
+  title: "Service",
+  type: "document",
+  groups,
+  fields: [
+    defineField({ name: "title", title: "Card title", type: "string" }),
+    defineField({ name: "slug", title: "Slug", type: "localizedSlug" }),
+    defineField({ name: "h1", title: "Page heading (H1)", type: "string" }),
+    defineField({ name: "shortDescription", title: "Card description", type: "text", rows: 3 }),
+    defineField({ name: "chart", title: "Card mini-chart", type: "string", options: { list: chartOptions } }),
+    defineField({ name: "intro", title: "Intro under the H1", type: "text", rows: 4 }),
+    defineField({ name: "facts", title: "Fact panel (duration, format, languages…)", type: "array", of: [{ type: "titledText" }] }),
+    defineField({ name: "problemsHeading", title: "Problems heading", type: "string" }),
+    defineField({ name: "problems", title: "Problems this service solves", type: "array", of: [{ type: "titledText" }] }),
+    defineField({ name: "includesHeading", title: "What the work includes — heading", type: "string" }),
+    defineField({ name: "includes", title: "What the work includes", type: "array", of: [{ type: "titledText" }] }),
+    defineField({ name: "resultsHeading", title: "Results heading", type: "string" }),
+    defineField({ name: "results", title: "Results", type: "array", of: [{ type: "metric" }] }),
+    defineField({ name: "toolsHeading", title: "Tools heading", type: "string" }),
+    defineField({ name: "tools", title: "Tools", type: "array", of: [{ type: "reference", to: [{ type: "tool" }] }] }),
+    defineField({ name: "caseStudy", title: "Related case study", type: "reference", to: [{ type: "caseStudy" }] }),
+    defineField({ name: "recommendation", title: "Recommendation", type: "reference", to: [{ type: "recommendation" }] }),
+    defineField({ name: "faqHeading", title: "FAQ heading", type: "string" }),
+    defineField({ name: "faq", title: "FAQ", type: "array", of: [{ type: "faqItem" }] }),
+    defineField({ name: "ctaTitle", title: "Closing call-to-action heading", type: "string" }),
+    defineField({ name: "ctaText", title: "Closing call-to-action text", type: "text", rows: 3 }),
+    orderField,
+    placeholderField,
+    seoField,
+    languageField,
+  ],
+  orderings: [{ title: "Order", name: "order", by: [{ field: "order", direction: "asc" }] }],
+  preview: { select: { title: "title", subtitle: "language" } },
+});
