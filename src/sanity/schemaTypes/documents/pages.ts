@@ -265,4 +265,5 @@ export const legalPage = defineType({
   preview: preview("Legal"),
 });
 
-export default [homepage, aboutPage, listingPage, contactPage, coursesPage, templatesPage, legalPage];
+const pages = [homepage, aboutPage, listingPage, contactPage, coursesPage, templatesPage, legalPage];
+export default pages;

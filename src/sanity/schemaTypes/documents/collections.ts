@@ -174,4 +174,5 @@ export const calculatorPage = defineType({
   preview: preview("cardTitle", "kind"),
 });
 
-export default [service, caseStudy, post, category, calculatorPage];
+const collections = [service, caseStudy, post, category, calculatorPage];
+export default collections;

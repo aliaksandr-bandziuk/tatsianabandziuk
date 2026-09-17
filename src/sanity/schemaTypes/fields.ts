@@ -17,7 +17,6 @@ type Options = {
 };
 
 // Sanity's field typings are strict per field type; the builders return plain definitions.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Field = any;
 
 const humanize = (name: string) =>

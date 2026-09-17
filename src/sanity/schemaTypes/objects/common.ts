@@ -137,4 +137,5 @@ export const credential = defineType({
   preview: { select: { title: "title", subtitle: "institution", media: "thumb" } },
 });
 
-export default [accentHeading, seo, metric, titledText, fact, faqItem, link, recommendation, careerStep, consultingFormat, toolItem, credential];
+const common = [accentHeading, seo, metric, titledText, fact, faqItem, link, recommendation, careerStep, consultingFormat, toolItem, credential];
+export default common;
