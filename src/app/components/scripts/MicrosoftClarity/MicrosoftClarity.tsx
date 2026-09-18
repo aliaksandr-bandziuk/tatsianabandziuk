@@ -1,15 +1,16 @@
 "use client";
 
-import { useAnalyticsConsent } from "@/hooks/useAnalyticsConsent";
 import { useEffect } from "react";
 
 const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID;
 
-/** Loads only when NEXT_PUBLIC_CLARITY_ID is set and the visitor accepted analytics cookies. */
+/**
+ * Microsoft Clarity. Loads whenever NEXT_PUBLIC_CLARITY_ID is set, regardless
+ * of the cookie banner choice, as on bandziuk.com (owner decision, 2026-09-18).
+ */
 export default function MicrosoftClarity() {
-  const consent = useAnalyticsConsent();
   useEffect(() => {
-    if (!CLARITY_ID || !consent) return;
+    if (!CLARITY_ID) return;
     (function (c: any, l: Document, a: string, r: string, i: string) {
       if (c[a]) return; // do not initialise twice (dev strict mode)
       c[a] =
@@ -24,7 +25,7 @@ export default function MicrosoftClarity() {
       if (y && y.parentNode) y.parentNode.insertBefore(t, y);
       else l.head.appendChild(t);
     })(window, document, "clarity", "script", CLARITY_ID);
-  }, [consent]);
+  }, []);
 
   return null;
 }
