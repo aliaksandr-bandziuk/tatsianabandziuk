@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
+import { afterInteraction } from "@/lib/afterInteraction";
 
 const CLARITY_ID = "yk8avkfbei";
 
 /**
  * Microsoft Clarity. Loads on every page regardless of the cookie banner
- * choice, as on bandziuk.com (owner decision, 2026-09-18). Injected after the
- * page has loaded and the browser is idle, so it stays out of the first render.
+ * choice, as on bandziuk.com (owner decision, 2026-09-18). Injected on the
+ * visitor's first interaction or 4 s after load (see afterInteraction), so it
+ * stays out of the first render.
  */
 export default function MicrosoftClarity() {
   useEffect(() => {
@@ -26,13 +28,7 @@ export default function MicrosoftClarity() {
       else l.head.appendChild(t);
     })(window, document, "clarity", "script", CLARITY_ID);
 
-    const idle = () => {
-      if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(inject, { timeout: 4000 });
-      else setTimeout(inject, 2000);
-    };
-    if (document.readyState === "complete") idle();
-    else window.addEventListener("load", idle, { once: true });
-    return () => window.removeEventListener("load", idle);
+    return afterInteraction(inject);
   }, []);
 
   return null;

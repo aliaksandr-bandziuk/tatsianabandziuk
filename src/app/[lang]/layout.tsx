@@ -1,14 +1,11 @@
 import "@/app/globals.css";
-import StatusBar from "@/app/components/site/StatusBar";
-import SmoothScroll from "@/app/components/site/SmoothScroll";
-import PageLoader from "@/app/components/site/PageLoader";
+import DeferredWidgets from "@/app/components/site/DeferredWidgets";
 import { getContent, localizeHref } from "@/content";
 import type { SiteContent } from "@/content/types";
 import { ConsultationModalProvider } from "@/app/components/site/ConsultationModal";
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { Playfair_Display, Inter_Tight, IBM_Plex_Mono, Caveat, Marck_Script } from "next/font/google";
-import CustomCookieConsent from "../components/shared/CustomCookieConsent/CustomCookieConsent";
 import GoogleAnalyticsWrapper from "../components/scripts/GoogleAnalyticsWrapper/GoogleAnalyticsWrapper";
 import MicrosoftClarity from "../components/scripts/MicrosoftClarity/MicrosoftClarity";
 import SchemaIdentity from "../components/seo/SchemaIdentity/SchemaIdentity";
@@ -151,16 +148,17 @@ export default async function LangLayout(
           <Footer lang={params.lang} />
         </ConsultationModalProvider>
         <Reveal />
-        <SmoothScroll />
-        <StatusBar lang={params.lang} labels={c.ui.statusBar} />
-        <PageLoader
-          signature={c.person.name}
-          label={{ en: "Loading page…", pl: "Ładowanie strony…", ru: "Загрузка страницы…" }[params.lang] ?? "Loading page…"}
+        <DeferredWidgets
+          statusBar={{ lang: params.lang, labels: c.ui.statusBar }}
+          pageLoader={{
+            signature: c.person.name,
+            label: { en: "Loading page…", pl: "Ładowanie strony…", ru: "Загрузка страницы…" }[params.lang] ?? "Loading page…",
+          }}
+          cookie={{ lang: params.lang }}
         />
 
         <GoogleAnalyticsWrapper />
         <MicrosoftClarity />
-        <CustomCookieConsent lang={params.lang} />
       </body>
     </html>
   );

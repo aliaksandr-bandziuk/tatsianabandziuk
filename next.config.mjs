@@ -8,6 +8,12 @@ const nextConfig = {
   // The free templates are emailed as attachments, so the route needs the files at runtime.
   outputFileTracingIncludes: { "/api/email": ["./templates/**/*"] },
 
+  experimental: {
+    // Styles (~15 KB gzipped) go into a <style> tag in the HTML instead of
+    // render-blocking <link> requests (PageSpeed, 2026-09-18).
+    inlineCss: true,
+  },
+
   // Next still ships polyfills for features every supported browser has; swap
   // the module for an empty one (see src/lib/empty-polyfills.js).
   turbopack: {
