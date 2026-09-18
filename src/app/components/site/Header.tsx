@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
 import { calculatorHref, getContent, languageAliases, localizeHref, serviceHref } from "@/content";
-import { DesktopNav, LangSwitch, MobileMenu, type NavEntry } from "./HeaderClient";
+import { BrandMark, DesktopNav, LangSwitch, MobileMenu, type NavEntry } from "./HeaderClient";
 import s from "./header.module.scss";
 
 export default async function Header({ lang }: { lang: string }) {
@@ -20,6 +20,7 @@ export default async function Header({ lang }: { lang: string }) {
     <header className={s.header}>
       <div className={`container ${s.inner}`}>
         <Link href={localizeHref(lang, "/")} className={s.brand} aria-label={c.person.name}>
+          <BrandMark className={s.brandMark} />
           <span className={s.brandName}>{c.person.name}</span>
           <span className={s.brandTag}>{c.ui.tagline}</span>
         </Link>
@@ -27,12 +28,14 @@ export default async function Header({ lang }: { lang: string }) {
         <div className={s.actions}>
           <LangSwitch lang={lang} aliases={aliases} label={c.ui.switchLanguage} />
           <ConsultationButton href={cta.href} className={`btn btn-sm ${s.cta}`}>
-            {cta.label}
+            <span className={s.ctaFull}>{cta.label}</span>
+            <span className={s.ctaShort}>{c.ui.bookConsultationShort}</span>
           </ConsultationButton>
           <MobileMenu
             lang={lang}
             nav={nav}
             cta={cta}
+            aliases={aliases}
             labels={{ menu: c.ui.menu, close: c.ui.close, language: c.ui.switchLanguage }}
           />
         </div>

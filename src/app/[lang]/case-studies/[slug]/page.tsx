@@ -103,7 +103,7 @@ export default async function CaseStudyPage({ params }: { params: Params }) {
         </div>
       </section>
 
-      <MetricsBand title={cs.resultsTitle} note={c.ui.placeholderFigures} items={cs.results} />
+      <MetricsBand title={cs.resultsTitle} items={cs.results} />
 
       <section className={`container section ${s.twoCol}`}>
         <div>

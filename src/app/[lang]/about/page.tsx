@@ -58,7 +58,7 @@ export default async function AboutPage({ params }: { params: { lang: string } }
           </div>
         </div>
         <div data-reveal data-reveal-delay="120">
-          <Photo label={c.ui.portraitPlaceholder} height={460} />
+          <Photo label={c.ui.portraitPlaceholder} height={460} image={c.person.photoSecondary} sizes="(max-width: 900px) 100vw, 40vw" />
           <p className="signature" style={{ fontSize: 28, margin: "14px 4px 0" }}>
             {c.person.signature}
           </p>
@@ -135,7 +135,9 @@ export default async function AboutPage({ params }: { params: { lang: string } }
         <CredentialsGallery data={a.credentials} />
       </section>
 
+      {/* Recommendation: hidden until real ones arrive (owner, 2026-09-18).
       <RecommendationWide title={a.recommendationTitle} note={c.ui.recommendationPlaceholder} item={a.recommendation} />
+      */}
       {a.faq && a.faq.length > 0 && <FaqSection title={a.faqTitle ?? accentText(a.h1)} items={a.faq} />}
       <CtaPanel lang={lang} title={a.ctaTitle} text={a.ctaText} note={a.ctaNote} signature={c.person.signature} />
     </>

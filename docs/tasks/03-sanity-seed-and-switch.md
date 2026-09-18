@@ -61,3 +61,18 @@
 - `/sitemap.xml` содержит все страницы с hreflang; `robots.txt` по-прежнему закрыт (`SITE_INDEXING` не задан).
 - Обновить раздел Status и Content model в `CLAUDE.md`.
 - Отчёт `docs/sanity-report.md`: что изменено в схемах, как запускать seed, какие поля в Studio заполняет владелец (фото, рекомендации, цифры кейсов), шаги по вебхуку.
+
+
+## Фотографии в Sanity
+
+В модель `Person` (`src/content/types.ts`) добавлены два поля типа `SiteImage` (`{ src, alt, focus? }`):
+
+- `photoPrimary` — фото в первом экране главной страницы (сейчас снимок с прозрачным фоном);
+- `photoSecondary` — фото во всех остальных местах: блок «обо мне» на главной, страница About, блок контактов.
+
+В fallback-контенте они указывают на файлы `public/images/portrait/tatsiana-main.webp` и `tatsiana-second.webp`. Что нужно сделать в Sanity:
+
+1. В схеме документа с данными о человеке (`person` или тот документ, куда легла модель `Person`) завести два поля типа `image` с `hotspot: true` и обязательным `alt` (поле локализовано вместе с документом, то есть своё на каждый язык).
+2. В маппинге (`src/content/index.ts` или где собирается `Person`) собирать `src` через `urlFor(asset)` — кастомный лоадер `src/lib/images/sanityLoader.ts` сам подставит ширину и формат. Если фото в Sanity нет, остаётся значение из fallback.
+3. В seed-скрипте загрузить оба файла из `public/images/portrait/` как assets и проставить ссылки во все три языковые версии документа.
+4. Компонент `Photo` (`src/app/components/site/Blocks.tsx`) рендерит `next/image` с `fill`, поэтому менять его не нужно — достаточно, чтобы в `Person` приходили `src` и `alt`.

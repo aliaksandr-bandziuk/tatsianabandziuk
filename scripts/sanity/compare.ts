@@ -45,7 +45,7 @@ async function main() {
     const out: string[] = [];
     diff(FALLBACK[lang], result.content, lang, out);
     // Credentials: Sanity serves the images from its CDN, so only the rest must match.
-    const rest = out.filter((d) => !/credentials\.items\[\d+\]\.(thumb|image|width|height)/.test(d));
+    const rest = out.filter((d) => !/credentials\.items\[\d+\]\.(thumb|image|width|height)/.test(d) && !/person\.photo\w+\.src: .*"https:\/\/cdn\.sanity\.io\//.test(d));
     const images = result.content.about.credentials.items.filter((i) => i.image.startsWith("https://cdn.sanity.io/") && i.width > 0).length;
     console.log(`${lang}: ${rest.length} difference(s); missing pieces: ${result.missing.join(", ") || "none"}; CDN images ${images}/${result.content.about.credentials.items.length}`);
     rest.slice(0, 40).forEach((d) => console.log("  " + d));

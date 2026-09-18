@@ -14,25 +14,25 @@ const placeholderRec = (topic: string) => ({
 
 const timeline = [
   {
-    period: "2014 — 2016",
+    period: "2014 — 2017",
     company: "OMA",
     role: "Commercial analyst",
     text: "Sales reporting and planning support for a building materials retailer.",
   },
   {
-    period: "2016 — 2018",
-    company: "Luxvisage",
-    role: "Category & pricing analyst",
-    text: "Assortment structure and price positioning for a distributed product range.",
-  },
-  {
-    period: "2018 — 2021",
+    period: "2017 — 2018",
     company: "Fashion House",
     role: "Retail analyst",
     text: "Multi-brand retail reporting, sell-through and tenant performance analysis.",
   },
   {
-    period: "2021 — today",
+    period: "2018 — 2022",
+    company: "Luxvisage",
+    role: "Category & pricing analyst",
+    text: "Assortment structure and price positioning for a distributed product range.",
+  },
+  {
+    period: "2022 — today",
     company: "International fashion brand",
     role: "Global Brand Analyst & Product Data Lead",
     text: "Assortment, pricing and product data for a brand selling across Europe and Asia.",
@@ -53,6 +53,7 @@ export const en: SiteContent = {
     ],
     tagline: "Retail & Fashion Analytics",
     bookConsultation: "Book a Consultation",
+    bookConsultationShort: "Book a Consultation",
     menu: "Menu",
     close: "Close",
     switchLanguage: "Language",
@@ -84,7 +85,6 @@ export const en: SiteContent = {
     toc: "Contents",
     aboutLink: "About Tatsiana Bandziuk",
     replyNote: "Reply within one working day · EN / PL / RU",
-    placeholderFigures: "placeholder figures",
     schematicCaption: "schematic dashboard · illustrative data",
     dashboardCaption: "anonymised dashboard illustration · schematic, illustrative data",
     portraitPlaceholder: "Portrait — to be replaced",
@@ -162,6 +162,9 @@ export const en: SiteContent = {
       { label: "Русский", value: "native" },
     ],
     educationChip: "Master of Economics and Management, BSEU",
+    photoPrimary: { src: "/images/portrait/tatsiana-main.webp", alt: "Tatsiana Bandziuk, retail and fashion analytics consultant", focus: "center 12%" },
+    photoSecondary: { src: "/images/portrait/tatsiana-second.webp", alt: "Tatsiana Bandziuk at her desk with a Power BI report open" },
+    photoWorkspace: { src: "/images/portrait/tatsiana-workspace.webp", alt: "Laptop, notebook and pen on Tatsiana Bandziuk's desk" },
   },
   home: {
     seo: {
@@ -191,7 +194,6 @@ export const en: SiteContent = {
       "Retail and Brand Analytics Experience at Luxvisage, Fashion House, OMA and an International Fashion Brand",
     experienceNames: ["Luxvisage", "Fashion House", "OMA", "International fashion brand"],
     servicesTitle: "Retail Analytics Consulting Services for Fashion and Retail Brands",
-    servicesCount: "06 services",
     aboutTitle: "About Tatsiana Bandziuk, Retail and Fashion Analytics Consultant",
     aboutText: [
       "I have spent about ten years in international fashion retail, working between the commercial teams and the systems behind them: assortment, pricing, product data and the reporting that has to agree with all three.",
@@ -201,7 +203,6 @@ export const en: SiteContent = {
     timeline,
     aboutLink: "About Tatsiana Bandziuk",
     resultsTitle: "Retail Analytics Consulting Results in Numbers",
-    resultsNote: "placeholder figures",
     results: [
       {
         value: "+18",
@@ -361,7 +362,7 @@ export const en: SiteContent = {
     timeline: [...timeline].reverse(),
     educationTitle: "Education in Logistics, Economics and Management at BSEU",
     educationText:
-      "I hold two degrees in Logistics from the Belarusian State Economic University (BSEU) in Minsk: logistician-economist (2014) and Master of Economics and Management (2015). During the master’s programme I completed the EU Tempus Be-Safe certificate with Sapienza University of Rome (CTL) and Knowledge Transfer sessions with Loughborough University, and in 2016 my paper took second place at the BNTU Young Researchers Seminar. Logistics taught me to define the question before choosing the metric.",
+      "I hold two degrees in Logistics from the Belarusian State Economic University (BSEU) in Minsk: logistician-economist (2014) and Master of Economics and Management (2015). During the master’s programme I completed the EU Tempus Be-Safe certificate with Sapienza University of Rome (CTL). In 2016 I completed Knowledge Transfer sessions with Loughborough University, and my paper took second place at the BNTU Young Researchers Seminar. Logistics taught me to define the question before choosing the metric.",
     educationChips: [
       "Logistics, BSEU",
       "Master of Economics and Management",
@@ -394,17 +395,6 @@ export const en: SiteContent = {
           height: 1410,
         },
         {
-          id: "loughborough",
-          year: "Tempus",
-          institution: "Loughborough University, Design School",
-          title:
-            "Certificate of participation: Knowledge Transfer sessions, Tempus road safety project",
-          thumb: "/images/credentials/lboro-thumb.webp",
-          image: "/images/credentials/lboro.webp",
-          width: 2000,
-          height: 1431,
-        },
-        {
           id: "bseu-2015",
           year: "2015",
           institution: "Belarusian State Economic University",
@@ -414,6 +404,17 @@ export const en: SiteContent = {
           width: 2000,
           height: 1355,
           redacted: true,
+        },
+        {
+          id: "loughborough",
+          year: "2016",
+          institution: "Loughborough University, Design School",
+          title:
+            "Certificate of participation: Knowledge Transfer sessions, Tempus road safety project",
+          thumb: "/images/credentials/lboro-thumb.webp",
+          image: "/images/credentials/lboro.webp",
+          width: 2000,
+          height: 1431,
         },
         {
           id: "bntu-2016",
@@ -463,7 +464,7 @@ export const en: SiteContent = {
       {
         question: "What is Tatsiana Bandziuk’s education?",
         answer:
-          "I hold two degrees in Logistics from the Belarusian State Economic University: logistician-economist (2014) and Master of Economics and Management (2015). During the master’s programme I completed the EU Tempus Be-Safe certificate with Sapienza University of Rome and Knowledge Transfer sessions with Loughborough University. In 2016 my paper took second place at the BNTU Young Researchers Seminar.",
+          "I hold two degrees in Logistics from the Belarusian State Economic University: logistician-economist (2014) and Master of Economics and Management (2015). During the master’s programme I completed the EU Tempus Be-Safe certificate with Sapienza University of Rome. In 2016 I completed Knowledge Transfer sessions with Loughborough University, and my paper took second place at the BNTU Young Researchers Seminar.",
       },
       {
         question: "Does Tatsiana Bandziuk take consulting projects?",
@@ -544,7 +545,7 @@ export const en: SiteContent = {
       {
         question: "How are the case study figures anonymised?",
         answer:
-          "The figures on the case study pages are illustrative and are marked as such. They show the kind of change a project measures, not a specific client’s results. Details such as market counts or product counts are left out on purpose.",
+          "The results are real project outcomes, shown as percentages, percentage points or time saved rather than sales values. Client names and details such as market counts or product counts are left out on purpose, so no company can be identified.",
       },
       {
         question: "Can a similar project be done for our brand?",
@@ -702,14 +703,9 @@ export const en: SiteContent = {
           "The courses are in preparation and no start date is fixed yet. Join the waitlist and you will receive one email when the first course opens.",
       },
       {
-        question: "Will the Power BI course be online?",
+        question: "What will the retail analytics courses cover?",
         answer:
-          "Yes, the courses are being prepared as online courses, so you can follow them from anywhere. Each module is built around a real retail reporting or planning task rather than a generic BI demo.",
-      },
-      {
-        question: "Which languages will the courses be taught in?",
-        answer:
-          "I work in English, Polish and Russian, and the courses are being prepared with these languages in mind. The waitlist email will say which language versions open first.",
+          "Four practical topics: Power BI for retail KPI reporting, Excel models for open-to-buy and buy planning, retail pricing and markdown analysis, and product data and attribute standards in PLM. Each module starts from a task a retail team actually has, such as a weekly sell-through report or a monthly buying budget.",
       },
       {
         question: "Do I need Power BI experience to join?",
@@ -731,13 +727,13 @@ export const en: SiteContent = {
     items: [
       {
         title: "Open-to-Buy Excel Template for Retail Planning",
-        text: "Planned sales, markdowns, closing stock and on-order by month and category, with the open-to-buy calculated for you and checks that flag drift mid-season.",
+        text: "Planned sales, markdowns, closing stock and on-order by month, category and market, with the open-to-buy at retail, at cost and in units, and three checks that flag drift mid-season.",
         preview: "otb",
         previewCaption: "preview · open-to-buy sheet",
       },
       {
         title: "Retail KPI Dashboard Checklist for Power BI",
-        text: "The checks to run before a retail dashboard goes to the commercial team: KPI definitions, owners, market access and refresh.",
+        text: "Twelve checks to run before a retail dashboard goes to the commercial team: KPI definitions, data model, market access, refresh, owners and reconciliation.",
         preview: "checklist",
         previewCaption: "preview · dashboard checklist",
       },
@@ -751,11 +747,12 @@ export const en: SiteContent = {
     ],
     insideTitle: "What Is Inside the Open-to-Buy Excel Template",
     inside: [
-      "Open-to-buy sheet with monthly phasing by category",
+      "Open-to-buy sheet by month, category and market, at retail, at cost and in units",
       "Open-to-buy formula: planned sales + planned markdowns + planned closing stock − opening stock − stock on order",
-      "Built-in checks that flag when receipts or sales have not been updated",
-      "A definitions tab that says how each figure is calculated",
-      "A one-page guide on using the template in a seasonal planning cycle",
+      "Three built-in checks: over-bought months, actuals not updated and sales off plan",
+      "Size and colour split from cleaned sales history",
+      "A definitions tab that says how and by whom each figure is calculated",
+      "A one-page guide on using the template in a seasonal planning cycle and handing it over",
     ],
     formTitle: "Download the Free Retail Planning Templates",
     formText:
@@ -783,7 +780,7 @@ export const en: SiteContent = {
       {
         question: "Can the template handle several markets?",
         answer:
-          "The template is laid out by month and category and is meant to be adapted. For several markets, keep one planning sheet per market with the same categories, so the totals can be added up. Convert every market to one currency before adding them.",
+          "Yes. The open-to-buy sheet is laid out by month, category and market, and the All markets block adds them up. To add a market or category, copy a block and rename it. Keep every market in one currency so the totals can be added up.",
       },
       {
         question: "How is the KPI dashboard checklist used?",

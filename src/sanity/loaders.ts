@@ -1,7 +1,7 @@
 import { groq } from "next-sanity";
 import { client } from "./sanity.client";
 import { ARTICLE_BLOCK_KINDS } from "./articleBlocks";
-import type { Locale, SiteContent } from "@/content/types";
+import type { Locale, SiteContent, SiteImage } from "@/content/types";
 
 /**
  * Reads one language of the site from Sanity and returns exactly the view
@@ -14,7 +14,15 @@ import type { Locale, SiteContent } from "@/content/types";
 const ROUTABLE = groq`..., "slug": slug[$lang].current, "updatedAt": _updatedAt`;
 
 const QUERY = groq`{
-  "settings": *[_type == "siteSettings" && language == $lang][0],
+  "settings": *[_type == "siteSettings" && language == $lang][0]{
+    ...,
+    person{
+      ...,
+      "photoPrimary": { "src": photoPrimary.file.asset->url, "alt": photoPrimary.alt },
+      "photoSecondary": { "src": photoSecondary.file.asset->url, "alt": photoSecondary.alt },
+      "photoWorkspace": { "src": photoWorkspace.file.asset->url, "alt": photoWorkspace.alt }
+    }
+  },
   "home": *[_type == "homepage" && language == $lang][0],
   "about": *[_type == "aboutPage" && language == $lang][0]{
     ...,
@@ -167,10 +175,23 @@ export async function loadSiteContent(lang: Locale, fallback: SiteContent): Prom
     missing.push("legalPage privacy");
   }
 
+  const personRaw = settings.person
+    ? (conform(settings.person, fallback.person) as SiteContent["person"])
+    : (missing.push("person"), fallback.person);
+  /** A photo counts only when Studio has a file; otherwise the fallback file under public/ stays. */
+  const photo = (value: SiteImage | undefined, fb: SiteImage | undefined): SiteImage | undefined =>
+    value && typeof value.src === "string" && value.src ? { ...fb, ...value } : fb;
+  const person: SiteContent["person"] = {
+    ...personRaw,
+    photoPrimary: photo(personRaw.photoPrimary, fallback.person.photoPrimary),
+    photoSecondary: photo(personRaw.photoSecondary, fallback.person.photoSecondary),
+    photoWorkspace: photo(personRaw.photoWorkspace, fallback.person.photoWorkspace),
+  };
+
   const content: SiteContent = {
     locale: lang,
     ui,
-    person: settings.person ? (conform(settings.person, fallback.person) as SiteContent["person"]) : (missing.push("person"), fallback.person),
+    person,
     formats: (settings.formats as SiteContent["formats"]) ?? [],
     tools: (conform(settings.tools ?? [], fallback.tools) as SiteContent["tools"]) ?? [],
     recommendations: (settings.recommendations as SiteContent["recommendations"]) ?? [],

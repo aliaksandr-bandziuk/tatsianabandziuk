@@ -51,9 +51,11 @@ export default async function ServicesPage({ params }: { params: { lang: string 
         </h2>
         <FormatCards lang={lang} formats={c.formats} clientTypesLabel={c.home.clientTypesLabel} clientTypes={c.home.clientTypes} />
       </section>
+      {/* Recommendation: hidden until real ones arrive (owner, 2026-09-18).
       {p.recommendation && p.recommendationTitle && (
         <RecommendationWide title={p.recommendationTitle} note={c.ui.recommendationPlaceholder} item={p.recommendation} />
       )}
+      */}
       {p.faq && p.faq.length > 0 && <FaqSection title={p.faqTitle ?? p.h1} items={p.faq} />}
       <CtaPanel lang={lang} title={p.ctaTitle ?? ""} text={p.ctaText ?? ""} signature={c.person.signature} />
     </>

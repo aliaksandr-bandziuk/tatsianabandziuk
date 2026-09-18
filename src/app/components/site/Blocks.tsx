@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
 import type { ReactNode } from "react";
@@ -12,6 +13,7 @@ import type {
   Post,
   Recommendation,
   Service,
+  SiteImage,
   TitledText,
   Tool,
 } from "@/content/types";
@@ -52,9 +54,46 @@ export function SectionHead({ title, aside, as: Tag = "h2", className = "h2" }: 
   );
 }
 
-export function Photo({ label, height, className = "" }: { label: string; height?: number | string; className?: string }) {
+/**
+ * Photo slot: renders `image` when the content has one (uploaded in Studio or
+ * a file under `public/`), and the warm placeholder tile with a caption when
+ * it does not. `sizes` keeps the srcset honest — every slot is narrower than
+ * the viewport.
+ */
+export function Photo({
+  label,
+  height,
+  className = "",
+  image,
+  priority = false,
+  sizes = "(max-width: 900px) 100vw, 40vw",
+}: {
+  label: string;
+  height?: number | string;
+  className?: string;
+  image?: SiteImage;
+  priority?: boolean;
+  sizes?: string;
+}) {
+  const style = height !== undefined && height !== "auto" ? { height } : undefined;
+
+  if (image) {
+    return (
+      <div className={`photo photo-filled ${className}`} style={style}>
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          sizes={sizes}
+          priority={priority}
+          style={image.focus ? { objectPosition: image.focus } : undefined}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className={`photo ${className}`} style={height !== undefined && height !== "auto" ? { height } : undefined} role="img" aria-label={label}>
+    <div className={`photo ${className}`} style={style} role="img" aria-label={label}>
       <span>{label}</span>
     </div>
   );
@@ -282,14 +321,14 @@ function metricBars(items: Metric[]) {
   });
 }
 
-export function MetricsBand({ title, note, items }: { title: string; note: string; items: Metric[] }) {
+export function MetricsBand({ title, note, items }: { title: string; note?: string; items: Metric[] }) {
   const bars = metricBars(items);
   return (
     <section className={s.band}>
       <div className="container">
         <div className="section-head" style={{ marginBottom: 46 }} data-reveal>
           <h2 className="h2">{title}</h2>
-          <span className="eyebrow">{note}</span>
+          {note && <span className="eyebrow">{note}</span>}
         </div>
         <div className={s.bandGrid} style={{ ["--cols" as string]: Math.min(items.length, 4) }}>
           {items.map((m, i) => (

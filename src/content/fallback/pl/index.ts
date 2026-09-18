@@ -12,28 +12,27 @@ const placeholderRec = (topic: string) => ({
   placeholder: true,
 });
 
-/** Years are unconfirmed (to be checked against the CV). */
 const timeline = [
   {
-    period: "2014 — 2016",
+    period: "2014 — 2017",
     company: "OMA",
     role: "Analityczka handlowa",
     text: "Raportowanie sprzedaży i wsparcie planowania w sieci sklepów z materiałami budowlanymi.",
   },
   {
-    period: "2016 — 2018",
-    company: "Luxvisage",
-    role: "Analityczka kategorii i cen",
-    text: "Struktura asortymentu i cen dla dystrybuowanych marek.",
-  },
-  {
-    period: "2018 — 2021",
+    period: "2017 — 2018",
     company: "Fashion House",
     role: "Analityczka retail",
     text: "Raporty dla wielu marek, sell-through i analiza wyników najemców.",
   },
   {
-    period: "2021 — obecnie",
+    period: "2018 — 2022",
+    company: "Luxvisage",
+    role: "Analityczka kategorii i cen",
+    text: "Struktura asortymentu i cen dla dystrybuowanych marek.",
+  },
+  {
+    period: "2022 — obecnie",
     company: "Międzynarodowa marka modowa",
     role: "Global Brand Analyst & Product Data Lead",
     text: "Asortyment, ceny i dane produktowe na rynkach Europy i Azji.",
@@ -56,6 +55,7 @@ export const pl: SiteContent = {
     ],
     tagline: "Analityka w handlu i modzie",
     bookConsultation: "Umów konsultację",
+    bookConsultationShort: "Umów konsultację",
     menu: "Menu",
     close: "Zamknij",
     switchLanguage: "Język",
@@ -87,9 +87,8 @@ export const pl: SiteContent = {
     toc: "Spis treści",
     aboutLink: "Więcej o Tatsianie Bandziuk",
     replyNote: "Odpowiedź w ciągu jednego dnia roboczego · PL / EN / RU",
-    placeholderFigures: "dane zastępcze",
-    schematicCaption: "schemat dashboardu · dane zastępcze",
-    dashboardCaption: "zanonimizowana ilustracja dashboardu · schemat, dane zastępcze",
+    schematicCaption: "schemat dashboardu · dane poglądowe",
+    dashboardCaption: "zanonimizowana ilustracja dashboardu · schemat, dane poglądowe",
     portraitPlaceholder: "Portret — do podmiany",
     recommendationPlaceholder:
       "Miejsce na rekomendacje — prawdziwe rekomendacje z LinkedIn pojawią się za zgodą autorów",
@@ -166,6 +165,9 @@ export const pl: SiteContent = {
       { label: "Русский", value: "ojczysty" },
     ],
     educationChip: "Magister ekonomii i zarządzania, BGEU",
+    photoPrimary: { src: "/images/portrait/tatsiana-main.webp", alt: "Tatsiana Bandziuk, konsultantka analityki retail i fashion", focus: "center 12%" },
+    photoSecondary: { src: "/images/portrait/tatsiana-second.webp", alt: "Tatsiana Bandziuk przy biurku z otwartym raportem Power BI" },
+    photoWorkspace: { src: "/images/portrait/tatsiana-workspace.webp", alt: "Laptop, notes i długopis na biurku Tatsiany Bandziuk" },
   },
   home: {
     seo: {
@@ -195,17 +197,15 @@ export const pl: SiteContent = {
       "Doświadczenie w analityce handlu: Luxvisage, Fashion House, OMA i międzynarodowa marka modowa",
     experienceNames: ["Luxvisage", "Fashion House", "OMA", "Międzynarodowa marka modowa"],
     servicesTitle: "Usługi analityki sprzedaży dla marek modowych i handlowych",
-    servicesCount: "06 usług",
     aboutTitle: "O mnie: Tatsiana Bandziuk i analityka w handlu modowym",
     aboutText: [
       "Od około dziesięciu lat pracuję w międzynarodowym handlu modowym, na styku zespołów handlowych i systemów, z których korzystają: asortymentu, cen, danych produktowych i raportów, które muszą się ze sobą zgadzać.",
       "Obecnie jestem Global Brand Analyst & Product Data Lead w międzynarodowej marce modowej i kieruję zespołem specjalistów ds. danych produktowych. Jako konsultantka pracuję z Warszawy po polsku, angielsku i rosyjsku.",
     ],
-    timelineLabel: "Przebieg kariery · daty do potwierdzenia",
+    timelineLabel: "Przebieg kariery",
     timeline,
     aboutLink: "Więcej o Tatsianie Bandziuk",
     resultsTitle: "Wyniki projektów analityki sprzedaży w liczbach",
-    resultsNote: "dane zastępcze",
     results: [
       { value: "+18", unit: "p.p.", label: "sell-through w kluczowych kategoriach po przebudowie planu asortymentu" },
       { value: "−31", unit: "%", label: "kosztów obniżek w dwóch sezonach" },
@@ -347,11 +347,11 @@ export const pl: SiteContent = {
     ],
     leadershipNote: "Raport bez właściciela po miesiącu przestaje być prawdziwy.",
     timelineTitle: "Przebieg kariery w analityce handlu modowego",
-    timelineNote: "Daty do potwierdzenia",
+    timelineNote: "Stanowiska i lata, od najnowszych",
     timeline: [...timeline].reverse(),
     educationTitle: "Wykształcenie: logistyka, ekonomia i zarządzanie na BGEU",
     educationText:
-      "Mam dwa dyplomy z logistyki Białoruskiego Państwowego Uniwersytetu Ekonomicznego (BGEU) w Mińsku: logistyka-ekonomisty (2014) i magistra ekonomii i zarządzania (2015). W latach 2014–2015 uczestniczyłam w unijnym programie Tempus Be-Safe prowadzonym z Uniwersytetem Sapienza w Rzymie, w ramach projektów Tempus także w sesjach Knowledge Transfer na Loughborough University, a w 2016 roku mój referat zajął 2. miejsce na Seminarium Młodych Badaczy BNTU. Z tamtych lat został mi nawyk: najpierw pytanie, potem miara.",
+      "Mam dwa dyplomy z logistyki Białoruskiego Państwowego Uniwersytetu Ekonomicznego (BGEU) w Mińsku: logistyka-ekonomisty (2014) i magistra ekonomii i zarządzania (2015). W latach 2014–2015 uczestniczyłam w unijnym programie Tempus Be-Safe prowadzonym z Uniwersytetem Sapienza w Rzymie. W 2016 roku ukończyłam sesje Knowledge Transfer na Loughborough University, a mój referat zajął 2. miejsce na Seminarium Młodych Badaczy BNTU. Z tamtych lat został mi nawyk: najpierw pytanie, potem miara.",
     educationChips: ["Logistyka", "Magister ekonomii i zarządzania", "UE Tempus Be-Safe"],
     credentials: {
       title: "Dyplomy i certyfikaty z logistyki, ekonomii i zarządzania",
@@ -380,16 +380,6 @@ export const pl: SiteContent = {
           height: 1410,
         },
         {
-          id: "loughborough",
-          year: "Tempus",
-          institution: "Loughborough University, Design School",
-          title: "Certyfikat udziału: sesje Knowledge Transfer w projekcie Tempus o bezpieczeństwie drogowym",
-          thumb: "/images/credentials/lboro-thumb.webp",
-          image: "/images/credentials/lboro.webp",
-          width: 2000,
-          height: 1431,
-        },
-        {
           id: "bseu-2015",
           year: "2015",
           institution: "Białoruski Państwowy Uniwersytet Ekonomiczny",
@@ -399,6 +389,16 @@ export const pl: SiteContent = {
           width: 2000,
           height: 1355,
           redacted: true,
+        },
+        {
+          id: "loughborough",
+          year: "2016",
+          institution: "Loughborough University, Design School",
+          title: "Certyfikat udziału: sesje Knowledge Transfer w projekcie Tempus o bezpieczeństwie drogowym",
+          thumb: "/images/credentials/lboro-thumb.webp",
+          image: "/images/credentials/lboro.webp",
+          width: 2000,
+          height: 1431,
         },
         {
           id: "bntu-2016",
@@ -447,7 +447,7 @@ export const pl: SiteContent = {
       {
         question: "Jakie ma wykształcenie?",
         answer:
-          "Ukończyła logistykę na Białoruskim Państwowym Uniwersytecie Ekonomicznym (BGEU): tytuł logistyka-ekonomisty w 2014 roku i magistra ekonomii i zarządzania w 2015 roku. Uczestniczyła w unijnym programie Tempus Be-Safe z Uniwersytetem Sapienza w Rzymie i w sesjach Knowledge Transfer na Loughborough University. W 2016 roku jej referat zajął 2. miejsce na Seminarium Młodych Badaczy BNTU.",
+          "Ukończyła logistykę na Białoruskim Państwowym Uniwersytecie Ekonomicznym (BGEU): tytuł logistyka-ekonomisty w 2014 roku i magistra ekonomii i zarządzania w 2015 roku. Uczestniczyła w unijnym programie Tempus Be-Safe z Uniwersytetem Sapienza w Rzymie. W 2016 roku ukończyła sesje Knowledge Transfer na Loughborough University, a jej referat zajął 2. miejsce na Seminarium Młodych Badaczy BNTU.",
       },
       {
         question: "Czy przyjmuje projekty konsultingowe?",
@@ -522,7 +522,7 @@ export const pl: SiteContent = {
       {
         question: "Jak anonimizowane są liczby w case study?",
         answer:
-          "Liczby w opisach są obecnie danymi zastępczymi i są wyraźnie oznaczone. Pokazują rodzaj efektu, a nie rzeczywiste wyniki konkretnej firmy. Nie publikuje się wartości sprzedaży ani innych danych, które mogłyby zidentyfikować klienta.",
+          "Wyniki pochodzą z prawdziwych projektów i są podane jako procenty, punkty procentowe lub zaoszczędzony czas, a nie wartości sprzedaży. Nie publikuje się nazw klientów, liczby rynków, produktów ani innych danych, które pozwoliłyby zidentyfikować firmę.",
       },
       {
         question: "Czy podobny projekt można zrealizować dla naszej marki?",
@@ -688,16 +688,6 @@ export const pl: SiteContent = {
         question: "Od czego zacząć naukę Power BI?",
         answer:
           "Najlepiej zacząć od modelu danych: tabel faktów, wymiarów i relacji, a dopiero potem przejść do miar DAX i wizualizacji. W handlu dobrym pierwszym projektem jest prosty raport sprzedaży i sell-through na własnych danych. Na start przydają się też darmowe szablony i artykuły na blogu.",
-      },
-      {
-        question: "Czy kurs będzie online?",
-        answer:
-          "Tak. Kursy są planowane w formie online, z materiałami do samodzielnej nauki i przykładami opartymi na danych z handlu. Plik ćwiczeniowy będzie można otworzyć we własnym Power BI Desktop lub Excelu.",
-      },
-      {
-        question: "W jakim języku będą kursy?",
-        answer:
-          "Kursy są przygotowywane z myślą o trzech językach: polskim, angielskim i rosyjskim. Wiadomość do osób z listy oczekujących poda, które wersje językowe ruszą najpierw.",
       },
     ],
   },

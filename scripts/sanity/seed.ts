@@ -171,13 +171,21 @@ function sources(lang: Locale): Source[] {
   const c = CONTENT[lang];
   const out: Source[] = [];
   const topics = Object.entries(c.ui.topics).map(([key, label]) => ({ key, label }));
+  // Photos: model { src, alt, focus } → schema { file (image asset), alt }; focus stays in the fallback modules.
+  const photo = (p?: { src: string; alt: string }) => (p ? { file: p.src, alt: p.alt } : undefined);
+  const person = {
+    ...c.person,
+    photoPrimary: photo(c.person.photoPrimary),
+    photoSecondary: photo(c.person.photoSecondary),
+    photoWorkspace: photo(c.person.photoWorkspace),
+  };
   out.push({
     type: "siteSettings",
     base: "siteSettings",
     lang,
     data: {
       ui: { ...c.ui, topics },
-      person: c.person,
+      person,
       formats: c.formats,
       tools: c.tools,
       recommendations: c.recommendations,

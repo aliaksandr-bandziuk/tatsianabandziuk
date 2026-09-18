@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import Mail from "nodemailer/lib/mailer";
 import { guardContactRequest } from "@/lib/formGuard/server";
+import { pageLanguage, templatesMail } from "@/lib/templatesMail";
 
 export async function POST(request: NextRequest) {
   const guard = await guardContactRequest(request);
@@ -69,6 +70,10 @@ export async function POST(request: NextRequest) {
 
   try {
     await transport.sendMail(mailOptions);
+    // Template requests and waitlist signups get both free templates at once.
+    if (data.kind === "templates" || data.kind === "waitlist") {
+      await transport.sendMail(templatesMail(data.kind, pageLanguage(data.language, data.currentPage), data.email, process.env.EMAIL_USER!, process.env.EMAIL_TO || process.env.EMAIL_USER!));
+    }
     return NextResponse.json({ message: "Email sent" });
   } catch (err) {
     // Logged, not returned: SMTP errors can carry server and account details.

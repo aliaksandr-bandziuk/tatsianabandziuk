@@ -19,7 +19,7 @@ const base = (key: string) => {
   };
 };
 
-const NOTE = "Klient zanonimizowany · dane zastępcze";
+const NOTE = "Klient zanonimizowany";
 
 export const caseStudies: CaseStudy[] = [
   {
@@ -178,14 +178,13 @@ export const caseStudies: CaseStudy[] = [
     tag: "Ceny · Raportowanie",
     title: "Architektura cenowa i raport marży dla sklepu internetowego z modą",
     h1: { before: "Architektura cenowa i raport marży", accent: "dla sklepu internetowego z modą" },
-    summary: "Progi cenowe w każdej kategorii, wspólne zasady cen dla trzech rynków i cotygodniowy raport marży w Power BI.",
+    summary: "Progi cenowe w każdej kategorii, wspólne zasady cen dla wszystkich rynków i cotygodniowy raport marży w Power BI.",
     intro:
-      "Sklep internetowy z modą uporządkował progi cenowe w każdej kategorii i wprowadził wspólne zasady cen dla trzech rynków. Cotygodniowy raport marży w Power BI pozwala korygować ceny i promocje, zanim marża zostanie utracona.",
-    cardMetrics: ["+2,4 p.p. marży", "3 rynki"],
+      "Sklep internetowy z modą uporządkował progi cenowe w każdej kategorii i wprowadził wspólne zasady cen dla wszystkich rynków. Cotygodniowy raport marży w Power BI pozwala korygować ceny i promocje, zanim marża zostanie utracona.",
+    cardMetrics: ["+2,4 p.p. marży", "6 tygodni"],
     breadcrumb: "Architektura cenowa i raport marży",
     facts: [
       { label: "Firma", value: "sklep internetowy z modą" },
-      { label: "Rynki", value: "3" },
       { label: "Czas trwania", value: "6 tygodni" },
       { label: "Rola", value: "analityczka cen" },
     ],
@@ -209,7 +208,6 @@ export const caseStudies: CaseStudy[] = [
     resultsTitle: "Wyniki projektu architektury cenowej w liczbach",
     results: [
       { value: "+2,4", unit: "p.p.", label: "marży brutto" },
-      { value: "3", label: "rynki wyceniane według jednych zasad" },
       { value: "1", label: "cotygodniowy raport marży" },
     ],
     toolsTitle: "Narzędzia w projekcie architektury cenowej",
@@ -227,7 +225,7 @@ export const caseStudies: CaseStudy[] = [
       {
         question: "Ile trwał projekt architektury cenowej i raportu marży?",
         answer:
-          "Projekt trwał sześć tygodni. Obejmował audyt progów cenowych w kategoriach, wspólne zasady cen dla trzech rynków i wdrożenie cotygodniowego raportu marży w Power BI.",
+          "Projekt trwał sześć tygodni. Obejmował audyt progów cenowych w kategoriach, wspólne zasady cen dla wszystkich rynków i wdrożenie cotygodniowego raportu marży w Power BI.",
       },
       {
         question: "Jakie dane były potrzebne do analizy architektury cenowej?",

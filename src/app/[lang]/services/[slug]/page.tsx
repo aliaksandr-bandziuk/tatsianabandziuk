@@ -111,7 +111,7 @@ export default async function ServicePage({ params }: { params: Params }) {
         <NumberedList items={sv.includes} />
       </section>
 
-      <MetricsBand title={sv.resultsTitle} note={c.ui.placeholderFigures} items={sv.results} />
+      <MetricsBand title={sv.resultsTitle} items={sv.results} />
 
       <section className={`container section ${s.twoCol}`}>
         <div>
@@ -134,7 +134,9 @@ export default async function ServicePage({ params }: { params: Params }) {
 
       <RelatedPosts lang={lang} posts={await servicePosts(lang, sv.key)} />
 
+      {/* Recommendation: hidden until real ones arrive (owner, 2026-09-18).
       <RecommendationWide title={sv.recommendationTitle} note={c.ui.recommendationPlaceholder} item={sv.recommendation} />
+      */}
 
       <FaqSection title={sv.faqTitle} items={sv.faq} />
 

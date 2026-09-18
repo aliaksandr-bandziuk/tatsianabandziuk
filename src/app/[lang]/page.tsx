@@ -17,7 +17,6 @@ import {
   Timeline,
   ToolCards,
 } from "@/app/components/site/Blocks";
-import { HeroChart } from "@/app/components/site/Charts";
 import { ContactForm, EmailSignup } from "@/app/components/site/Forms";
 import CountUp from "@/app/components/site/CountUp";
 import JsonLd from "@/app/components/site/JsonLd";
@@ -84,8 +83,14 @@ export default async function Home({ params }: { params: { lang: string } }) {
           </div>
         </div>
         <div className={s.heroMedia} data-reveal data-reveal-delay="150">
-          <Photo label={c.ui.portraitPlaceholder} height="auto" className={s.heroPhoto} />
-          <HeroChart label={h.chartLabel} delta={h.chartDelta} note={h.chartNote} />
+          <Photo
+            label={c.ui.portraitPlaceholder}
+            height="auto"
+            className={`photo-plain ${s.heroPhoto}`} // hero-photo-only
+            image={c.person.photoPrimary}
+            priority
+            sizes="(max-width: 900px) 100vw, 34vw"
+          />
         </div>
       </section>
 
@@ -103,14 +108,14 @@ export default async function Home({ params }: { params: { lang: string } }) {
 
       {/* Services */}
       <section className="container section">
-        <SectionHead title={h.servicesTitle} aside={<span className="eyebrow">{h.servicesCount}</span>} />
+        <SectionHead title={h.servicesTitle} />
         <ServicesGrid lang={lang} services={c.services} />
       </section>
 
       {/* About teaser */}
       <section className="container section">
         <div className={`panel ${s.about}`} data-reveal>
-          <Photo label={c.ui.portraitPlaceholder} height="auto" className={s.aboutPhoto} />
+          <Photo label={c.ui.portraitPlaceholder} height="auto" className={s.aboutPhoto} image={c.person.photoSecondary} sizes="(max-width: 900px) 100vw, 30vw" />
           <div>
             <h2 className="h2-sm">{h.aboutTitle}</h2>
             {h.aboutText.map((p) => (
@@ -133,7 +138,7 @@ export default async function Home({ params }: { params: { lang: string } }) {
       </section>
 
       {/* Results */}
-      <MetricsBand title={h.resultsTitle} note={h.resultsNote} items={h.results} />
+      <MetricsBand title={h.resultsTitle} items={h.results} />
 
       {/* Formats */}
       <section className="container section">
@@ -150,7 +155,7 @@ export default async function Home({ params }: { params: { lang: string } }) {
           <Steps steps={h.process} />
         </div>
         <div data-reveal data-reveal-delay="120">
-          <Photo label={h.processPhotoLabel} height="auto" className={s.processPhoto} />
+          <Photo label={h.processPhotoLabel} height="auto" className={s.processPhoto} image={c.person.photoWorkspace} sizes="(max-width: 900px) 100vw, 40vw" />
           <p className="hand" style={{ fontSize: 17, margin: "16px 4px 0" }}>
             {h.processNote}
           </p>
@@ -198,7 +203,7 @@ export default async function Home({ params }: { params: { lang: string } }) {
         </div>
       </section>
 
-      {/* Recommendations */}
+      {/* Recommendations: hidden until real ones arrive (owner, 2026-09-18).
       <section className="container section">
         <SectionHead
           title={h.recommendationsTitle}
@@ -210,6 +215,7 @@ export default async function Home({ params }: { params: { lang: string } }) {
         />
         <RecommendationCards items={c.recommendations} />
       </section>
+      */}
 
       {/* Free templates */}
       <section className="container section">
@@ -259,14 +265,10 @@ export default async function Home({ params }: { params: { lang: string } }) {
       <section className="container section" id="contact">
         <div className={`panel ${s.contact}`} data-reveal>
           <div>
-            <Photo label={c.ui.portraitPlaceholder} height="auto" className={s.contactPhoto} />
             <h2 className="h2-sm" style={{ marginBottom: 16 }}>
               {h.contactTitle}
             </h2>
             <p className="body-lg">{h.contactNote}</p>
-            <p className="signature" style={{ fontSize: 30, marginTop: 18 }}>
-              {c.person.signature}
-            </p>
             <div className={s.contactMeta}>
               <a href={`mailto:${c.person.email}`}>{c.person.email}</a>
               <span>

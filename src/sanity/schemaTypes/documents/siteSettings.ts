@@ -1,5 +1,5 @@
 import { defineType } from "sanity";
-import { list, obj, objects, paragraphs, str, txt } from "../fields";
+import { img, list, obj, objects, paragraphs, str, txt } from "../fields";
 import { languageField } from "../shared";
 
 /** One per language: interface strings (Ui), Person, formats, tools, recommendations, 404 and thank-you texts. */
@@ -21,6 +21,7 @@ export default defineType({
         list("nav", "link", { title: "Main navigation" }),
         str("tagline"),
         str("bookConsultation", { title: "Book a consultation (button)" }),
+        str("bookConsultationShort", { title: "Book a consultation, short (phone header)" }),
         str("menu"),
         str("close"),
         str("switchLanguage"),
@@ -43,7 +44,6 @@ export default defineType({
         str("toc", { title: "Table of contents" }),
         str("aboutLink"),
         str("replyNote"),
-        str("placeholderFigures"),
         str("schematicCaption"),
         str("dashboardCaption"),
         str("portraitPlaceholder"),
@@ -104,6 +104,17 @@ export default defineType({
         str("linkedin", { title: "LinkedIn URL" }),
         list("languages", "fact", { title: "Languages (language → level)" }),
         str("educationChip"),
+        obj("photoPrimary", [img("file"), str("alt", { title: "Alt text" })], {
+          title: "Hero photo (home page)",
+          description: "Cut-out portrait on the warm tile; without it the site uses the file in public/images/portrait",
+        }),
+        obj("photoSecondary", [img("file"), str("alt", { title: "Alt text" })], {
+          title: "Portrait for About, the about teaser and contacts",
+        }),
+        obj("photoWorkspace", [img("file"), str("alt", { title: "Alt text" })], {
+          title: "Desk photo for the process block",
+          description: "No face: laptop, notebook, desk",
+        }),
       ],
       { group: "person", collapsed: false },
     ),

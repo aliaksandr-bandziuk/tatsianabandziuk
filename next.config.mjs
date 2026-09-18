@@ -5,6 +5,11 @@
 const STATIC_REDIRECTS = [];
 
 const nextConfig = {
+  experimental: {
+    // The free templates are emailed as attachments, so the route needs the files at runtime.
+    outputFileTracingIncludes: { "/api/email": ["./templates/**/*"] },
+  },
+
   images: {
     // Sanity's image CDN resizes and re-encodes instead of Vercel's
     // /_next/image optimizer, so Vercel's transformation quota is not spent.

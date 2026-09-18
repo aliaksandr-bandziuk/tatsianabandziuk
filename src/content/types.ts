@@ -238,6 +238,20 @@ export type CareerStep = {
   current?: boolean;
 };
 
+/**
+ * A photo the site renders through `next/image`.
+ *
+ * `src` is either a Sanity CDN URL (built with `urlFor()`, resized by the
+ * custom loader) or a path under `public/`. Photos are edited in Studio, so
+ * `alt` is per language.
+ */
+export type SiteImage = {
+  src: string;
+  alt: string;
+  /** Object-position for the crop, e.g. "center 20%". Default: "center". */
+  focus?: string;
+};
+
 export type Person = {
   name: string;
   jobTitle: string;
@@ -249,6 +263,12 @@ export type Person = {
   linkedin: string;
   languages: Fact[];
   educationChip: string;
+  /** Hero photo on the home page. */
+  photoPrimary?: SiteImage;
+  /** Photo for every other slot: about teaser, about page, contact. */
+  photoSecondary?: SiteImage;
+  /** Desk photo without a face, used in the process block on the home page. */
+  photoWorkspace?: SiteImage;
 };
 
 export type HomeContent = {
@@ -265,14 +285,12 @@ export type HomeContent = {
   experienceTitle: string;
   experienceNames: string[];
   servicesTitle: string;
-  servicesCount: string;
   aboutTitle: string;
   aboutText: string[];
   timelineLabel: string;
   timeline: CareerStep[];
   aboutLink: string;
   resultsTitle: string;
-  resultsNote: string;
   results: Metric[];
   formatsTitle: string;
   clientTypesLabel: string;
@@ -460,6 +478,8 @@ export type Ui = {
   nav: LinkItem[];
   tagline: string;
   bookConsultation: string;
+  /** Short button label for the phone header bar. */
+  bookConsultationShort: string;
   menu: string;
   close: string;
   switchLanguage: string;
@@ -482,7 +502,6 @@ export type Ui = {
   toc: string;
   aboutLink: string;
   replyNote: string;
-  placeholderFigures: string;
   schematicCaption: string;
   dashboardCaption: string;
   portraitPlaceholder: string;

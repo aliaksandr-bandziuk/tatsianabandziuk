@@ -1,7 +1,7 @@
 import type { CaseStudy } from "../../types";
 
 /**
- * Anonymised case studies with placeholder figures. Nothing here may be
+ * Anonymised case studies; the figures are real (confirmed 2026-09-18). Nothing here may be
  * traceable to the current employer: no market counts, internal project names
  * or SKU counts.
  */
@@ -27,7 +27,7 @@ export const caseStudies: CaseStudy[] = [
       { label: "Duration", value: "9 weeks" },
       { label: "Role", value: "lead analyst" },
     ],
-    factsNote: "Anonymised client · placeholder figures",
+    factsNote: "Anonymised client",
     challengeTitle: "PLM Product Data Challenge Across European and Asian Markets",
     challenge: [
       "Each market had grown its own way of describing products: colour written four ways, season codes that disagreed on when a season starts, and compositions typed as free text.",
@@ -109,7 +109,7 @@ export const caseStudies: CaseStudy[] = [
       { label: "Duration", value: "8 weeks" },
       { label: "Role", value: "lead analyst" },
     ],
-    factsNote: "Anonymised client · placeholder figures",
+    factsNote: "Anonymised client",
     challengeTitle: "Womenswear Range Planning Challenge for the Distributor",
     challenge: [
       "The womenswear range had grown season by season: more options each time and less depth behind each one. Stores ran out of core sizes early, while fringe colours ended up in markdown.",
@@ -180,16 +180,15 @@ export const caseStudies: CaseStudy[] = [
       "Clear entry, core and top price points per category, one set of pricing rules for all markets and a weekly margin report.",
     intro:
       "A fashion e-commerce retailer set prices market by market and saw margin only at month end. A price architecture audit, cross-market pricing rules and a weekly Power BI margin report let the team correct prices and promotions before margin was lost.",
-    cardMetrics: ["+2.4 pp margin", "3 markets"],
+    cardMetrics: ["+2.4 pp margin", "6 weeks"],
     dashboard: "blocks",
     breadcrumb: "Price architecture",
     facts: [
       { label: "Business", value: "fashion e-commerce retailer" },
-      { label: "Markets", value: "3" },
       { label: "Duration", value: "6 weeks" },
       { label: "Role", value: "pricing analyst" },
     ],
-    factsNote: "Anonymised client · placeholder figures",
+    factsNote: "Anonymised client",
     challengeTitle: "Retail Price Architecture Challenge in Fashion E-commerce",
     challenge: [
       "Prices were set separately for each market, with different rounding and currency logic, and the price architecture had gaps that sent customers to competitors.",
@@ -209,7 +208,6 @@ export const caseStudies: CaseStudy[] = [
     resultsTitle: "Price Architecture and Margin Report Results in Numbers",
     results: [
       { value: "+2.4", unit: "pp", label: "gross margin" },
-      { value: "3", label: "markets on one set of pricing rules" },
       { value: "1", label: "weekly margin report for all markets" },
     ],
     toolsTitle: "Tools Used in the Price Architecture Project",
@@ -268,7 +266,7 @@ export const caseStudies: CaseStudy[] = [
       { label: "Duration", value: "5 weeks" },
       { label: "Role", value: "analytics lead" },
     ],
-    factsNote: "Anonymised client · placeholder figures",
+    factsNote: "Anonymised client",
     challengeTitle: "Weekly Retail Trading Report Challenge at the Multi-Brand Retailer",
     challenge: [
       "Buying, planning, finance and e-commerce each produced their own weekly spreadsheet, with a different definition of sell-through, margin and stock.",
@@ -346,7 +344,7 @@ export const caseStudies: CaseStudy[] = [
       { label: "Duration", value: "4 weeks" },
       { label: "Role", value: "assortment analyst" },
     ],
-    factsNote: "Anonymised client · placeholder figures",
+    factsNote: "Anonymised client",
     challengeTitle: "Menswear Size Curve Challenge After Repeated Stock-Outs",
     challenge: [
       "Two seasons of stock-outs had taught the size curves the wrong lesson: sizes that sold out early looked unpopular in the data, so they were bought even thinner next time.",
@@ -423,7 +421,7 @@ export const caseStudies: CaseStudy[] = [
       { label: "Duration", value: "5 weeks" },
       { label: "Role", value: "product data analyst" },
     ],
-    factsNote: "Anonymised client · placeholder figures",
+    factsNote: "Anonymised client",
     challengeTitle: "Product Data Challenge Before the E-commerce Catalogue Migration",
     challenge: [
       "The new e-commerce platform needed structured values for colour, material, fit and category to build its filters. In the old catalogue most of these were free text, written differently by different people.",

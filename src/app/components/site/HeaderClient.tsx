@@ -50,9 +50,35 @@ function withLocale(lang: string, path: string): string {
   return withPrefix(lang, path === "/" ? path : localizePath(lang, path));
 }
 
+/** Links to the same page in the other languages (translated slugs through the aliases). */
+function useLanguageLinks(lang: string, aliases: LanguageAlias[]) {
+  const rest = stripLocale(usePathname() ?? "/");
+  return LANGS.filter((l) => l !== lang).map((l) => {
+    const alias = aliases.find((a) => a.paths[lang as keyof LanguageAlias["paths"]] === rest);
+    const target = alias ? alias.paths[l] ?? alias.fallback[l] : rest;
+    return { lang: l, href: withPrefix(l, target) };
+  });
+}
+
+/** The logo mark from the favicon (src/app/icon.svg), used as the logo on phones. */
+export function BrandMark({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="12" fill="#faf8f4" />
+      <rect x="7" y="7" width="47" height="47" rx="3" fill="#fff" stroke="#0f5943" strokeWidth="5" />
+      <rect x="47" y="47" width="13" height="13" rx="2" fill="#0f5943" stroke="#faf8f4" strokeWidth="3" />
+      <path
+        fill="#0f5943"
+        transform="translate(17.782 44) scale(0.03814 -0.03814)"
+        d="M642 708Q638 657 636.5 610.0Q635 563 635 538Q635 516 636.0 496.0Q637 476 638 462H615Q599 546 574.5 595.0Q550 644 516.0 664.5Q482 685 436 685H413V114Q413 74 421.5 54.0Q430 34 453.0 27.5Q476 21 520 20V0Q489 1 437.5 2.0Q386 3 330 3Q275 3 226.0 2.0Q177 1 147 0V20Q192 21 215.0 27.5Q238 34 246.0 54.0Q254 74 254 114V685H232Q186 685 152.0 664.5Q118 644 94.0 595.5Q70 547 52 462H29Q31 476 31.5 496.0Q32 516 32 538Q32 563 30.5 610.0Q29 657 25 708Q71 707 125.5 706.0Q180 705 235 705H434Q488 705 543.0 706.0Q598 707 642 708Z"
+      />
+    </svg>
+  );
+}
+
 export function LangSwitch({ lang, aliases, label }: { lang: string; aliases: LanguageAlias[]; label: string }) {
   const pathname = usePathname() ?? "/";
-  const rest = stripLocale(pathname);
+  const links = useLanguageLinks(lang, aliases);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -81,18 +107,13 @@ export function LangSwitch({ lang, aliases, label }: { lang: string; aliases: La
       </button>
       {/* The list stays in the server HTML (hidden with CSS) so crawlers see links to the other languages. */}
       <ul className={s.langList} data-open={open}>
-        {LANGS.filter((l) => l !== lang).map((l) => {
-          // Pages with translated slugs map through the aliases; fixed pages keep their path.
-          const alias = aliases.find((a) => a.paths[lang as keyof LanguageAlias['paths']] === rest);
-          const target = alias ? alias.paths[l] ?? alias.fallback[l] : rest;
-          return (
-            <li key={l}>
-              <Link href={withPrefix(l, target)} hrefLang={l} lang={l} prefetch={false} onClick={() => setOpen(false)}>
-                {l}
-              </Link>
-            </li>
-          );
-        })}
+        {links.map((l) => (
+          <li key={l.lang}>
+            <Link href={l.href} hrefLang={l.lang} lang={l.lang} prefetch={false} onClick={() => setOpen(false)}>
+              {l.lang}
+            </Link>
+          </li>
+        ))}
       </ul>
     </div>
   );
@@ -180,10 +201,11 @@ export function DesktopNav({ lang, nav }: { lang: string; nav: NavEntry[] }) {
   );
 }
 
-export function MobileMenu({ lang, nav, cta, labels }: Props) {
+export function MobileMenu({ lang, nav, cta, labels, aliases }: Props & { aliases: LanguageAlias[] }) {
   const [open, setOpen] = useState(false);
   const [section, setSection] = useState<string | null>(null);
   const pathname = usePathname() ?? "/";
+  const languages = useLanguageLinks(lang, aliases);
 
   useEffect(() => {
     setOpen(false);
@@ -255,6 +277,15 @@ export function MobileMenu({ lang, nav, cta, labels }: Props) {
             );
           })}
         </nav>
+        {/* On phones the language switch lives here instead of the header bar. */}
+        <div className={s.mobileLangs} role="group" aria-label={labels.language}>
+          <span aria-current="true">{lang}</span>
+          {languages.map((l) => (
+            <Link key={l.lang} href={l.href} hrefLang={l.lang} lang={l.lang} prefetch={false} tabIndex={open ? 0 : -1}>
+              {l.lang}
+            </Link>
+          ))}
+        </div>
         <ConsultationButton href={cta.href} className={`btn btn-block ${s.btn}`} tabIndex={open ? 0 : -1} onOpen={() => setOpen(false)}>
           {cta.label}
         </ConsultationButton>
