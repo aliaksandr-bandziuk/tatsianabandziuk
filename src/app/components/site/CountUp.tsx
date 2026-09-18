@@ -47,7 +47,9 @@ export default function CountUp({ value, duration = 1500 }: { value: string; dur
   }, [value]);
 
   return (
-    <span ref={ref} aria-label={value}>
+    // Screen readers get the final value; the animated digits are hidden from them.
+    <span ref={ref}>
+      <span className="visually-hidden">{value}</span>
       <span aria-hidden="true">{shown}</span>
     </span>
   );

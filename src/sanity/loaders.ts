@@ -1,4 +1,4 @@
-import { groq } from "next-sanity";
+import groq from "groq";
 import { client } from "./sanity.client";
 import { ARTICLE_BLOCK_KINDS } from "./articleBlocks";
 import type { Locale, SiteContent, SiteImage } from "@/content/types";

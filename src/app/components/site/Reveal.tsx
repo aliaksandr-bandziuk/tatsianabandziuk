@@ -20,8 +20,19 @@ export default function Reveal() {
       nodes.forEach((n) => n.classList.add("is-visible"));
       return;
     }
+    // Whatever is already on screen stays as painted by the server: hiding it
+    // to fade it back in would push Largest Contentful Paint to after hydration.
+    const fold = window.innerHeight;
+    const pending = nodes.filter((n) => {
+      const r = n.getBoundingClientRect();
+      if (r.top < fold && r.bottom > 0) {
+        n.classList.add("is-visible");
+        return false;
+      }
+      return true;
+    });
     root.classList.add("js-reveal");
-    nodes.forEach((n) => {
+    pending.forEach((n) => {
       const d = n.dataset.revealDelay;
       if (d) n.style.setProperty("--reveal-delay", `${d}ms`);
     });
@@ -36,7 +47,7 @@ export default function Reveal() {
       },
       { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
     );
-    nodes.forEach((n) => io.observe(n));
+    pending.forEach((n) => io.observe(n));
     return () => io.disconnect();
   }, [pathname]);
 

@@ -6,11 +6,12 @@ const CLARITY_ID = "yk8avkfbei";
 
 /**
  * Microsoft Clarity. Loads on every page regardless of the cookie banner
- * choice, as on bandziuk.com (owner decision, 2026-09-18).
+ * choice, as on bandziuk.com (owner decision, 2026-09-18). Injected after the
+ * page has loaded and the browser is idle, so it stays out of the first render.
  */
 export default function MicrosoftClarity() {
   useEffect(() => {
-    (function (c: any, l: Document, a: string, r: string, i: string) {
+    const inject = () => (function (c: any, l: Document, a: string, r: string, i: string) {
       if (c[a]) return; // do not initialise twice (dev strict mode)
       c[a] =
         c[a] ||
@@ -24,6 +25,14 @@ export default function MicrosoftClarity() {
       if (y && y.parentNode) y.parentNode.insertBefore(t, y);
       else l.head.appendChild(t);
     })(window, document, "clarity", "script", CLARITY_ID);
+
+    const idle = () => {
+      if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(inject, { timeout: 4000 });
+      else setTimeout(inject, 2000);
+    };
+    if (document.readyState === "complete") idle();
+    else window.addEventListener("load", idle, { once: true });
+    return () => window.removeEventListener("load", idle);
   }, []);
 
   return null;

@@ -1,4 +1,7 @@
-import { createClient, type QueryParams } from "next-sanity";
+// Straight from @sanity/client, not the next-sanity root: that entry pulls
+// visual-editing and live-preview client components into the browser bundle
+// (≈50 KB of unused JS on every page, PageSpeed 2026-09-18).
+import { createClient, type QueryParams } from "@sanity/client";
 import ImageUrlBuilder from "@sanity/image-url";
 
 export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID as string;

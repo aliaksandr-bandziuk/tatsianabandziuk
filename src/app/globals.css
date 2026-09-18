@@ -10,7 +10,7 @@
   --ink: #17181c;
   --ink-2: #2f3034;
   --muted: #4f5a53;
-  --muted-2: #79847c;
+  --muted-2: #5f6b63; /* was #79847c: 4.5:1 contrast on the page and footer backgrounds (WCAG AA) */
   --paper: #faf8f4;            /* page background */
   --sand: #f3f1ec;
   --sand-2: #ece8e0;

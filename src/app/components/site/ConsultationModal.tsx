@@ -1,17 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type ComponentProps, type ReactNode } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { ContactForm } from "./Forms";
-import s from "./modal.module.scss";
+import dynamic from "next/dynamic";
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import type { DialogProps } from "./ConsultationDialog";
 
 type ModalCtx = { open: () => void };
 const Ctx = createContext<ModalCtx | null>(null);
 
-type FormProps = ComponentProps<typeof ContactForm>;
+type FormProps = DialogProps["form"];
 
-const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+// The popup (framer-motion + the form) is a separate chunk, fetched on the first open.
+const loadDialog = () => import("./ConsultationDialog");
+const ConsultationDialog = dynamic(loadDialog, { ssr: false });
+const prefetchDialog = () => void loadDialog();
 
 /** Holds the consultation popup for the whole page (same idea as ModalContext in bandziuk). */
 export function ConsultationModalProvider({
@@ -28,85 +30,24 @@ export function ConsultationModalProvider({
   form: FormProps;
 }) {
   const [isOpen, setOpen] = useState(false);
-  const boxRef = useRef<HTMLDivElement>(null);
+  // Mounted after the first open and kept, so the closing animation can run.
+  const [loaded, setLoaded] = useState(false);
   const lastFocus = useRef<HTMLElement | null>(null);
   const open = useCallback(() => {
     lastFocus.current = document.activeElement as HTMLElement;
+    setLoaded(true);
     setOpen(true);
   }, []);
   const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
-    if (!isOpen) {
-      lastFocus.current?.focus?.();
-      return;
-    }
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const box = boxRef.current;
-    const t = window.setTimeout(() => box?.querySelector<HTMLElement>("input")?.focus(), 60);
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") return close();
-      if (e.key !== "Tab" || !box) return;
-      const els = Array.from(box.querySelectorAll<HTMLElement>(FOCUSABLE));
-      if (!els.length) return;
-      const first = els[0];
-      const last = els[els.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    return () => {
-      window.clearTimeout(t);
-      document.body.style.overflow = prev;
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [isOpen, close]);
+    if (!isOpen) lastFocus.current?.focus?.();
+  }, [isOpen]);
 
   return (
     <Ctx.Provider value={{ open }}>
       {children}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className={s.overlay}
-            data-lenis-prevent
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onMouseDown={(e) => e.target === e.currentTarget && close()}
-          >
-            <motion.div
-              ref={boxRef}
-              className={s.box}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="consultation-title"
-              initial={{ opacity: 0, y: 24, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 16, scale: 0.98 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <button type="button" className={s.close} onClick={close} aria-label={closeLabel}>
-                <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
-                  <path d="M15 1 1 15M1 1l14 14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                </svg>
-              </button>
-              <p className={s.title} id="consultation-title">
-                {title}
-              </p>
-              <p className={s.text}>{text}</p>
-              <ContactForm {...form} />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {loaded && <ConsultationDialog isOpen={isOpen} onClose={close} title={title} text={text} closeLabel={closeLabel} form={form} />}
     </Ctx.Provider>
   );
 }
@@ -135,6 +76,10 @@ export function ConsultationButton({
       className={className}
       tabIndex={tabIndex}
       aria-haspopup="dialog"
+      // Warm the popup chunk on intent, so the first click opens it without a wait.
+      onMouseEnter={prefetchDialog}
+      onFocus={prefetchDialog}
+      onTouchStart={prefetchDialog}
       onClick={(e) => {
         if (!ctx || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
