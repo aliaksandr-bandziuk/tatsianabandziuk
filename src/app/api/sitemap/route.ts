@@ -1,6 +1,7 @@
 import { BASE_URL, localePrefix } from "@/utils/hreflang";
 import { LOCALES } from "@/lib/site";
-import { routableGroups, STATIC_PATHS } from "@/content";
+import { getAllContent, routableGroups, STATIC_PATHS } from "@/content";
+import type { SiteContent } from "@/content/types";
 import { localizePath } from "@/lib/routing";
 
 // Cached like the pages; the publish webhook refreshes it.
@@ -14,18 +15,54 @@ function url(lang: string, path: string) {
   return `${BASE_URL}${localePrefix(lang)}${localizePath(lang, path)}` || BASE_URL;
 }
 
+const latest = (dates: (string | undefined)[]) =>
+  dates.filter((d): d is string => Boolean(d)).sort((a, b) => Date.parse(b) - Date.parse(a))[0];
+
+const dates = (items: { updatedAt?: string }[]) => items.map((i) => i.updatedAt);
+
 /**
- * Every page in every language with hreflang alternates. Items come from the
- * same content loader as the pages (Sanity first, fallback modules otherwise),
- * grouped by their language-independent key.
+ * Last edit of a fixed page: its own Sanity document, and for pages that list
+ * items (home, listings) also the newest item they show. Undefined when the
+ * content comes from the fallback modules.
+ */
+function staticLastmod(c: SiteContent, path: string): string | undefined {
+  switch (path) {
+    case "":
+      return latest([c.home.updatedAt, ...dates(c.services), ...dates(c.caseStudies), ...dates(c.posts)]);
+    case "/services":
+      return latest([c.servicesPage.updatedAt, ...dates(c.services)]);
+    case "/case-studies":
+      return latest([c.caseStudiesPage.updatedAt, ...dates(c.caseStudies)]);
+    case "/blog":
+      return latest([c.blogPage.updatedAt, ...dates(c.posts), ...dates(c.categories)]);
+    case "/tools":
+      return latest([c.calculatorsPage.updatedAt, ...dates(c.calculators)]);
+    case "/about":
+      return c.about.updatedAt;
+    case "/contact":
+      return c.contact.updatedAt;
+    case "/courses":
+      return c.courses.updatedAt;
+    case "/free-templates":
+      return c.templates.updatedAt;
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Every page in every language with hreflang alternates and lastmod. Items come
+ * from the same content loader as the pages (Sanity first, fallback modules
+ * otherwise), grouped by their language-independent key.
  */
 export async function GET() {
   const entries: Entry[] = [];
+  const all = await getAllContent();
 
   for (const path of STATIC_PATHS) {
     const alternates = Object.fromEntries(LOCALES.map((l) => [l, url(l, path) || `${BASE_URL}/`]));
     for (const lang of LOCALES) {
-      entries.push({ loc: alternates[lang], alternates });
+      entries.push({ loc: alternates[lang], lastmod: staticLastmod(all[lang], path), alternates });
     }
   }
 

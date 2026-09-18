@@ -40,7 +40,8 @@ Brief and positioning: `brief.md`.
 - **Publish webhook:** manage.sanity.io → Webhooks → `POST {SITE_URL}/api/indexnow/webhook`, header `Authorization: Bearer <INDEXNOW_WEBHOOK_SECRET>`, filter `!(_id in path("drafts.**"))`. It calls `revalidateTag("sanity")` for every type and submits `service`, `caseStudy`, `post` URLs to IndexNow.
 - `/admin` is excluded from the i18n middleware. Keep it that way.
 - Analytics (GA, Clarity) load only when their env IDs are set **and** the visitor accepted analytics cookies (`useAnalyticsConsent`). This differs from bandziuk on purpose (GDPR).
-- **Indexing is closed until launch**: without `SITE_INDEXING=on` the site serves robots.txt `Disallow: /`, noindex meta, an `X-Robots-Tag` header, and the webhook skips IndexNow. At launch set `SITE_INDEXING=on` for Production in Vercel and redeploy. When open, `robots.ts` blocks SEO-tool crawlers; search engines and AI crawlers stay allowed.
+- **Indexing is open on production since 2026-09-18**: `INDEXING_ALLOWED` (`src/lib/site.ts`, repeated in `next.config.mjs` for the header) is true on the Vercel production deployment (`VERCEL_ENV=production`) unless `SITE_INDEXING=off`; previews and local runs stay closed (robots.txt `Disallow: /`, noindex meta, `X-Robots-Tag`, no IndexNow). `SITE_INDEXING=on` opens any environment. When open, `robots.ts` blocks SEO-tool crawlers; search engines and AI crawlers stay allowed.
+- **Sitemap lastmod**: every URL has one. Items use their `_updatedAt`; fixed pages use their own document's `_updatedAt` (`updatedAt` on the page models, projected in `loaders.ts`), and home and listing pages take the newest of that and the items they list (`staticLastmod` in `api/sitemap/route.ts`).
 
 ## Content model (`src/sanity/schemaTypes`)
 

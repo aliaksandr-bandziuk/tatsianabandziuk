@@ -28,11 +28,14 @@ export const ROUTES = {
 } as const;
 
 /**
- * Search indexing switch. The site stays closed (robots.txt disallow, noindex
- * meta, X-Robots-Tag header, no IndexNow pings) until SITE_INDEXING=on is set
- * in the environment — so a fresh Vercel deploy or preview is never indexed.
+ * Search indexing switch. Open on the Vercel production deployment (launched
+ * 2026-09-18); previews and local runs stay closed (robots.txt disallow,
+ * noindex meta, X-Robots-Tag header, no IndexNow pings). SITE_INDEXING=off
+ * closes production again, SITE_INDEXING=on opens any environment.
+ * next.config.mjs repeats this rule for the X-Robots-Tag header.
  */
-export const INDEXING_ALLOWED = process.env.SITE_INDEXING === "on";
+export const INDEXING_ALLOWED =
+  process.env.SITE_INDEXING === "on" || (process.env.SITE_INDEXING !== "off" && process.env.VERCEL_ENV === "production");
 
 export const NOINDEX_ROBOTS = {
   index: false,

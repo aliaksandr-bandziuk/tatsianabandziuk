@@ -23,9 +23,10 @@ const QUERY = groq`{
       "photoWorkspace": { "src": photoWorkspace.file.asset->url, "alt": photoWorkspace.alt }
     }
   },
-  "home": *[_type == "homepage" && language == $lang][0],
+  "home": *[_type == "homepage" && language == $lang][0]{ ..., "updatedAt": _updatedAt },
   "about": *[_type == "aboutPage" && language == $lang][0]{
     ...,
+    "updatedAt": _updatedAt,
     credentials{
       ...,
       items[]{
@@ -37,11 +38,11 @@ const QUERY = groq`{
       }
     }
   },
-  "listings": *[_type == "listingPage" && language == $lang],
-  "contact": *[_type == "contactPage" && language == $lang][0],
-  "courses": *[_type == "coursesPage" && language == $lang][0],
-  "templates": *[_type == "templatesPage" && language == $lang][0],
-  "privacy": *[_type == "legalPage" && language == $lang && key == "privacy"][0]{ ..., "slug": slug[$lang].current },
+  "listings": *[_type == "listingPage" && language == $lang]{ ..., "updatedAt": _updatedAt },
+  "contact": *[_type == "contactPage" && language == $lang][0]{ ..., "updatedAt": _updatedAt },
+  "courses": *[_type == "coursesPage" && language == $lang][0]{ ..., "updatedAt": _updatedAt },
+  "templates": *[_type == "templatesPage" && language == $lang][0]{ ..., "updatedAt": _updatedAt },
+  "privacy": *[_type == "legalPage" && language == $lang && key == "privacy"][0]{ ..., "slug": slug[$lang].current, "updatedAt": _updatedAt },
   "services": *[_type == "service" && language == $lang && defined(slug[$lang].current)] | order(order asc){ ${ROUTABLE} },
   "caseStudies": *[_type == "caseStudy" && language == $lang && defined(slug[$lang].current)] | order(order asc){ ${ROUTABLE} },
   "posts": *[_type == "post" && language == $lang && defined(slug[$lang].current)] | order(order asc){ ${ROUTABLE} },

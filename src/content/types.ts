@@ -271,7 +271,10 @@ export type Person = {
   photoWorkspace?: SiteImage;
 };
 
-export type HomeContent = {
+/** Last edit in Sanity (sitemap lastmod); absent in the fallback content. */
+type Dated = { updatedAt?: string };
+
+export type HomeContent = Dated & {
   seo: Seo;
   eyebrow: string;
   h1: AccentHeading;
@@ -343,7 +346,7 @@ export type CredentialsBlock = {
   };
 };
 
-export type AboutContent = {
+export type AboutContent = Dated & {
   seo: Seo;
   h1: AccentHeading;
   intro: string;
@@ -373,7 +376,7 @@ export type AboutContent = {
   faq?: FaqItem[];
 };
 
-export type ListingPage = {
+export type ListingPage = Dated & {
   seo: Seo;
   eyebrow: string;
   h1: string;
@@ -386,7 +389,7 @@ export type ListingPage = {
   faq?: FaqItem[];
 };
 
-export type ContactContent = {
+export type ContactContent = Dated & {
   seo: Seo;
   eyebrow: string;
   h1: string;
@@ -400,7 +403,7 @@ export type ContactContent = {
   faq: FaqItem[];
 };
 
-export type CoursesContent = {
+export type CoursesContent = Dated & {
   seo: Seo;
   eyebrow: string;
   h1: string;
@@ -418,7 +421,7 @@ export type CoursesContent = {
   faq?: FaqItem[];
 };
 
-export type TemplatesContent = {
+export type TemplatesContent = Dated & {
   seo: Seo;
   eyebrow: string;
   h1: string;
@@ -439,7 +442,7 @@ export type TemplatesContent = {
   faq?: FaqItem[];
 };
 
-export type LegalContent = {
+export type LegalContent = Dated & {
   seo: Seo;
   slug: string;
   eyebrow: string;

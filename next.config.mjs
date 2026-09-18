@@ -21,9 +21,11 @@ const nextConfig = {
     ],
   },
 
-  // Closed to search engines until SITE_INDEXING=on (see src/lib/site.ts).
+  // Same rule as INDEXING_ALLOWED in src/lib/site.ts: open on Vercel production, closed elsewhere.
   async headers() {
-    if (process.env.SITE_INDEXING === "on") return [];
+    const open =
+      process.env.SITE_INDEXING === "on" || (process.env.SITE_INDEXING !== "off" && process.env.VERCEL_ENV === "production");
+    if (open) return [];
     return [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noimageindex" }] }];
   },
 

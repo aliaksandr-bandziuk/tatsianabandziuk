@@ -162,7 +162,10 @@ export async function routableGroups(): Promise<RoutableGroup[]> {
       groups.push({ paths: pathsFrom(all, kind, key), updatedAt });
     });
   }
-  groups.push({ paths: Object.fromEntries(LOCALES.map((l) => [l, `/${all[l].privacy.slug}`])) });
+  groups.push({
+    paths: Object.fromEntries(LOCALES.map((l) => [l, `/${all[l].privacy.slug}`])),
+    updatedAt: Object.fromEntries(LOCALES.flatMap((l) => (all[l].privacy.updatedAt ? [[l, all[l].privacy.updatedAt]] : []))),
+  });
   return groups;
 }
 
