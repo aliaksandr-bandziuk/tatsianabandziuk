@@ -16,6 +16,11 @@
   font-size: 14px;
 }
 
+// A choice is saved (class set by the <head> script or by the buttons).
+:global(.cc-set) .cookieBanner {
+  display: none;
+}
+
 .title {
   margin: 0;
   font: 500 20px/1.2 var(--font-heading), serif;

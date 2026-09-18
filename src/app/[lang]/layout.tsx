@@ -1,5 +1,6 @@
 import "@/app/globals.css";
 import DeferredWidgets from "@/app/components/site/DeferredWidgets";
+import CustomCookieConsent, { COOKIE_BANNER_HEAD_SCRIPT } from "@/app/components/shared/CustomCookieConsent/CustomCookieConsent";
 import { getContent, localizeHref } from "@/content";
 import type { SiteContent } from "@/content/types";
 import { ConsultationModalProvider } from "@/app/components/site/ConsultationModal";
@@ -19,7 +20,7 @@ import { INDEXING_ALLOWED, LOCALES, NOINDEX_ROBOTS, SITE_NAME, SITE_URL, isLocal
 // cover every subset through unicode-range, so PL and RU text still gets its
 // glyphs. Preloading all three subsets of five families put 21 font files in
 // front of the first render (PageSpeed, 2026-09-18), so only the Latin files of
-// the heading and body fonts are preloaded; the decorative fonts load on use.
+// the heading, body and mono fonts are preloaded; signature and handwriting load on use.
 const fontHeading = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500"],
@@ -35,12 +36,13 @@ const fontBody = Inter_Tight({
   display: "swap",
 });
 
+// Preloaded too (Latin only): the eyebrow above the home H1 is set in it, and a
+// late swap from the fallback font was a visible change on the first screen.
 const fontMono = IBM_Plex_Mono({
-  subsets: ["latin", "latin-ext", "cyrillic"],
+  subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-mono",
   display: "swap",
-  preload: false,
 });
 
 const fontSignature = Marck_Script({
@@ -132,7 +134,11 @@ export default async function LangLayout(
   const c = await getContent(params.lang);
 
   return (
-    <html lang={params.lang}>
+    // suppressHydrationWarning: the <head> script may add the `cc-set` class before hydration.
+    <html lang={params.lang} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: COOKIE_BANNER_HEAD_SCRIPT }} />
+      </head>
       <body
         className={`${fontHeading.variable} ${fontBody.variable} ${fontMono.variable} ${fontHand.variable} ${fontSignature.variable}`}
       >
@@ -154,11 +160,11 @@ export default async function LangLayout(
             signature: c.person.name,
             label: { en: "Loading page…", pl: "Ładowanie strony…", ru: "Загрузка страницы…" }[params.lang] ?? "Loading page…",
           }}
-          cookie={{ lang: params.lang }}
         />
 
         <GoogleAnalyticsWrapper />
         <MicrosoftClarity />
+        <CustomCookieConsent lang={params.lang} />
       </body>
     </html>
   );

@@ -1,15 +1,6 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import styles from "./CustomCookieConsent.module.scss";
-import { CONSENT_COOKIE as COOKIE_NAME, CONSENT_EVENT } from "@/hooks/useAnalyticsConsent";
-
-type Consent = {
-  necessary: true;
-  analytics: boolean;
-  marketing: boolean;
-};
+import CookieBannerButtons from "./CookieBannerButtons";
+import { CONSENT_COOKIE } from "@/lib/consent";
 
 type Props = {
   lang: string;
@@ -42,87 +33,36 @@ const dictionary = {
   },
 };
 
+const PRIVACY_SLUG: Record<string, string> = {
+  en: "privacy-policy",
+  pl: "polityka-prywatnosci",
+  ru: "politika-konfidencialnosti",
+};
+
+/**
+ * Inline script for <head>: marks <html> with `cc-set` before the first paint
+ * when a choice is already saved, so the banner (in the HTML from the start)
+ * never flashes for returning visitors. See `.cc-set .cookieBanner`.
+ */
+export const COOKIE_BANNER_HEAD_SCRIPT = `try{if(document.cookie.indexOf(${JSON.stringify(CONSENT_COOKIE + "=")})>-1)document.documentElement.classList.add("cc-set")}catch(e){}`;
+
+/**
+ * Cookie banner, rendered on the server so it is part of the first paint:
+ * a banner that slid in after the JavaScript loaded was the last visual change
+ * on the first screen and hurt Speed Index (PageSpeed, 2026-09-18). Only the
+ * buttons are a client component.
+ */
 export default function CustomCookieConsent({ lang }: Props) {
   const t = dictionary[lang as keyof typeof dictionary] || dictionary.en;
-
-  const getNormalizedHref = (lang: string, link: string) => {
-    const normalizedLink = link.startsWith("/") ? link.slice(1) : link;
-    const languagePrefix = lang === "en" ? "" : `/${lang}`;
-    return `${languagePrefix}/${normalizedLink}`;
-  };
-
-  const [visible, setVisible] = useState(false);
-
-  // Show the banner only while no choice has been saved.
-  useEffect(() => {
-    const saved = Cookies.get(COOKIE_NAME);
-    if (!saved) {
-      setVisible(true);
-    }
-  }, []);
-
-  const acceptAll = () => {
-    const consent: Consent = {
-      necessary: true,
-      analytics: true,
-      marketing: true,
-    };
-    Cookies.set(COOKIE_NAME, JSON.stringify(consent), {
-      expires: 180,
-      sameSite: "Lax",
-    });
-    setVisible(false);
-    window.dispatchEvent(new Event(CONSENT_EVENT));
-  };
-
-  const rejectAll = () => {
-    const consent: Consent = {
-      necessary: true,
-      analytics: false,
-      marketing: false,
-    };
-    Cookies.set(COOKIE_NAME, JSON.stringify(consent), {
-      expires: 180,
-      sameSite: "Lax",
-    });
-    setVisible(false);
-    window.dispatchEvent(new Event(CONSENT_EVENT));
-  };
-
-  if (!visible) return null;
+  const privacyHref = `${lang === "en" ? "" : `/${lang}`}/${PRIVACY_SLUG[lang] ?? PRIVACY_SLUG.en}`;
 
   return (
     <div className={styles.cookieBanner} role="dialog" aria-live="polite" aria-label={t.title}>
       <p className={styles.title}>{t.title}</p>
       <p className={styles.text}>{t.description}</p>
-
-      <div className={styles.buttons}>
-        <button
-          type="button"
-          onClick={acceptAll}
-          className={styles.primaryButton}
-        >
-          {t.acceptAll}
-        </button>
-
-        <button type="button" onClick={rejectAll} className={styles.linkButton}>
-          {t.rejectAll}
-        </button>
-      </div>
-
+      <CookieBannerButtons accept={t.acceptAll} reject={t.rejectAll} />
       <p className={styles.policyLink}>
-        <a
-          href={getNormalizedHref(
-            lang,
-            ({
-              en: "privacy-policy",
-              pl: "polityka-prywatnosci",
-              ru: "politika-konfidencialnosti",
-            } as Record<string, string>)[lang] ?? "privacy-policy"
-          )}
-        >
-          {t.privacy}
-        </a>
+        <a href={privacyHref}>{t.privacy}</a>
       </p>
     </div>
   );

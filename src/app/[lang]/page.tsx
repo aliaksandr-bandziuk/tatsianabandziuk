@@ -77,7 +77,7 @@ export default async function Home(props: { params: Promise<{ lang: string }> })
             {h.stats.map((st) => (
               <div key={st.label} className={s.stat}>
                 <b>
-                  <CountUp value={st.value} />
+                  <CountUp value={st.value} animate={false} />
                 </b>
                 <span>{st.label}</span>
               </div>

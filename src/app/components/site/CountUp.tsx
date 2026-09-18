@@ -8,14 +8,18 @@ import { useEffect, useRef, useState } from "react";
  * "4 → 1" is left as is). The final value is server-rendered, so crawlers and
  * no-JS visitors see the real number.
  */
-export default function CountUp({ value, duration = 1500 }: { value: string; duration?: number }) {
+/**
+ * `animate={false}` for figures on the first screen: counting up there is a
+ * late visual change that hurts Speed Index (PageSpeed, 2026-09-18).
+ */
+export default function CountUp({ value, duration = 1500, animate = true }: { value: string; duration?: number; animate?: boolean }) {
   const ref = useRef<HTMLSpanElement>(null);
   const match = value.match(/^([+−-]?)(\d+(?:[.,]\d+)?)(\D*)$/);
   const [shown, setShown] = useState(value);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || !match) return;
+    if (!el || !match || !animate) return;
     const [, sign, num, suffix] = match;
     const sep = num.includes(",") ? "," : ".";
     const decimals = num.split(/[.,]/)[1]?.length ?? 0;
@@ -44,7 +48,7 @@ export default function CountUp({ value, duration = 1500 }: { value: string; dur
       cancelAnimationFrame(raf);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [value, animate]);
 
   return (
     // Screen readers get the final value; the animated digits are hidden from them.

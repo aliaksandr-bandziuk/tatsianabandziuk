@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
-export const CONSENT_COOKIE = "cookieConsent";
-export const CONSENT_EVENT = "cookie-consent-change";
+import { CONSENT_COOKIE, CONSENT_EVENT } from "@/lib/consent";
+
+export { CONSENT_COOKIE, CONSENT_EVENT };
 
 function readConsent(): boolean {
   try {
