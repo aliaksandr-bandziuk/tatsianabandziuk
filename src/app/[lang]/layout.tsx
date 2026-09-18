@@ -16,17 +16,21 @@ import Reveal from "../components/site/Reveal";
 import { INDEXING_ALLOWED, LOCALES, NOINDEX_ROBOTS, SITE_NAME, SITE_URL, isLocale } from "@/lib/site";
 
 // Every font carries Cyrillic and Polish diacritics: the site is EN / PL / RU.
-// `subsets` only decides what is PRELOADED; the generated @font-face rules
-// cover every subset through unicode-range, so PL and RU text still gets its
-// glyphs. Preloading all three subsets of five families put 21 font files in
-// front of the first render (PageSpeed, 2026-09-18), so only the Latin files of
-// the heading, body and mono fonts are preloaded; signature and handwriting load on use.
+// The generated @font-face rules cover every subset through unicode-range.
+//
+// No font is preloaded (PageSpeed, 2026-09-18). With preloads the font files
+// often arrived before the first paint, so mobile Lighthouse's simulation put
+// them on the critical path of the H1 (the LCP element) and the score swung
+// between ~88 and ~99 on identical code. Without preloads the H1 paints in the
+// size-adjusted fallback first and swaps to the web font a moment later
+// (display: swap, next/font's metric-matched fallback keeps the layout still).
 const fontHeading = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500"],
   style: ["normal", "italic"],
   variable: "--font-heading",
   display: "swap",
+  preload: false,
 });
 
 const fontBody = Inter_Tight({
@@ -34,15 +38,15 @@ const fontBody = Inter_Tight({
   weight: ["400", "500", "600"],
   variable: "--font-body",
   display: "swap",
+  preload: false,
 });
 
-// Preloaded too (Latin only): the eyebrow above the home H1 is set in it, and a
-// late swap from the fallback font was a visible change on the first screen.
 const fontMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-mono",
   display: "swap",
+  preload: false,
 });
 
 const fontSignature = Marck_Script({
