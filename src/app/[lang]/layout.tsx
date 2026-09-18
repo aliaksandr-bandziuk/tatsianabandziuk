@@ -18,8 +18,13 @@ import Reveal from "../components/site/Reveal";
 import { INDEXING_ALLOWED, LOCALES, NOINDEX_ROBOTS, SITE_NAME, SITE_URL, isLocale } from "@/lib/site";
 
 // Every font carries Cyrillic and Polish diacritics: the site is EN / PL / RU.
+// `subsets` only decides what is PRELOADED; the generated @font-face rules
+// cover every subset through unicode-range, so PL and RU text still gets its
+// glyphs. Preloading all three subsets of five families put 21 font files in
+// front of the first render (PageSpeed, 2026-09-18), so only the Latin files of
+// the heading and body fonts are preloaded; the decorative fonts load on use.
 const fontHeading = Playfair_Display({
-  subsets: ["latin", "latin-ext", "cyrillic"],
+  subsets: ["latin"],
   weight: ["400", "500"],
   style: ["normal", "italic"],
   variable: "--font-heading",
@@ -27,7 +32,7 @@ const fontHeading = Playfair_Display({
 });
 
 const fontBody = Inter_Tight({
-  subsets: ["latin", "latin-ext", "cyrillic"],
+  subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-body",
   display: "swap",
@@ -38,6 +43,7 @@ const fontMono = IBM_Plex_Mono({
   weight: ["400", "500"],
   variable: "--font-mono",
   display: "swap",
+  preload: false,
 });
 
 const fontSignature = Marck_Script({
@@ -45,6 +51,7 @@ const fontSignature = Marck_Script({
   weight: "400",
   variable: "--font-signature",
   display: "swap",
+  preload: false,
 });
 
 const fontHand = Caveat({
@@ -52,6 +59,7 @@ const fontHand = Caveat({
   weight: ["500"],
   variable: "--font-hand",
   display: "swap",
+  preload: false,
 });
 
 // Default cache lifetime for every page under [lang]. Must be a literal; keep

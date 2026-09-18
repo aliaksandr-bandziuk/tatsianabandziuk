@@ -85,7 +85,10 @@ export function Photo({
           alt={image.alt}
           fill
           sizes={sizes}
-          priority={priority}
+          // Above-the-fold photos load eagerly but without a <head> preload: on
+          // phones the hero photo sits below the H1 (the LCP element) and a
+          // high-priority preload would compete with it (PageSpeed, 2026-09-18).
+          loading={priority ? "eager" : "lazy"}
           style={image.focus ? { objectPosition: image.focus } : undefined}
         />
       </div>
