@@ -5,9 +5,17 @@
 const STATIC_REDIRECTS = [];
 
 const nextConfig = {
-  experimental: {
-    // The free templates are emailed as attachments, so the route needs the files at runtime.
-    outputFileTracingIncludes: { "/api/email": ["./templates/**/*"] },
+  // The free templates are emailed as attachments, so the route needs the files at runtime.
+  outputFileTracingIncludes: { "/api/email": ["./templates/**/*"] },
+
+  // Next still ships polyfills for features every supported browser has; swap
+  // the module for an empty one (see src/lib/empty-polyfills.js).
+  turbopack: {
+    resolveAlias: {
+      // next/dist/client/app-globals.js requires it by this relative path.
+      "../build/polyfills/polyfill-module": "./src/lib/empty-polyfills.js",
+      "next/dist/build/polyfills/polyfill-module": "./src/lib/empty-polyfills.js",
+    },
   },
 
   images: {

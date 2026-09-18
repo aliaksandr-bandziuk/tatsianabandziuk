@@ -7,7 +7,8 @@ import s from "../pages.module.scss";
 
 export const generateStaticParams = localeParams;
 
-export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const params = await props.params;
   return pageMetadata(params.lang, (await getContent(params.lang)).templates.seo, () => "/free-templates");
 }
 
@@ -42,7 +43,8 @@ const OTB_ROWS: SheetRow[] = [
   { cells: ["M3", 455, 402, 88, 53], trend: "down" },
 ];
 
-export default async function FreeTemplatesPage({ params }: { params: { lang: string } }) {
+export default async function FreeTemplatesPage(props: { params: Promise<{ lang: string }> }) {
+  const params = await props.params;
   const { lang } = params;
   const c = await getContent(lang);
   const p = c.templates;

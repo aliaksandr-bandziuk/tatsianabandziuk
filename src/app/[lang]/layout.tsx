@@ -119,13 +119,18 @@ function modalProps(lang: string, c: SiteContent) {
   };
 }
 
-export default async function LangLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { lang: string };
-}) {
+export default async function LangLayout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ lang: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   if (!isLocale(params.lang)) notFound();
   const c = await getContent(params.lang);
 

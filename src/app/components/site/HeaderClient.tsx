@@ -29,8 +29,8 @@ const SUBMENU_LABEL: Record<string, (label: string) => string> = {
 };
 const submenuLabel = (lang: string, label: string) => (SUBMENU_LABEL[lang] ?? SUBMENU_LABEL.en)(label);
 
-// React 18 has no `inert` prop type and renders it only as a string.
-const INERT = { inert: "" } as object;
+// React 19: `inert` is a boolean prop (React 18 needed the "" string form).
+const INERT = { inert: true };
 
 /** Path without the locale prefix: "/pl/services" → "/services". */
 function stripLocale(pathname: string): string {
@@ -131,34 +131,34 @@ function isActive(pathname: string, lang: string, href: string) {
  */
 function NavItemWithSubmenu({ lang, item, active, isOpen, onOpenChange }: { lang: string; item: NavEntry; active: boolean; isOpen: boolean; onOpenChange: (open: boolean) => void }) {
   const pathname = usePathname() ?? "/";
-  const d = useNavDropdown(isOpen, onOpenChange);
+  const { rootRef, buttonRef, panelId, clearTimer, onMouseEnter, onMouseLeave, onButtonClick, onKeyDown, onBlur } = useNavDropdown(isOpen, onOpenChange);
   return (
     <div
-      ref={d.rootRef}
+      ref={rootRef}
       className={s.navItem}
-      onMouseEnter={d.onMouseEnter}
-      onMouseLeave={d.onMouseLeave}
-      onFocusCapture={d.clearTimer}
-      onBlurCapture={d.onBlur}
-      onKeyDown={d.onKeyDown}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onFocusCapture={clearTimer}
+      onBlurCapture={onBlur}
+      onKeyDown={onKeyDown}
     >
       <span className={s.navTrigger}>
         <Link href={withLocale(lang, item.href)} aria-current={active ? "page" : undefined}>
           {item.label}
         </Link>
         <button
-          ref={d.buttonRef}
+          ref={buttonRef}
           type="button"
           className={s.chevronButton}
           aria-expanded={isOpen}
-          aria-controls={d.panelId}
+          aria-controls={panelId}
           aria-label={submenuLabel(lang, item.label)}
-          onClick={d.onButtonClick}
+          onClick={onButtonClick}
         >
           <span className={s.chevron} data-open={isOpen || undefined} aria-hidden="true" />
         </button>
       </span>
-      <div id={d.panelId} className={s.submenu} data-open={isOpen || undefined}>
+      <div id={panelId} className={s.submenu} data-open={isOpen || undefined}>
         <ul>
           {item.children!.map((child) => (
             <li key={child.href}>

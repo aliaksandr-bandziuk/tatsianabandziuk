@@ -33,13 +33,15 @@ async function find(params: Params) {
   return bySlug("service", await getContent(params.lang), params.slug);
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
+  const params = await props.params;
   const sv = await find(params);
   if (!sv) return {};
   return await itemMetadata("service", params.lang, sv);
 }
 
-export default async function ServicePage({ params }: { params: Params }) {
+export default async function ServicePage(props: { params: Promise<Params> }) {
+  const params = await props.params;
   const { lang } = params;
   const c = await getContent(lang);
   const sv = await find(params);

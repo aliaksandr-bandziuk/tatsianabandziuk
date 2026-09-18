@@ -6,7 +6,7 @@ import { intlPathnames } from "@/lib/routing";
 
 const pathnames = intlPathnames();
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const handleI18nRouting = createIntlMiddleware({
     locales,
     defaultLocale,

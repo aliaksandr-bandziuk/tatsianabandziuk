@@ -21,13 +21,15 @@ async function find(params: Params) {
   return bySlug("caseStudy", await getContent(params.lang), params.slug);
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
+  const params = await props.params;
   const cs = await find(params);
   if (!cs) return {};
   return await itemMetadata("caseStudy", params.lang, cs, { type: "article" });
 }
 
-export default async function CaseStudyPage({ params }: { params: Params }) {
+export default async function CaseStudyPage(props: { params: Promise<Params> }) {
+  const params = await props.params;
   const { lang } = params;
   const c = await getContent(lang);
   const cs = await find(params);

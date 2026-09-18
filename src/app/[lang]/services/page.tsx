@@ -8,11 +8,13 @@ import s from "../pages.module.scss";
 
 export const generateStaticParams = localeParams;
 
-export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const params = await props.params;
   return pageMetadata(params.lang, (await getContent(params.lang)).servicesPage.seo, () => "/services");
 }
 
-export default async function ServicesPage({ params }: { params: { lang: string } }) {
+export default async function ServicesPage(props: { params: Promise<{ lang: string }> }) {
+  const params = await props.params;
   const { lang } = params;
   const c = await getContent(lang);
   const p = c.servicesPage;

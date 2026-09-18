@@ -16,14 +16,16 @@ async function legalFor(lang: string, slug: string) {
   return p.slug === slug ? p : null;
 }
 
-export async function generateMetadata({ params }: { params: { lang: string; slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ lang: string; slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const p = await legalFor(params.lang, params.slug);
   if (!p) return {};
   const all = await getAllContent();
   return pageMetadata(params.lang, p.seo, (l) => `/${all[l].privacy.slug}`);
 }
 
-export default async function LegalPage({ params }: { params: { lang: string; slug: string } }) {
+export default async function LegalPage(props: { params: Promise<{ lang: string; slug: string }> }) {
+  const params = await props.params;
   const c = await getContent(params.lang);
   const p = await legalFor(params.lang, params.slug);
   if (!p) notFound();

@@ -55,7 +55,9 @@ export async function POST(request: NextRequest) {
   // cached for a day and this is how a publish reaches them immediately. It
   // also runs first so the URL resolution below reads fresh data. A manual
   // refresh is a POST with the secret and body {"_id":"manual","_type":"manual"}.
-  revalidateTag(SANITY_CACHE_TAG);
+  // Next 16: `{ expire: 0 }` expires the cached pages at once (the "max"
+  // profile would serve the old version once more while refreshing).
+  revalidateTag(SANITY_CACHE_TAG, { expire: 0 });
 
   // No IndexNow pings while the site is closed to search engines.
   if (!INDEXING_ALLOWED) {

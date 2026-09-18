@@ -2,7 +2,7 @@
 // visual-editing and live-preview client components into the browser bundle
 // (≈50 KB of unused JS on every page, PageSpeed 2026-09-18).
 import { createClient, type QueryParams } from "@sanity/client";
-import ImageUrlBuilder from "@sanity/image-url";
+import { createImageUrlBuilder } from "@sanity/image-url";
 
 export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID as string;
 export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET as string;
@@ -75,7 +75,7 @@ export const client = {
   },
 };
 
-const builder = ImageUrlBuilder({ projectId, dataset });
+const builder = createImageUrlBuilder({ projectId, dataset });
 
 export function urlFor(source: any) {
   return builder.image(source);

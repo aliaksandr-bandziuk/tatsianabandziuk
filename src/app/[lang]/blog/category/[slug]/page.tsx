@@ -14,13 +14,15 @@ export async function generateStaticParams() {
   return slugParams("category");
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
+  const params = await props.params;
   const cat = bySlug("category", await getContent(params.lang), params.slug);
   if (!cat) return {};
   return await itemMetadata("category", params.lang, cat);
 }
 
-export default async function CategoryPage({ params }: { params: Params }) {
+export default async function CategoryPage(props: { params: Promise<Params> }) {
+  const params = await props.params;
   const { lang } = params;
   const c = await getContent(lang);
   const cat = bySlug("category", c, params.slug);

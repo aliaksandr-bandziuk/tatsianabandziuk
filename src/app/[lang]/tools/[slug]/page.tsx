@@ -17,13 +17,15 @@ export async function generateStaticParams() {
   return slugParams("calculator");
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
+  const params = await props.params;
   const calc = bySlug("calculator", await getContent(params.lang), params.slug);
   if (!calc) return {};
   return await itemMetadata("calculator", params.lang, calc);
 }
 
-export default async function CalculatorPage({ params }: { params: Params }) {
+export default async function CalculatorPage(props: { params: Promise<Params> }) {
+  const params = await props.params;
   const { lang } = params;
   const c = await getContent(lang);
   const calc = bySlug("calculator", c, params.slug);

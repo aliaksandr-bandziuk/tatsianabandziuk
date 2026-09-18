@@ -16,7 +16,8 @@ export async function generateStaticParams() {
   return slugParams("post");
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
+  const params = await props.params;
   const post = bySlug("post", await getContent(params.lang), params.slug);
   if (!post) return {};
   const meta = await itemMetadata("post", params.lang, post, { type: "article" });
@@ -40,7 +41,8 @@ function videoSchema(v: VideoBlock, lang: string) {
   };
 }
 
-export default async function PostPage({ params }: { params: Params }) {
+export default async function PostPage(props: { params: Promise<Params> }) {
+  const params = await props.params;
   const { lang } = params;
   const c = await getContent(lang);
   const post = bySlug("post", c, params.slug);

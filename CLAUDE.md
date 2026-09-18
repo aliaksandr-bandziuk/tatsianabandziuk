@@ -8,9 +8,9 @@ its CLAUDE.md explains the reasoning behind most of the rules below.
 
 | Layer | Choice |
 |---|---|
-| Framework | Next.js 14 App Router, TypeScript strict |
-| CMS | Sanity v3 + next-sanity, Studio at `/admin` |
-| i18n | next-intl middleware: EN without prefix (default), `/pl`, `/ru`; `@sanity/document-internationalization` (one document per language) |
+| Framework | Next.js 16 App Router (Turbopack), React 19, TypeScript strict, Node 24 (`engines`) |
+| CMS | Sanity 6 + next-sanity 13 (Studio only), Studio at `/admin`; the site reads through `@sanity/client` 8 + `groq` |
+| i18n | next-intl 4 in `src/proxy.ts` (Next 16 name for middleware): EN without prefix (default), `/pl`, `/ru`; `@sanity/document-internationalization` 6 (one document per language) |
 | Styling | SCSS modules + CSS custom properties in `src/app/globals.css` (tokens from the approved design) |
 | Fonts | Playfair Display (headings), Inter Tight (body), IBM Plex Mono (labels, numbers), Caveat (handwritten notes) — all with Cyrillic |
 | Animation | Framer Motion, always with a `prefers-reduced-motion` fallback |
@@ -30,10 +30,12 @@ Brief and positioning: `brief.md`.
 
 ## Engineering rules (inherited from bandziuk)
 
-- **Never run `npm run build` locally.** Vercel builds on push. Use `npm run dev` and `npx tsc --noEmit`. Kill any dev server you start.
+- **Local builds are allowed since the Next 16 migration (owner, 2026-09-18).** Checks: `npx tsc --noEmit`, `npm run lint` (ESLint 9 flat config `eslint.config.mjs`; `next lint` no longer exists), `npx next build`. A local build overwrites `.next`, so stop any dev server first. Kill any server you start.
+- **Next 16 specifics:** `params` in pages, layouts and `generateMetadata` is a Promise (`await props.params`); `revalidateTag(tag, { expire: 0 })` in the webhook (the `"max"` profile would serve stale pages once more); `NextRequest.ip` is gone (form guard reads `x-forwarded-for`); `inert` is a boolean prop in React 19.
+- **Polyfills:** `turbopack.resolveAlias` in `next.config.mjs` swaps Next's `polyfill-module` for `src/lib/empty-polyfills.js`; every browser Next 16 supports has those features. Check after a Next upgrade that the alias still matches (`"trimStart"in String.prototype` must not appear in `.next/static/chunks`).
 - **Git:** do not commit or push unless the owner asks in the session. Inspect with `git --no-optional-locks`. Never run mutating git commands from a shell that cannot delete files (stale `index.lock`).
 - **Sanity access only through `client` from `src/sanity/sanity.client.ts`** (adds `revalidate: 86400` + tag `sanity`). A raw `createClient` fetch with the token makes the route dynamic.
-- **Every page under `[lang]` exports `generateStaticParams`**, otherwise Next 14 renders it on every request.
+- **Every page under `[lang]` exports `generateStaticParams`**, otherwise it is rendered on every request.
 - `useCdn: false` stays. The token (`SANITY_API_TOKEN`) is required: translated documents are private.
 - **JSON-LD uses a plain `<script type="application/ld+json" suppressHydrationWarning>`**, never `next/script` (AI fetchers do not run JS).
 - **Images go through Sanity's CDN** (`src/lib/images/sanityLoader.ts`), not `/_next/image`. Do not add `unoptimized`; `fill` images need `sizes`.
@@ -83,3 +85,13 @@ Sitemap at `/sitemap.xml` (→ `/api/sitemap`) with hreflang.
 - Free templates (2026-09-18): `templates/<lang>/` holds the open-to-buy model and the 12-point KPI dashboard checklist per language, built by `python scripts/templates/build.py` (openpyxl; texts in its `TEXT` dict) and checked by `python scripts/templates/verify.py` (pycel evaluates every formula and hand-checked values). `/api/email` mails both files to the visitor for `templates` and `waitlist` requests (`src/lib/templatesMail.ts`, language from the page path); `next.config.mjs` bundles `templates/**` with the route. Page texts on /free-templates describe exactly these files — change both together.
 - Articles (2026-09-18): all 54 are full (no stand-ins left; `check-content` 0 errors, 0 warnings). The 41 former stand-ins were written from per-article DataForSEO research: `npx tsx scripts/dataforseo/articles.ts run|brief <lang>` (target queries in its `TARGETS`), briefs in `research/articles/<lang>/<key>.md` (top-10, People Also Ask, related searches, suggestions). Total DataForSEO spend so far about $5.55 of the $10 guard.
 - `_to_delete/` holds files from bandziuk that are not used here; the owner can delete the folder.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
