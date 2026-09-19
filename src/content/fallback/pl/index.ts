@@ -151,7 +151,7 @@ export const pl: SiteContent = {
   },
   person: {
     name: "Tatsiana Bandziuk",
-    jobTitle: "Konsultantka ds. analityki w handlu i modzie",
+    jobTitle: "Ekspertka ds. analityki w handlu i modzie",
     shortBio:
       "Około dziesięciu lat w międzynarodowym handlu modowym: asortyment, ceny, dane produktowe i raporty Power BI. Warszawa.",
     signature: "Tatsiana",
@@ -165,7 +165,7 @@ export const pl: SiteContent = {
       { label: "Русский", value: "ojczysty" },
     ],
     educationChip: "Magister ekonomii i zarządzania, BGEU",
-    photoPrimary: { src: "/images/portrait/tatsiana-main.webp", alt: "Tatsiana Bandziuk, konsultantka analityki retail i fashion", focus: "center 12%" },
+    photoPrimary: { src: "/images/portrait/tatsiana-main.webp", alt: "Tatsiana Bandziuk, ekspertka analityki retail i fashion", focus: "center 12%" },
     photoSecondary: { src: "/images/portrait/tatsiana-second.webp", alt: "Tatsiana Bandziuk przy biurku z otwartym raportem Power BI" },
     photoWorkspace: { src: "/images/portrait/tatsiana-workspace.webp", alt: "Laptop, notes i długopis na biurku Tatsiany Bandziuk" },
   },
@@ -173,12 +173,12 @@ export const pl: SiteContent = {
     seo: {
       title: "Tatsiana Bandziuk — analityka sprzedaży w handlu i modzie",
       description:
-        "Konsultantka ds. analityki w handlu i modzie z Warszawy: planowanie asortymentu, analiza cen, raportowanie sprzedaży w Power BI i dane produktowe.",
+        "Ekspertka ds. analityki w handlu i modzie z Warszawy: planowanie asortymentu, analiza cen, raportowanie sprzedaży w Power BI i dane produktowe.",
     },
     eyebrow: "Warszawa · PL / EN / RU",
     h1: {
       before: "Tatsiana Bandziuk —",
-      accent: "konsultantka ds. analityki sprzedaży",
+      accent: "ekspertka ds. analityki sprzedaży",
       after: "w handlu i modzie",
     },
     subtitle:
@@ -200,7 +200,7 @@ export const pl: SiteContent = {
     aboutTitle: "O mnie: Tatsiana Bandziuk i analityka w handlu modowym",
     aboutText: [
       "Od około dziesięciu lat pracuję w międzynarodowym handlu modowym, na styku zespołów handlowych i systemów, z których korzystają: asortymentu, cen, danych produktowych i raportów, które muszą się ze sobą zgadzać.",
-      "Obecnie jestem Global Brand Analyst & Product Data Lead w międzynarodowej marce modowej i kieruję zespołem specjalistów ds. danych produktowych. Jako konsultantka pracuję z Warszawy po polsku, angielsku i rosyjsku.",
+      "Obecnie jestem Global Brand Analyst & Product Data Lead w międzynarodowej marce modowej i kieruję zespołem specjalistów ds. danych produktowych. Jako niezależna ekspertka pracuję z Warszawy po polsku, angielsku i rosyjsku.",
     ],
     timelineLabel: "Przebieg kariery",
     timeline,
@@ -240,7 +240,7 @@ export const pl: SiteContent = {
       {
         label: "KROK 04",
         title: "Przekazanie narzędzi i procesu zespołowi",
-        text: "Dokumentacja, definicje i szkolenia, dzięki którym proces działa bez konsultantki.",
+        text: "Dokumentacja, definicje i szkolenia, dzięki którym proces działa bez zewnętrznego wsparcia.",
       },
     ],
     processPhotoLabel: "Zdjęcie przy pracy — do podmiany",
@@ -261,9 +261,9 @@ export const pl: SiteContent = {
     faqLead: "Sześć pytań, które firmy zadają przed pierwszą rozmową.",
     faq: [
       {
-        question: "Czym zajmuje się konsultantka ds. analityki sprzedaży?",
+        question: "Czym zajmuje się ekspertka ds. analityki sprzedaży?",
         answer:
-          "Konsultantka ds. analityki sprzedaży pomaga firmie handlowej zamienić dane o sprzedaży, zapasach i produktach w decyzje: co kupić, po jakiej cenie i kiedy obniżyć cenę. W praktyce porządkuję definicje wskaźników, buduję modele w Excelu i raporty w Power BI oraz uczę zespół z nich korzystać. Po projekcie firma pracuje na tych narzędziach samodzielnie.",
+          "Ekspertka ds. analityki sprzedaży pomaga firmie handlowej zamienić dane o sprzedaży, zapasach i produktach w decyzje: co kupić, po jakiej cenie i kiedy obniżyć cenę. W praktyce porządkuję definicje wskaźników, buduję modele w Excelu i raporty w Power BI oraz uczę zespół z nich korzystać. Po projekcie firma pracuje na tych narzędziach samodzielnie.",
       },
       {
         question: "Na czym polega analiza sprzedaży w handlu?",
@@ -304,7 +304,7 @@ export const pl: SiteContent = {
     },
     h1: {
       before: "O mnie: Tatsiana Bandziuk,",
-      accent: "konsultantka ds. analityki w handlu i modzie",
+      accent: "ekspertka ds. analityki w handlu i modzie",
     },
     intro:
       "Od około dziesięciu lat zajmuję się analityką w międzynarodowym handlu modowym: asortymentem, cenami, danymi produktowymi i raportami, które je łączą. Z Warszawy doradzam markom modowym, dystrybutorom i sklepom internetowym.",
@@ -547,7 +547,7 @@ export const pl: SiteContent = {
       {
         question: "Kto pisze artykuły na blogu?",
         answer:
-          "Artykuły pisze Tatsiana Bandziuk, konsultantka ds. analityki w handlu i modzie z około dziesięcioletnim doświadczeniem w międzynarodowym handlu modowym. Teksty opierają się na praktyce pracy z asortymentem, cenami, danymi produktowymi i raportami Power BI.",
+          "Artykuły pisze Tatsiana Bandziuk, ekspertka ds. analityki w handlu i modzie z około dziesięcioletnim doświadczeniem w międzynarodowym handlu modowym. Teksty opierają się na praktyce pracy z asortymentem, cenami, danymi produktowymi i raportami Power BI.",
       },
       {
         question: "Jak często pojawiają się nowe artykuły?",

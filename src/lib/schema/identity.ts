@@ -23,8 +23,8 @@ export const KNOWS_LANGUAGE = ["en", "pl", "ru"];
 
 const JOB_TITLE: Record<string, string> = {
   en: "Retail and Fashion Analytics Consultant",
-  pl: "Konsultantka ds. analityki w handlu i modzie",
-  ru: "Консультант по аналитике в ритейле и моде",
+  pl: "Ekspertka ds. analityki w handlu i modzie",
+  ru: "Эксперт по аналитике в ритейле и моде",
 };
 
 type Graph = Record<string, unknown>;

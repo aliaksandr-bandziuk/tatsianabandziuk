@@ -355,7 +355,7 @@ export const services: Service[] = [
     ...base("excel-retail-planning-models"),
     cardTitle: "Planowanie zakupów w Excelu",
     cardText:
-      "Budżet open-to-buy, plan zakupów i model marży w jednym skoroszycie, który prowadzi zespół planowania, a nie konsultant.",
+      "Budżet open-to-buy, plan zakupów i model marży w jednym skoroszycie, który prowadzi zespół planowania, a nie zewnętrzny ekspert.",
     chartCaption: "budżet open-to-buy · sztuki, dane przykładowe",
     breadcrumb: "Planowanie zakupów w Excelu",
     h1: { before: "Modele Excel do planowania", accent: "zakupów i sprzedaży", after: "w handlu" },

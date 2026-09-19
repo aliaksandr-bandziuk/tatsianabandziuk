@@ -495,3 +495,14 @@ timestamp,endpoint,cache_name,tasks,cost_usd
 2026-09-18T09:12:50.154Z,/v3/serp/google/organic/live/advanced,article_serp-ru-buyer-and-category-manager-категорийный-менеджер,1,0.00215
 2026-09-18T09:12:52.285Z,/v3/serp/google/organic/live/advanced,article_serp-ru-buyer-and-category-manager-кто-такой-байер,1,0.00215
 2026-09-18T09:12:52.552Z,/v3/dataforseo_labs/google/keyword_suggestions/live,article_suggestions-ru-buyer-and-category-manager,1,0.01476
+2026-09-19T08:51:42.067Z,/v3/keywords_data/google_ads/search_volume/live,terms_volume-pl,1,0.09
+2026-09-19T08:51:44.848Z,/v3/keywords_data/google_ads/search_volume/live,terms_volume-kz,1,0.09
+2026-09-19T08:51:48.074Z,/v3/keywords_data/google_ads/search_volume/live,terms_volume-ua-ru,1,0.09
+2026-09-19T08:51:52.810Z,/v3/serp/google/organic/live/advanced,terms_serp-pl-konsultant,1,0.00215
+2026-09-19T08:51:57.674Z,/v3/serp/google/organic/live/advanced,terms_serp-pl-ekspert,1,0.00215
+2026-09-19T08:52:09.981Z,/v3/serp/google/organic/live/advanced,terms_serp-pl-konsultant-analityki-danych,1,0.002
+2026-09-19T08:52:11.946Z,/v3/serp/google/organic/live/advanced,terms_serp-pl-ekspert-analityki-danych,1,0.002
+2026-09-19T08:52:13.386Z,/v3/serp/google/organic/live/advanced,terms_serp-ru-консультант,1,0.00215
+2026-09-19T08:52:16.642Z,/v3/serp/google/organic/live/advanced,terms_serp-ru-эксперт,1,0.00215
+2026-09-19T08:52:20.054Z,/v3/serp/google/organic/live/advanced,terms_serp-ru-консультант-по-аналитике,1,0.00215
+2026-09-19T08:52:22.472Z,/v3/serp/google/organic/live/advanced,terms_serp-ru-эксперт-по-аналитике,1,0.00215
