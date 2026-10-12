@@ -50,3 +50,6 @@ __pycache__/
 
 # Sanity dataset exports
 /backups/
+
+# local source snapshot for the case write-up
+/audit-src.tgz
