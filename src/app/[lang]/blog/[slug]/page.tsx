@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { bySlug, categoryByKey, categoryHref, dateLabel, getContent, itemMetadata, latestPosts, localizeHref, postHref, slugParams } from "@/content";
+import { notFound, permanentRedirect } from "next/navigation";
+import { crossLanguageHref, bySlug, categoryByKey, categoryHref, dateLabel, getContent, itemMetadata, latestPosts, localizeHref, postHref, slugParams } from "@/content";
 import type { ArticleBlock } from "@/content/types";
 import { Accent, Breadcrumbs, FaqSection, accentText } from "@/app/components/site/Blocks";
-import { RelatedCalculators, RelatedPosts } from "@/app/components/site/Related";
+import { RelatedCalculators, RelatedCase, RelatedPosts, serviceCase } from "@/app/components/site/Related";
 import { ArticleAside, ArticleBody, articleStyles as a } from "@/app/components/site/Article";
 import JsonLd from "@/app/components/site/JsonLd";
 import { PERSON_ID } from "@/lib/schema/identity";
@@ -46,7 +46,12 @@ export default async function PostPage(props: { params: Promise<Params> }) {
   const { lang } = params;
   const c = await getContent(lang);
   const post = bySlug("post", c, params.slug);
-  if (!post) notFound();
+  if (!post) {
+    // Another language's slug under this section: keep the signal with a 308.
+    const elsewhere = await crossLanguageHref("post", params.lang, params.slug);
+    if (elsewhere) permanentRedirect(elsewhere);
+    notFound();
+  }
   const cat = categoryByKey(c, post.category);
   // Same category first, then finished articles, then newest.
   const related = latestPosts(c, c.posts.length, post.key)
@@ -68,7 +73,7 @@ export default async function PostPage(props: { params: Promise<Params> }) {
     mainEntityOfPage: url,
     inLanguage: lang,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updatedAt ?? post.date,
     author: { "@id": PERSON_ID },
     publisher: { "@id": PERSON_ID },
     articleSection: cat?.label,
@@ -114,6 +119,7 @@ export default async function PostPage(props: { params: Promise<Params> }) {
       </section>
       {post.faq && post.faq.length > 0 && <FaqSection title={post.faqTitle ?? accentText(post.h1)} items={post.faq} />}
       <RelatedCalculators lang={lang} items={calculators} />
+      <RelatedCase lang={lang} item={await serviceCase(lang, post.serviceKey)} />
       <RelatedPosts lang={lang} posts={related} />
     </>
   );

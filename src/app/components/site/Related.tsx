@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { calculatorHref, getContent, latestPosts } from "@/content";
-import type { CalculatorPage, Post } from "@/content/types";
-import { PostCard } from "./Blocks";
+import type { CalculatorPage, CaseStudy, Post } from "@/content/types";
+import { CaseCard, PostCard } from "./Blocks";
 
 /**
  * Cross-links between sections: articles and calculators that belong to the
@@ -45,6 +45,28 @@ export async function RelatedCalculators({ lang, items, title }: { lang: string;
       </div>
     </section>
   );
+}
+
+export async function RelatedCase({ lang, item, title }: { lang: string; item?: CaseStudy; title?: string }) {
+  if (!item) return null;
+  const c = await getContent(lang);
+  return (
+    <section className="container section">
+      <h2 className="h2-sm" style={{ marginBottom: 26 }} data-reveal>
+        {title ?? c.ui.relatedCaseStudy}
+      </h2>
+      <div className="grid-3">
+        <CaseCard lang={lang} item={item} />
+      </div>
+    </section>
+  );
+}
+
+/** The case study of one service, so articles link into the portfolio. */
+export async function serviceCase(lang: string, serviceKey: string | undefined) {
+  if (!serviceKey) return undefined;
+  const c = await getContent(lang);
+  return c.caseStudies.find((x) => x.serviceKey === serviceKey);
 }
 
 /** Up to `count` articles of one service, finished ones first. */

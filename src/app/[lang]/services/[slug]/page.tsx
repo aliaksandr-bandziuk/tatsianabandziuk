@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { bySlug, caseByKey, caseHref, getContent, itemMetadata, localizeHref, serviceHref, slugParams } from "@/content";
+import { notFound, permanentRedirect } from "next/navigation";
+import { crossLanguageHref, bySlug, caseByKey, caseHref, getContent, itemMetadata, localizeHref, serviceHref, slugParams } from "@/content";
 import {
   Accent,
   Breadcrumbs,
@@ -45,7 +45,12 @@ export default async function ServicePage(props: { params: Promise<Params> }) {
   const { lang } = params;
   const c = await getContent(lang);
   const sv = await find(params);
-  if (!sv) notFound();
+  if (!sv) {
+    // Another language's slug under this section: keep the signal with a 308.
+    const elsewhere = await crossLanguageHref("service", params.lang, params.slug);
+    if (elsewhere) permanentRedirect(elsewhere);
+    notFound();
+  }
   const related = caseByKey(c, sv.caseStudyKey);
   const url = `${SITE_URL}${serviceHref(lang, sv.slug)}`;
 

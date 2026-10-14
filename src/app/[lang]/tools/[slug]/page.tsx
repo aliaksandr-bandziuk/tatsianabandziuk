@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { bySlug, calculatorHref, getContent, itemMetadata, localizeHref, postByKey, postHref, serviceByKey, serviceHref, slugParams } from "@/content";
+import { notFound, permanentRedirect } from "next/navigation";
+import { crossLanguageHref, bySlug, calculatorHref, getContent, itemMetadata, localizeHref, postByKey, postHref, serviceByKey, serviceHref, slugParams } from "@/content";
 import { Accent, Breadcrumbs, FaqSection, accentText } from "@/app/components/site/Blocks";
 import { ArticleBody, articleStyles as a } from "@/app/components/site/Article";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
@@ -29,7 +29,12 @@ export default async function CalculatorPage(props: { params: Promise<Params> })
   const { lang } = params;
   const c = await getContent(lang);
   const calc = bySlug("calculator", c, params.slug);
-  if (!calc) notFound();
+  if (!calc) {
+    // Another language's slug under this section: keep the signal with a 308.
+    const elsewhere = await crossLanguageHref("calculator", params.lang, params.slug);
+    if (elsewhere) permanentRedirect(elsewhere);
+    notFound();
+  }
   const post = postByKey(c, calc.relatedPostKey);
   const service = serviceByKey(c, calc.serviceKey);
   // Same service first, then the rest; the aside already links to `post`.

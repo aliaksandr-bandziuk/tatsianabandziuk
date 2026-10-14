@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { bySlug, getContent, itemMetadata, localizeHref, serviceByKey, serviceHref, slugParams } from "@/content";
+import { notFound, permanentRedirect } from "next/navigation";
+import { categoryIsThin, crossLanguageHref, bySlug, getContent, itemMetadata, localizeHref, serviceByKey, serviceHref, slugParams } from "@/content";
 import { Breadcrumbs, FaqSection } from "@/app/components/site/Blocks";
 import { CategoryChips, PostGrid } from "@/app/components/site/BlogList";
 import { RelatedCalculators } from "@/app/components/site/Related";
@@ -16,9 +16,12 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: { params: Promise<Params> }): Promise<Metadata> {
   const params = await props.params;
-  const cat = bySlug("category", await getContent(params.lang), params.slug);
+  const c = await getContent(params.lang);
+  const cat = bySlug("category", c, params.slug);
   if (!cat) return {};
-  return await itemMetadata("category", params.lang, cat);
+  // One or two articles: readable for people, not worth an index slot.
+  const item = categoryIsThin(c, cat.key) ? { ...cat, seo: { ...cat.seo, noindex: true } } : cat;
+  return await itemMetadata("category", params.lang, item);
 }
 
 export default async function CategoryPage(props: { params: Promise<Params> }) {
@@ -26,7 +29,12 @@ export default async function CategoryPage(props: { params: Promise<Params> }) {
   const { lang } = params;
   const c = await getContent(lang);
   const cat = bySlug("category", c, params.slug);
-  if (!cat) notFound();
+  if (!cat) {
+    // Another language's slug under this section: keep the signal with a 308.
+    const elsewhere = await crossLanguageHref("category", params.lang, params.slug);
+    if (elsewhere) permanentRedirect(elsewhere);
+    notFound();
+  }
   const posts = c.posts.filter((p) => p.category === cat.key).sort((a, b) => b.date.localeCompare(a.date));
   const service = serviceByKey(c, cat.serviceKey);
   // Calculators of every service the rubric's articles belong to.

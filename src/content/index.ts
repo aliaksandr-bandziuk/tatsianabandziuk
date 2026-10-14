@@ -100,6 +100,17 @@ const PATH: Record<RoutableKind, { path: (slug: string) => string; index: string
   calculator: { path: (slug) => `/tools/${slug}`, index: "/tools" },
 };
 
+/**
+ * A rubric worth indexing. Below this, a listing of one or two articles
+ * competes with the articles themselves for crawl budget and ranks for nothing,
+ * so it stays on the site, linked, but out of the sitemap and out of the index.
+ */
+export const MIN_CATEGORY_POSTS = 3;
+
+export const categoryPostCount = (c: SiteContent, key: string) => c.posts.filter((p) => p.category === key).length;
+
+export const categoryIsThin = (c: SiteContent, key: string) => categoryPostCount(c, key) < MIN_CATEGORY_POSTS;
+
 export const serviceByKey = (c: SiteContent, key?: string) => (key ? c.services.find((x) => x.key === key) : undefined);
 export const caseByKey = (c: SiteContent, key?: string) => (key ? c.caseStudies.find((x) => x.key === key) : undefined);
 export const postByKey = (c: SiteContent, key?: string) => (key ? c.posts.find((x) => x.key === key) : undefined);
@@ -118,6 +129,23 @@ type RoutableOf<K extends RoutableKind> = K extends "service"
 
 export function bySlug<K extends RoutableKind>(kind: K, c: SiteContent, slug: string) {
   return LIST[kind](c).find((x) => x.slug === slug) as RoutableOf<K> | undefined;
+}
+
+/**
+ * The same item's URL in the language that owns this slug.
+ *
+ * Search engines and old links mix a section segment with another language's
+ * slug (/case-studies/<pl slug>). The route answers 308 to the real URL
+ * instead of 404, so the signal is kept instead of thrown away.
+ */
+export async function crossLanguageHref(kind: RoutableKind, lang: string, slug: string): Promise<string | undefined> {
+  const all = await getAllContent();
+  for (const l of LOCALES) {
+    if (l === lang) continue;
+    const item = LIST[kind](all[l]).find((x) => x.slug === slug);
+    if (item) return localizeHref(l, PATH[kind].path(item.slug));
+  }
+  return undefined;
 }
 
 function pathsFrom(all: Record<Locale, SiteContent>, kind: RoutableKind, key: string): Partial<Record<Locale, string>> {
@@ -159,7 +187,15 @@ export async function routableGroups(): Promise<RoutableGroup[]> {
         const item = LIST[kind](all[l]).find((x) => x.key === key);
         if (item?.updatedAt) updatedAt[l] = item.updatedAt;
       }
-      groups.push({ paths: pathsFrom(all, kind, key), updatedAt });
+      const paths = pathsFrom(all, kind, key);
+      if (kind === "category") {
+        // A thin rubric is not a sitemap-worthy URL in that language.
+        for (const l of LOCALES) {
+          if (paths[l] && categoryIsThin(all[l], key)) delete paths[l];
+        }
+        if (!Object.keys(paths).length) return;
+      }
+      groups.push({ paths, updatedAt });
     });
   }
   groups.push({

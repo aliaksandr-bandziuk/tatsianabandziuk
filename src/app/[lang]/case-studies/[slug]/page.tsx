@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { ConsultationButton } from "@/app/components/site/ConsultationModal";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { bySlug, caseHref, getContent, itemMetadata, localizeHref, serviceByKey, serviceHref, slugParams } from "@/content";
+import { notFound, permanentRedirect } from "next/navigation";
+import { crossLanguageHref, bySlug, caseHref, getContent, itemMetadata, localizeHref, serviceByKey, serviceHref, slugParams } from "@/content";
 import { Accent, Breadcrumbs, CaseCard, FactPanel, FaqSection, MetricsBand, NumberedList, ToolRows, accentText } from "@/app/components/site/Blocks";
 import { CaseDashboard } from "@/app/components/site/Charts";
 import JsonLd from "@/app/components/site/JsonLd";
@@ -33,7 +33,12 @@ export default async function CaseStudyPage(props: { params: Promise<Params> }) 
   const { lang } = params;
   const c = await getContent(lang);
   const cs = await find(params);
-  if (!cs) notFound();
+  if (!cs) {
+    // Another language's slug under this section: keep the signal with a 308.
+    const elsewhere = await crossLanguageHref("caseStudy", params.lang, params.slug);
+    if (elsewhere) permanentRedirect(elsewhere);
+    notFound();
+  }
   const others = c.caseStudies.filter((x) => x.key !== cs.key).slice(0, 3);
   const service = serviceByKey(c, cs.serviceKey);
   const url = `${SITE_URL}${caseHref(lang, cs.slug)}`;
@@ -47,6 +52,7 @@ export default async function CaseStudyPage(props: { params: Promise<Params> }) 
     url,
     inLanguage: lang,
     datePublished: cs.publishedAt,
+    dateModified: cs.updatedAt ?? cs.publishedAt,
     author: { "@id": PERSON_ID },
     publisher: { "@id": PERSON_ID },
     about: cs.tag,
