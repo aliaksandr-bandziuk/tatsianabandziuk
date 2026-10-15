@@ -84,6 +84,12 @@ export async function serviceCase(lang: string, serviceKey: string | undefined, 
   if (!c.caseStudies.length) return undefined;
   const exact = serviceKey ? c.caseStudies.find((x) => x.serviceKey === serviceKey) : undefined;
   if (exact) return exact;
+  // The service page already shows a case (`caseStudyKey`), even one owned by
+  // another service: Power BI articles belong with the Power BI case, not with
+  // whichever case happens to carry the topic "reporting" first.
+  const declared = serviceKey ? c.services.find((s) => s.key === serviceKey)?.caseStudyKey : undefined;
+  const byService = declared ? c.caseStudies.find((x) => x.key === declared) : undefined;
+  if (byService) return byService;
   const topic = categoryKey ? CATEGORY_TOPIC[categoryKey] : undefined;
   const byTopic = topic ? c.caseStudies.find((x) => x.topics.includes(topic)) : undefined;
   return byTopic ?? c.caseStudies[0];

@@ -241,13 +241,19 @@ export async function languageAliases(): Promise<LanguageAlias[]> {
  * degrades to a plain summary. Rebuilt by hand when the name, role or brand
  * colours change; the text on it is the name and the role, nothing page-specific.
  */
+const OG_CARD = {
+  en: { name: SITE_NAME, role: "Retail and Fashion Analytics Consultant" },
+  pl: { name: SITE_NAME, role: "Konsultantka analityki retail i fashion" },
+  ru: { name: "Татьяна Бандюк", role: "Консультант по аналитике ритейла и fashion" },
+} as const;
+
 export function ogImage(lang: string) {
   const l = isLocale(lang) ? lang : "en";
   return {
     url: `${SITE_URL}/images/og/og-${l}.png`,
     width: 1200,
     height: 630,
-    alt: `${SITE_NAME} — ${{ en: "Retail and Fashion Analytics Consultant", pl: "Konsultantka analityki retail i fashion", ru: "\u041a\u043e\u043d\u0441\u0443\u043b\u044c\u0442\u0430\u043d\u0442 \u043f\u043e \u0430\u043d\u0430\u043b\u0438\u0442\u0438\u043a\u0435 \u0440\u0438\u0442\u0435\u0439\u043b\u0430 \u0438 fashion" }[l]}`,
+    alt: `${OG_CARD[l].name} — ${OG_CARD[l].role}`,
   };
 }
 
