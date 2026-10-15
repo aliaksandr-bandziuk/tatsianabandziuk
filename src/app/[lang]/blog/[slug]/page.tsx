@@ -119,7 +119,7 @@ export default async function PostPage(props: { params: Promise<Params> }) {
       </section>
       {post.faq && post.faq.length > 0 && <FaqSection title={post.faqTitle ?? accentText(post.h1)} items={post.faq} />}
       <RelatedCalculators lang={lang} items={calculators} />
-      <RelatedCase lang={lang} item={await serviceCase(lang, post.serviceKey)} />
+      <RelatedCase lang={lang} item={await serviceCase(lang, post.serviceKey, post.category)} />
       <RelatedPosts lang={lang} posts={related} />
     </>
   );

@@ -96,3 +96,61 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Commands
+
+Every maintenance script has an `npm run` entry (added 2026-10-15); the bare
+`npx tsx scripts/...` calls still work and mean the same thing.
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server. Never run `npm run build` locally — Vercel builds on push. |
+| `npm run typecheck` | `tsc --noEmit`; run before every commit. |
+| `npm run lint` | ESLint. |
+| `npm run check:content` | SEO lengths, name spelling, empty headings and FAQ answers, registry match, calculator labels, article length, remaining stand-ins. |
+| `npm run sanity:backup` | Dataset export to `backups/`. Always before writing to Sanity. |
+| `npm run sanity:seed` | Writes the fallback modules to Sanity with createOrReplace — overwrites Studio edits, so prefer `--only=` or `seo:apply`. |
+| `npm run sanity:compare` | Sanity against the fallback modules. |
+| `npm run sanity:validate` | Schema check. |
+| `npm run sanity:webhook` | Publish-webhook check. |
+| `npm run sanity:urls` | URLs a document resolves to. |
+| `npm run seo:diff` | Shows which `seo.title` / `seo.description` differ between the content modules and Sanity. Writes nothing. |
+| `npm run seo:apply` | Writes those two fields with a patch, leaving the rest of each document untouched (`scripts/sanity/patch-seo.ts`). |
+| `npm run templates:build` / `templates:verify` | Rebuilds and verifies the Excel templates (Python, openpyxl / pycel). |
+| `npm run keywords:build` | Rebuilds the keyword CSVs from the cached DataForSEO responses, offline and free. |
+
+Editing copy is two steps: change `src/content/fallback/**`, then `npm run seo:apply`
+for SEO fields (or edit the document in Studio). The site reads Sanity first, so a
+change that lives only in the modules does not reach the live site.
+
+## Indexing rules (from the first month of Search Console data, 2026-10-14)
+
+State on 14 October: 81 pages indexed, 79 not, 71 of them "Discovered - currently
+not indexed" with no crawl date at all — Google knew the URLs from the sitemap and
+never fetched them. Not a technical fault: a one-month-old domain with no backlinks
+gets little crawl budget. The unindexed set was the commercial half of the site
+(all PL services, three EN and three RU services, 11 of 18 case studies, `/ru`,
+most calculators, `/about`, `/courses`, `/free-templates`).
+
+What follows from that, and what is now in the code:
+
+- **A thin rubric is not an index-worthy URL.** `MIN_CATEGORY_POSTS = 3` in
+  `src/content/index.ts`: a rubric with fewer articles is dropped from the sitemap
+  group and gets `noindex, follow` in its metadata. It stays on the site and keeps
+  passing link weight. Raising the threshold removes more URLs from the crawl queue;
+  do not add new URLs to the sitemap without a reason while indexing is the bottleneck.
+- **Another language's slug answers 308, not 404.** `crossLanguageHref` in
+  `src/content/index.ts`, used by every dynamic route. Search engines guess
+  combinations like `/case-studies/<pl slug>`; a redirect keeps the signal.
+- **`dateModified` comes from `updatedAt`**, not from the publication date
+  (articles and case studies). Freshness is a ranking and citation signal and the
+  data was already there.
+- **Articles link to the case study of their service** (`RelatedCase` in
+  `Related.tsx`), so pages Google already crawls feed the ones it does not.
+- **Snippets promise what an AI answer does not carry** — a formula to copy, a
+  benchmark table, a calculator, a worked example, a step count. Eleven pages were
+  rewritten this way on 2026-10-15; they sat at positions 3–16 with 2 clicks on
+  780 impressions. Keep new titles under 60 characters and descriptions under 155;
+  `npm run check:content` enforces it.
+- **Manual submission is part of the job** while the domain is young: priority URLs
+  go into Search Console by hand after each deploy, a handful a day.

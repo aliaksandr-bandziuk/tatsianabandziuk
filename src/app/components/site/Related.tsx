@@ -62,11 +62,31 @@ export async function RelatedCase({ lang, item, title }: { lang: string; item?: 
   );
 }
 
-/** The case study of one service, so articles link into the portfolio. */
-export async function serviceCase(lang: string, serviceKey: string | undefined) {
-  if (!serviceKey) return undefined;
+/**
+ * The case study closest to an article, so every article links into the
+ * portfolio — the case pages are the ones Google crawls least.
+ *
+ * Two services (Power BI reporting, Excel planning models) have no case study
+ * of their own, and they carry the most articles, so an exact match on
+ * `serviceKey` alone leaves the best-crawled rubrics without a link. The
+ * rubric's topic is the second try, the newest case the last.
+ */
+const CATEGORY_TOPIC: Record<string, string> = {
+  "power-bi": "reporting",
+  excel: "assortment",
+  assortment: "assortment",
+  pricing: "pricing",
+  "product-data": "product-data",
+};
+
+export async function serviceCase(lang: string, serviceKey: string | undefined, categoryKey?: string) {
   const c = await getContent(lang);
-  return c.caseStudies.find((x) => x.serviceKey === serviceKey);
+  if (!c.caseStudies.length) return undefined;
+  const exact = serviceKey ? c.caseStudies.find((x) => x.serviceKey === serviceKey) : undefined;
+  if (exact) return exact;
+  const topic = categoryKey ? CATEGORY_TOPIC[categoryKey] : undefined;
+  const byTopic = topic ? c.caseStudies.find((x) => x.topics.includes(topic)) : undefined;
+  return byTopic ?? c.caseStudies[0];
 }
 
 /** Up to `count` articles of one service, finished ones first. */
