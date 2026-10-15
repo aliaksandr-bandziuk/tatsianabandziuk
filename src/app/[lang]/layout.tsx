@@ -1,7 +1,7 @@
 import "@/app/globals.css";
 import DeferredWidgets from "@/app/components/site/DeferredWidgets";
 import CustomCookieConsent, { COOKIE_BANNER_HEAD_SCRIPT } from "@/app/components/shared/CustomCookieConsent/CustomCookieConsent";
-import { getContent, localizeHref } from "@/content";
+import { ogImage, getContent, localizeHref } from "@/content";
 import type { SiteContent } from "@/content/types";
 import { ConsultationModalProvider } from "@/app/components/site/ConsultationModal";
 import type { Metadata, Viewport } from "next";
@@ -85,6 +85,9 @@ export const metadata: Metadata = {
   description:
     "Assortment planning, retail pricing analysis and Power BI reporting for fashion and retail brands. Consultant based in Warsaw, working in English, Polish and Russian.",
   robots: INDEXING_ALLOWED ? undefined : NOINDEX_ROBOTS,
+  // Default share card for anything that does not go through pageMetadata.
+  openGraph: { images: [ogImage("en")] },
+  twitter: { card: "summary_large_image", images: [ogImage("en").url] },
 };
 
 export const viewport: Viewport = {

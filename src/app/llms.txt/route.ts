@@ -1,76 +1,103 @@
-import { calculatorHref, caseHref, categoryHref, getAllContent, localizeHref, postHref, serviceHref } from "@/content";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
-
-// Built from the same content as the pages (Sanity first), cached like them;
-// the publish webhook refreshes it through the `sanity` tag.
-export const revalidate = 86400;
-
-const abs = (path: string) => `${SITE_URL}${path === "/" ? "" : path}`;
-const line = (title: string, path: string, note?: string) => `- [${title}](${abs(path)})${note ? `: ${note}` : ""}`;
+import { NextResponse } from "next/server";
+import { getAllContent, calculatorHref, caseHref, localizeHref, postHref, serviceHref } from "@/content";
+import { LOCALES, SITE_NAME, SITE_URL, INDEXING_ALLOWED } from "@/lib/site";
+import type { AccentHeading, Locale, SiteContent } from "@/content/types";
 
 /**
- * /llms.txt (https://llmstxt.org): a Markdown map of the site for language
- * models and AI agents — H1, a one-paragraph summary, then sections of links
- * with a short note each. English pages in full; Polish and Russian versions
- * are listed as entry points, their pages link to each other through hreflang.
+ * /llms.txt — what the site is and where to look, for assistants that read a
+ * page instead of crawling a sitemap.
+ *
+ * Built from the same content loader as the pages (Sanity first, fallback
+ * modules otherwise), so it cannot drift from the site the way a hand-written
+ * file does. Cached and revalidated like the pages; the publish webhook
+ * refreshes it with everything else.
+ *
+ * The path contains a dot, so the i18n middleware leaves it alone and it is
+ * served from the site root.
  */
+export const revalidate = 86400;
+
+const LABEL: Record<Locale, { lang: string; services: string; cases: string; tools: string; articles: string; pages: string; contact: string }> = {
+  en: { lang: "English", services: "Services", cases: "Case studies", tools: "Free calculators", articles: "Recent articles", pages: "Key pages", contact: "Contact" },
+  pl: { lang: "Polski", services: "Usługi", cases: "Case studies", tools: "Darmowe kalkulatory", articles: "Najnowsze artykuły", pages: "Najważniejsze strony", contact: "Kontakt" },
+  ru: { lang: "Русский", services: "Услуги", cases: "Кейсы", tools: "Бесплатные калькуляторы", articles: "Свежие статьи", pages: "Основные страницы", contact: "Контакты" },
+};
+
+const abs = (path: string) => `${SITE_URL}${path === "/" ? "" : path}`;
+/** Page headings are plain strings on some models and accent headings on others. */
+const heading = (h: string | AccentHeading) =>
+  typeof h === "string" ? h : [h.before, h.accent, h.after].filter(Boolean).join(" ").trim();
+
+const line = (title: string, url: string, note?: string) => `- [${title}](${abs(url)})${note ? `: ${note}` : ""}`;
+
+function section(lang: Locale, c: SiteContent): string {
+  const t = LABEL[lang];
+  const out: string[] = [];
+  out.push(`## ${t.lang} (${lang})`);
+  out.push("");
+  out.push(c.person.shortBio);
+  out.push("");
+  out.push(`### ${t.services}`);
+  out.push(...c.services.map((s) => line(s.cardTitle, serviceHref(lang, s.slug), s.cardText)));
+  out.push("");
+  out.push(`### ${t.tools}`);
+  out.push(...c.calculators.map((x) => line(x.cardTitle, calculatorHref(lang, x.slug), x.lead)));
+  out.push("");
+  out.push(`### ${t.cases}`);
+  out.push(...c.caseStudies.map((x) => line(x.title, caseHref(lang, x.slug), x.summary)));
+  out.push("");
+  out.push(`### ${t.articles}`);
+  out.push(
+    ...[...c.posts]
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, 12)
+      .map((p) => line(p.title, postHref(lang, p.slug), p.excerpt)),
+  );
+  out.push("");
+  out.push(`### ${t.pages}`);
+  out.push(line(heading(c.about.h1), localizeHref(lang, "/about")));
+  out.push(line(heading(c.servicesPage.h1), localizeHref(lang, "/services")));
+  out.push(line(heading(c.blogPage.h1), localizeHref(lang, "/blog")));
+  out.push(line(heading(c.templates.h1), localizeHref(lang, "/free-templates")));
+  out.push(line(heading(c.contact.h1), localizeHref(lang, "/contact")));
+  out.push("");
+  out.push(`### ${t.contact}`);
+  out.push(`- ${c.person.email}`);
+  out.push(`- ${c.person.location} · ${c.person.timezone}`);
+  out.push(`- ${c.person.linkedin}`);
+  return out.join("\n");
+}
+
 export async function GET() {
+  if (!INDEXING_ALLOWED) return new NextResponse("", { status: 404 });
+
   const all = await getAllContent();
-  const c = all.en;
-  const posts = [...c.posts].sort((a, b) => b.date.localeCompare(a.date));
-  const category = (key: string) => c.categories.find((x) => x.key === key)?.label;
+  const en = all.en;
 
-  const out = [
-    `# ${SITE_NAME} — ${c.person.jobTitle}`,
+  const head = [
+    `# ${SITE_NAME}`,
     "",
-    `> ${c.person.shortBio}`,
+    `> ${en.person.jobTitle}. ${en.person.shortBio}`,
     "",
-    "Consulting for fashion and retail brands: assortment planning, retail pricing and price architecture, Power BI reporting, Excel planning models (open-to-buy), product data quality in PLM. Works in English, Polish and Russian from Warsaw. Consultation requests go through the contact form.",
+    `The site is published in three languages: English at ${SITE_URL}/, Polish under /pl/ and Russian under /ru/.`,
+    "Each language is written from its own keyword research, so the versions are not translations of each other and the article lists differ.",
     "",
-    "## Main pages",
+    `Sitemap: ${SITE_URL}/sitemap.xml`,
     "",
-    line("Home", "/", c.home.seo.description),
-    line(c.about.seo.title, localizeHref("en", "/about"), c.about.seo.description),
-    line(c.servicesPage.h1, localizeHref("en", "/services"), c.servicesPage.seo.description),
-    line(c.caseStudiesPage.h1, localizeHref("en", "/case-studies"), c.caseStudiesPage.seo.description),
-    line(c.blogPage.h1, localizeHref("en", "/blog"), c.blogPage.seo.description),
-    line(c.calculatorsPage.h1, localizeHref("en", "/tools"), c.calculatorsPage.seo.description),
-    line(c.templates.h1, localizeHref("en", "/free-templates"), c.templates.seo.description),
-    line(c.contact.h1, localizeHref("en", "/contact"), c.contact.seo.description),
+    "## About this file",
     "",
-    "## Services",
+    "Definitions, formulas and worked examples on this site are written to be quoted:",
+    "every article opens with a direct answer, formulas are given as text rather than images,",
+    "and the calculators show the same formulas with a worked example.",
+    "Figures in the case studies come from real projects; the client names are withheld.",
     "",
-    ...c.services.map((s) => line(s.cardTitle, serviceHref("en", s.slug), s.cardText)),
-    "",
-    "## Case studies",
-    "",
-    ...c.caseStudies.map((cs) => line(cs.title, caseHref("en", cs.slug), cs.summary)),
-    "",
-    "## Free retail calculators",
-    "",
-    ...c.calculators.map((x) => line(x.cardTitle, calculatorHref("en", x.slug), x.cardText)),
-    "",
-    "## Articles",
-    "",
-    ...posts.map((p) => line(p.title, postHref("en", p.slug), [category(p.category), p.excerpt].filter(Boolean).join(" — "))),
-    "",
-    "## Blog categories",
-    "",
-    ...c.categories.map((x) => line(x.label, categoryHref("en", x.slug), x.seo.description)),
-    "",
-    "## Other languages",
-    "",
-    line("Polski: analityka w handlu i modzie", localizeHref("pl", "/"), all.pl.home.seo.description),
-    line("Русский: аналитика в ритейле и моде", localizeHref("ru", "/"), all.ru.home.seo.description),
-    "",
-    "## Optional",
-    "",
-    line("Sitemap with every page in every language", "/sitemap.xml"),
-    line(c.privacy.h1, localizeHref("en", `/${c.privacy.slug}`)),
-    "",
-  ];
+  ].join("\n");
 
-  return new Response(out.join("\n"), {
-    headers: { "Content-Type": "text/markdown; charset=utf-8" },
+  const body = LOCALES.map((l) => section(l, all[l])).join("\n\n");
+  const foot = `\n\n---\n\nLast updated: ${new Date().toISOString().slice(0, 10)}\n`;
+
+  return new NextResponse(head + body + foot, {
+    status: 200,
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
   });
 }

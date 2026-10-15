@@ -1,11 +1,10 @@
 import * as React from "react";
 import type { Metadata } from "next";
-import { INDEXING_ALLOWED, NOINDEX_ROBOTS } from "@/lib/site";
+import { INDEXING_ALLOWED, NOINDEX_ROBOTS, SITE_NAME, SITE_URL, isLocale } from "@/lib/site";
 import type { CalculatorPage, CaseStudy, Category, Locale, Post, Service, SiteContent } from "./types";
 import { en } from "./fallback/en";
 import { pl } from "./fallback/pl";
 import { ru } from "./fallback/ru";
-import { SITE_NAME } from "@/lib/site";
 import { localizePath } from "@/lib/routing";
 import { loadSiteContent } from "@/sanity/loaders";
 
@@ -235,6 +234,23 @@ export async function languageAliases(): Promise<LanguageAlias[]> {
   return groups;
 }
 
+/**
+ * Open Graph card, one per language (`public/images/og/og-<lang>.png`, 1200x630).
+ *
+ * Without it LinkedIn, Telegram and X show an empty box, and `summary_large_image`
+ * degrades to a plain summary. Rebuilt by hand when the name, role or brand
+ * colours change; the text on it is the name and the role, nothing page-specific.
+ */
+export function ogImage(lang: string) {
+  const l = isLocale(lang) ? lang : "en";
+  return {
+    url: `${SITE_URL}/images/og/og-${l}.png`,
+    width: 1200,
+    height: 630,
+    alt: `${SITE_NAME} — ${{ en: "Retail and Fashion Analytics Consultant", pl: "Konsultantka analityki retail i fashion", ru: "\u041a\u043e\u043d\u0441\u0443\u043b\u044c\u0442\u0430\u043d\u0442 \u043f\u043e \u0430\u043d\u0430\u043b\u0438\u0442\u0438\u043a\u0435 \u0440\u0438\u0442\u0435\u0439\u043b\u0430 \u0438 fashion" }[l]}`,
+  };
+}
+
 /** Fixed pages that exist in every language (internal paths). */
 export const STATIC_PATHS = ["", "/services", "/case-studies", "/blog", "/about", "/contact", "/courses", "/free-templates", "/tools"];
 
@@ -268,8 +284,9 @@ export function pageMetadata(
       siteName: SITE_NAME,
       locale: { en: "en_GB", pl: "pl_PL", ru: "ru_RU" }[lang] ?? "en_GB",
       type: opts.type ?? "website",
+      images: [ogImage(lang)],
     },
-    twitter: { card: "summary_large_image", title: seo.title, description: seo.description },
+    twitter: { card: "summary_large_image", title: seo.title, description: seo.description, images: [ogImage(lang).url] },
   };
 }
 

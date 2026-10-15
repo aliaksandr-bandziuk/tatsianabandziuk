@@ -154,3 +154,11 @@ What follows from that, and what is now in the code:
   `npm run check:content` enforces it.
 - **Manual submission is part of the job** while the domain is young: priority URLs
   go into Search Console by hand after each deploy, a handful a day.
+- **Share cards**: `public/images/og/og-{en,pl,ru}.png` (1200x630, name and role in
+  the site's own fonts and colours), wired in `ogImage()` in `src/content/index.ts`
+  and used by `pageMetadata` and the `[lang]` layout. Rebuild them by hand if the
+  name, role or brand colours change — they carry text, not page titles.
+- **`/llms.txt`** is a route (`src/app/llms.txt/route.ts`), not a static file: it is
+  built from the same content loader as the pages, so it cannot drift. It lists the
+  services, calculators, case studies, twelve newest articles and contacts per
+  language, and returns 404 while indexing is closed.
