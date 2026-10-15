@@ -152,7 +152,8 @@ export const post: Post = {
     },
   ],
   seo: {
-    title: "Size Curve Analysis in Retail: Size Ratios from Sales Data",
-    description: "How to build a retail size curve from sales data: remove stock-outs, returns and promo weeks, then calculate size ratios per category and market.",
+    title: "Size Curve Analysis: Size Ratios from Sales Data in 5 Steps",
+    description:
+      "Build a size curve from sales data in five steps: strip stock-outs, returns and promo weeks, then set size ratios per category, market and store.",
   },
 };

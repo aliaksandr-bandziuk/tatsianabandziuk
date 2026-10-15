@@ -183,7 +183,8 @@ DIVIDE (
     },
   ],
   seo: {
-    title: "Sell-in, sell-through i sell-out: różnice w raportach",
-    description: "Czym różnią się sell-in, sell-through i sell-out oraz dlaczego dział handlowy i finanse raportują inne wartości tego samego wskaźnika.",
+    title: "Sell-in, sell-through, sell-out: różnice i wzory",
+    description:
+      "Różnice między sell-in, sell-through i sell-out na jednym przykładzie: trzy wzory, tabela porównawcza i powód rozbieżności między handlem a finansami.",
   },
 };

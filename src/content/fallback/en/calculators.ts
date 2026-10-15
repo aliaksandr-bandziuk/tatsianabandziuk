@@ -314,9 +314,9 @@ const stockTurnCalculator: CalculatorPage = {
   ],
   relatedPostKey: "retail-kpis",
   seo: {
-    title: "Stock Turn Calculator: Formula and Weeks of Cover",
+    title: "Stock Turn Calculator: Turns, Days and Weeks of Cover",
     description:
-      "Free stock turn calculator: inventory turnover, days of stock and weeks of cover from COGS, average inventory and weekly sales. Formula and example.",
+      "Work out stock turn, days of inventory and weeks of cover in one step. Formulas, a worked fashion example and the ranges each figure usually sits in.",
   },
 };
 

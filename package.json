@@ -10,7 +10,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:content": "tsx scripts/check-content.ts",
+    "sanity:backup": "tsx scripts/sanity/backup.ts",
+    "sanity:seed": "tsx scripts/sanity/seed.ts",
+    "sanity:compare": "tsx scripts/sanity/compare.ts",
+    "sanity:validate": "tsx scripts/sanity/validate-schema.ts",
+    "sanity:webhook": "tsx scripts/sanity/webhook-check.ts",
+    "sanity:urls": "tsx scripts/sanity/urls.ts",
+    "seo:diff": "tsx scripts/sanity/patch-seo.ts",
+    "seo:apply": "tsx scripts/sanity/patch-seo.ts --apply",
+    "templates:build": "python scripts/templates/build.py",
+    "templates:verify": "python scripts/templates/verify.py",
+    "keywords:build": "tsx scripts/dataforseo/build.ts"
   },
   "dependencies": {
     "@sanity/client": "^8.6.2",

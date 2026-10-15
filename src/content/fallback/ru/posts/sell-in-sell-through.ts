@@ -150,7 +150,8 @@ DIVIDE ( [Net Units Sold], [Units Available] )`,
     },
   ],
   seo: {
-    title: "Sell-in, sell-through и sell-out: в чём разница",
-    description: "Чем различаются sell-in, sell-through и sell-out и почему коммерческий отдел и финансы показывают разные значения одного показателя.",
+    title: "Sell-in, sell-through, sell-out: разница и формулы",
+    description:
+      "Разница между sell-in, sell-through и sell-out на одном примере: три формулы, таблица отличий и причина, по которой у продаж и финансов цифры не сходятся.",
   },
 };

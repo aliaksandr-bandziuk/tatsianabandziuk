@@ -194,7 +194,8 @@ GMROI = DIVIDE ( [Marża brutto], [Przeciętny zapas] )`,
     },
   ],
   seo: {
-    title: "Wskaźniki sprzedaży i KPI w handlu detalicznym",
-    description: "Najważniejsze wskaźniki sprzedaży w sklepie i marce modowej: sell-through, rotacja zapasu, GMROI, tygodnie zapasu i marża, ze wzorami do Excela i Power BI.",
+    title: "KPI w handlu detalicznym: 8 wskaźników ze wzorami",
+    description:
+      "Osiem wskaźników sprzedaży z gotowymi wzorami: sell-through, rotacja zapasu, GMROI, tygodnie zapasu i marża, z wartościami odniesienia i kalkulatorami.",
   },
 };

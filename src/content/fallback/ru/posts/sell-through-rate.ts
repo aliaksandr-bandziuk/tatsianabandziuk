@@ -213,7 +213,8 @@ RETURN
     },
   ],
   seo: {
-    title: "Sell-through: что это и как посчитать в Excel и Power BI",
-    description: "Что такое sell-through, как его рассчитать в Excel и Power BI, какой уровень считается хорошим в fashion-ритейле и где чаще всего ошибаются.",
+    title: "Sell-through: формула, нормы по категориям, калькулятор",
+    description:
+      "Формула sell-through с возвратами и без них, нормы для fashion по неделям сезона, расчёт в Excel и Power BI и бесплатный калькулятор на сайте.",
   },
 };

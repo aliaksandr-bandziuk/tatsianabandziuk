@@ -164,7 +164,8 @@ export const post: Post = {
     },
   ],
   seo: {
-    title: "Power BI Dashboard Examples for Retail and Fashion Sales",
-    description: "Three Power BI dashboard examples for retail: a weekly sales dashboard, a category review and an end-of-season review, with KPIs and design rules.",
+    title: "Power BI Retail Dashboard Examples: 3 Layouts and DAX",
+    description:
+      "Three retail Power BI dashboards page by page: weekly trade, category review, end of season. The KPI list, layout rules and the DAX behind each measure.",
   },
 };

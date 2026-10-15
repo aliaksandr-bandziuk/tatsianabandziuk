@@ -145,7 +145,8 @@ export const post: Post = {
     },
   ],
   seo: {
-    title: "RLS w Power BI: zabezpieczenia wierszy w raportach",
-    description: "Jak skonfigurować statyczny i dynamiczny RLS w Power BI, aby każdy rynek widział w jednym raporcie tylko swoje dane sprzedażowe.",
+    title: "RLS w Power BI: dostęp do raportu według rynków",
+    description:
+      "Statyczny i dynamiczny RLS w Power BI krok po kroku: role, filtr DAX, tabela uprawnień i test. Każdy rynek widzi w jednym raporcie tylko swoje dane.",
   },
 };
