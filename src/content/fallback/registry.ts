@@ -236,6 +236,13 @@ export const POSTS: PostPlan[] = [
     },
   },
   {
+    key: "retail-calendar-454",
+    category: "power-bi",
+    serviceKey: "power-bi-dashboards",
+    cover: "table",
+    slugs: { en: "retail-calendar-454-power-bi" },
+  },
+  {
     key: "weekly-trading-report",
     category: "power-bi",
     serviceKey: "power-bi-dashboards",

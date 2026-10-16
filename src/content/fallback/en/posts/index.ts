@@ -1,6 +1,7 @@
 import type { Post } from "../../../types";
 import { post as weeksOfCover } from "./weeks-of-cover";
 import { post as weeklyTradingReport } from "./weekly-trading-report";
+import { post as retailCalendar454 } from "./retail-calendar-454";
 import { post as sellThroughRate } from "./sell-through-rate";
 import { post as openToBuy } from "./open-to-buy";
 import { post as rowLevelSecurity } from "./row-level-security";
@@ -45,4 +46,5 @@ export const posts: Post[] = [
   // Appended rather than inserted: `order` in Sanity is this index.
   weeksOfCover,
   weeklyTradingReport,
+  retailCalendar454,
 ];
