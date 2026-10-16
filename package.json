@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "check:content": "tsx scripts/check-content.ts",
+    "check:links": "tsx scripts/check-links.ts",
     "sanity:backup": "tsx scripts/sanity/backup.ts",
     "sanity:seed": "tsx scripts/sanity/seed.ts",
     "sanity:compare": "tsx scripts/sanity/compare.ts",

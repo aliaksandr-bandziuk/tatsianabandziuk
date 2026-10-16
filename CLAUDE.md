@@ -108,6 +108,7 @@ Every maintenance script has an `npm run` entry (added 2026-10-15); the bare
 | `npm run typecheck` | `tsc --noEmit`; run before every commit. |
 | `npm run lint` | ESLint. |
 | `npm run check:content` | SEO lengths, name spelling, empty headings and FAQ answers, registry match, calculator labels, article length, remaining stand-ins. |
+| `npm run check:links` | Crawls the deployed site from sitemap.xml and checks every internal link. 4xx, 5xx and 3xx all fail (`--allow-redirects` downgrades 3xx to a warning); `--base=` points it at another deployment. Run it a minute after a deploy, or the CDN still answers with the previous build. |
 | `npm run sanity:backup` | Dataset export to `backups/`. Always before writing to Sanity. |
 | `npm run sanity:seed` | Writes the fallback modules to Sanity with createOrReplace — overwrites Studio edits, so prefer `--only=` or `seo:apply`. |
 | `npm run sanity:compare` | Sanity against the fallback modules. |
@@ -162,3 +163,8 @@ What follows from that, and what is now in the code:
   built from the same content loader as the pages, so it cannot drift. It lists the
   services, calculators, case studies, twelve newest articles and contacts per
   language, and returns 404 while indexing is closed.
+
+- **Internal links point at the final URL.** No internal link may answer a redirect: the language switch
+  once emitted internal section segments (`/pl/case-studies` instead of `/pl/case-study`) and 92 of 250
+  link targets went through a 308. Nothing looked broken, because every one of them landed on the right
+  page. `npm run check:links` is what catches it.
