@@ -53,3 +53,5 @@ __pycache__/
 
 # local source snapshot for the case write-up
 /audit-src.tgz
+
+Claude outputs/
