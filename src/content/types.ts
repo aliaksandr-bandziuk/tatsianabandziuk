@@ -136,7 +136,8 @@ export type CaseStudy = {
  * - stockTurn: inputs cogs, avgInventory, periodDays, stock, weeklySales · results turns, days, weeksCover
  * - openToBuy: inputs sales, markdowns, endStock, openingStock, onOrder · results otb
  */
-export type CalculatorKind = "marginMarkup" | "sellThrough" | "gmroi" | "stockTurn" | "openToBuy";
+export type CalculatorKind =
+  "marginMarkup" | "sellThrough" | "gmroi" | "stockTurn" | "openToBuy";
 
 export type ArticleBlock =
   | { type: "p"; text: string }
@@ -167,9 +168,27 @@ export type ArticleBlock =
       transcript?: string[];
     }
   | {
+      /**
+       * A figure drawn as an SVG under /public/images/blog. Used where the point
+       * of the section is a comparison the reader has to see; `alt` carries the
+       * finding, because that is what a screen reader and a crawler get.
+       */
+      type: "figure";
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      caption?: string;
+    }
+  | {
       type: "table";
       caption?: string;
-      columns: { label: string; kind?: "text" | "number"; format?: "scale" | "bars"; suffix?: string }[];
+      columns: {
+        label: string;
+        kind?: "text" | "number";
+        format?: "scale" | "bars";
+        suffix?: string;
+      }[];
       rows: { cells: (string | number)[]; trend?: "up" | "down" | "flat" }[];
       trendColumn?: number;
     };
@@ -426,7 +445,12 @@ export type TemplatesContent = Dated & {
   eyebrow: string;
   h1: string;
   intro: string;
-  items: { title: string; text: string; preview: "otb" | "checklist"; previewCaption: string }[];
+  items: {
+    title: string;
+    text: string;
+    preview: "otb" | "checklist";
+    previewCaption: string;
+  }[];
   checklist: string[];
   insideTitle: string;
   inside: string[];
@@ -512,7 +536,15 @@ export type Ui = {
   allFilter: string;
   topics: Record<string, string>;
   slicer: { slicer: string; clear: string; chart: string };
-  statusBar: { ready: string; average: string; count: string; sum: string; words: string; characters: string; value: string };
+  statusBar: {
+    ready: string;
+    average: string;
+    count: string;
+    sum: string;
+    words: string;
+    characters: string;
+    value: string;
+  };
   pagination: { prev: string; next: string; page: string };
   video: { play: string; transcript: string };
   /** Shown under every calculator, e.g. that numbers stay in the browser. */
@@ -543,7 +575,13 @@ export type Ui = {
     channels: { email: string; whatsapp: string; phone: string };
   };
   languages: { en: string; pl: string; ru: string };
-  cookie: { title: string; text: string; accept: string; reject: string; policy: string };
+  cookie: {
+    title: string;
+    text: string;
+    accept: string;
+    reject: string;
+    policy: string;
+  };
 };
 
 export type SiteContent = {

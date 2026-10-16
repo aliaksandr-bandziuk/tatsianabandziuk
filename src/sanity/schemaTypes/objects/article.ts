@@ -6,9 +6,20 @@ import { num, objects, paragraphs, str, strings, txt } from "../fields";
  * to one `ArticleBlock` variant: the loader turns `_type` into `type`
  * (ARTICLE_BLOCK_TYPES in src/sanity/loaders.ts).
  */
-const CALCULATOR_KINDS = ["marginMarkup", "sellThrough", "gmroi", "stockTurn", "openToBuy"];
+const CALCULATOR_KINDS = [
+  "marginMarkup",
+  "sellThrough",
+  "gmroi",
+  "stockTurn",
+  "openToBuy",
+];
 
-const block = (name: string, title: string, fields: ReturnType<typeof str>[], previewField: string) =>
+const block = (
+  name: string,
+  title: string,
+  fields: ReturnType<typeof str>[],
+  previewField: string,
+) =>
   defineType({
     name,
     title,
@@ -16,35 +27,72 @@ const block = (name: string, title: string, fields: ReturnType<typeof str>[], pr
     fields,
     preview: {
       select: { value: previewField },
-      prepare: ({ value }) => ({ title: typeof value === "string" ? value.slice(0, 90) : title, subtitle: title }),
+      prepare: ({ value }) => ({
+        title: typeof value === "string" ? value.slice(0, 90) : title,
+        subtitle: title,
+      }),
     },
   });
 
-export const articleParagraph = block("articleParagraph", "Paragraph", [txt("text", { rows: 5 })], "text");
+export const articleParagraph = block(
+  "articleParagraph",
+  "Paragraph",
+  [txt("text", { rows: 5 })],
+  "text",
+);
 
 export const articleHeading = block(
   "articleHeading",
   "Heading (H2)",
   [
-    str("text", { description: "Self-explanatory, with the key term of the section" }),
-    str("id", { title: "Anchor", description: "Used in the table of contents, e.g. formula" }),
+    str("text", {
+      description: "Self-explanatory, with the key term of the section",
+    }),
+    str("id", {
+      title: "Anchor",
+      description: "Used in the table of contents, e.g. formula",
+    }),
   ],
   "text",
 );
 
-export const articleFormula = block("articleFormula", "Formula", [str("text")], "text");
+export const articleFormula = block(
+  "articleFormula",
+  "Formula",
+  [str("text")],
+  "text",
+);
 
-export const articleCode = block("articleCode", "Code (DAX, Excel, SQL)", [txt("code", { rows: 8 }), str("caption")], "caption");
+export const articleCode = block(
+  "articleCode",
+  "Code (DAX, Excel, SQL)",
+  [txt("code", { rows: 8 }), str("caption")],
+  "caption",
+);
 
-export const articleChart = block("articleChart", "Chart", [str("title"), str("legend"), str("caption")], "title");
+export const articleChart = block(
+  "articleChart",
+  "Chart",
+  [str("title"), str("legend"), str("caption")],
+  "title",
+);
 
-export const articleList = block("articleList", "List", [paragraphs("items")], "items.0");
+export const articleList = block(
+  "articleList",
+  "List",
+  [paragraphs("items")],
+  "items.0",
+);
 
 export const articleCalculator = block(
   "articleCalculator",
   "Calculator",
   [
-    str("kind", { list: CALCULATOR_KINDS, required: true, description: "Field ids per kind: src/content/calculators.ts" }),
+    str("kind", {
+      list: CALCULATOR_KINDS,
+      required: true,
+      description: "Field ids per kind: src/content/calculators.ts",
+    }),
     str("title"),
     objects("labels", [str("id", { title: "Field id" }), str("label")], {
       description: "One label per input and result of this kind",
@@ -59,12 +107,20 @@ export const articleVideo = block(
   "articleVideo",
   "YouTube video",
   [
-    str("youtubeId", { title: "YouTube ID", required: true, description: "The part after v= in the video URL" }),
+    str("youtubeId", {
+      title: "YouTube ID",
+      required: true,
+      description: "The part after v= in the video URL",
+    }),
     str("title"),
     txt("description"),
-    str("uploadDate", { description: "ISO date of the upload, e.g. 2026-10-01" }),
+    str("uploadDate", {
+      description: "ISO date of the upload, e.g. 2026-10-01",
+    }),
     str("duration", { description: "ISO 8601, e.g. PT7M30S" }),
-    paragraphs("transcript", { description: "Short transcript or chapter summary" }),
+    paragraphs("transcript", {
+      description: "Short transcript or chapter summary",
+    }),
   ],
   "title",
 );
@@ -84,12 +140,43 @@ export const articleTable = block(
       ],
       { preview: { title: "label", subtitle: "kind" } },
     ),
-    objects("rows", [strings("cells", { description: "Numbers in number columns are written as plain numbers" }), str("trend", { list: ["up", "down", "flat"] })], {
-      preview: { title: "cells.0", subtitle: "trend" },
+    objects(
+      "rows",
+      [
+        strings("cells", {
+          description: "Numbers in number columns are written as plain numbers",
+        }),
+        str("trend", { list: ["up", "down", "flat"] }),
+      ],
+      {
+        preview: { title: "cells.0", subtitle: "trend" },
+      },
+    ),
+    num("trendColumn", {
+      description: "Index of the column that shows the trend icon (0 = first)",
     }),
-    num("trendColumn", { description: "Index of the column that shows the trend icon (0 = first)" }),
   ],
   "caption",
+);
+
+export const articleFigure = block(
+  "articleFigure",
+  "Figure (SVG)",
+  [
+    str("src", {
+      description:
+        "Path under /public, e.g. /images/blog/weeks-of-cover-windows.svg",
+    }),
+    txt("alt", {
+      rows: 3,
+      description:
+        "The finding the picture shows, not the file name - this is what a screen reader and a crawler get",
+    }),
+    num("width"),
+    num("height"),
+    str("caption"),
+  ],
+  "alt",
 );
 
 export const ARTICLE_BLOCKS = [
@@ -102,6 +189,7 @@ export const ARTICLE_BLOCKS = [
   articleCalculator,
   articleVideo,
   articleTable,
+  articleFigure,
 ];
 
 export const ARTICLE_BLOCK_NAMES = ARTICLE_BLOCKS.map((b) => b.name);

@@ -1,0 +1,37 @@
+id,lang,family,question,target_page,win_condition
+en-a1,en,name,Who is Tatsiana Bandziuk?,/about,the assistant knows the person and gets the role right
+en-a2,en,name,Which consultants work on retail and fashion analytics in Warsaw or remotely across Europe?,/,"named in the list of people, not only agencies"
+en-b1,en,hire,I need a freelance Power BI consultant to build a weekly trading report for a fashion retailer. Who can I hire in Europe?,/services/power-bi-dashboards,"named, or the service page cited"
+en-b2,en,hire,Who can help a fashion brand set up assortment planning and an open-to-buy process when there is no planner in-house?,/services/assortment-planning,"named, or the service page cited"
+en-b3,en,hire,We need someone to clean up product data and set PLM attribute standards for an e-commerce catalogue. Who does this kind of work?,/services/product-data-quality-plm,"named, or the service page cited"
+en-b4,en,hire,Looking for a retail pricing analyst to build a price architecture for a fashion e-commerce brand. Who would you recommend?,/services/retail-pricing-analysis,"named, or the service page cited"
+en-c1,en,method,"How do I calculate sell-through rate, and what is a good sell-through by category in fashion?",/blog/sell-through-rate,the domain cited as a source
+en-c2,en,method,"What is the difference between margin and markup in retail, with a worked example?",/blog/markup-vs-margin-fashion-retail,the domain cited as a source
+en-c3,en,method,How do I calculate GMROI and what is a healthy GMROI for apparel?,/tools/gmroi-calculator,the domain cited as a source
+en-c4,en,method,How do I build an open-to-buy plan in Excel?,/blog/open-to-buy-model-excel,the domain cited as a source
+en-c5,en,method,Which DAX measures do I need for a retail KPI dashboard in Power BI?,/blog/dax-measures-retail-kpi-dashboard,the domain cited as a source
+en-c6,en,method,How do I set up row-level security so each store sees only its own sales in a reporting model?,/blog/row-level-security-retail-reporting,the domain cited as a source
+pl-a1,pl,name,Kim jest Tatsiana Bandziuk?,/pl/o-mnie,the assistant knows the person and gets the role right
+pl-a2,pl,name,Kto w Polsce doradza markom modowym w zakresie analityki sprzedaży i planowania asortymentu?,/pl,"named in the list of people, not only agencies"
+pl-b1,pl,hire,"Szukam konsultanta Power BI, który zbuduje tygodniowy raport sprzedaży dla sieci sklepów odzieżowych. Kogo polecacie?",/pl/uslugi/raportowanie-sprzedazy-power-bi,"named, or the service page cited"
+pl-b2,pl,hire,Kto pomoże wdrożyć planowanie zakupów i budżet open-to-buy w Excelu dla marki odzieżowej?,/pl/uslugi/planowanie-zakupow-excel,"named, or the service page cited"
+pl-b3,pl,hire,Potrzebujemy uporządkować dane produktowe i atrybuty w PIM/PLM dla sklepu internetowego. Kto się tym zajmuje?,/pl/uslugi/jakosc-danych-produktowych,"named, or the service page cited"
+pl-b4,pl,hire,Kto przeprowadzi analizę cen i zbuduje architekturę cenową dla e-commerce modowego?,/pl/uslugi/analiza-cen,"named, or the service page cited"
+pl-c1,pl,method,Jak obliczyć wskaźnik sell-through i jakie wartości są dobre w handlu odzieżą?,/pl/blog/wskaznik-sell-through,the domain cited as a source
+pl-c2,pl,method,Marża a narzut — czym się różnią i jak je policzyć na przykładzie?,/pl/blog/marza-a-narzut-w-handlu,the domain cited as a source
+pl-c3,pl,method,Jak obliczyć rotację zapasów i zapas w tygodniach sprzedaży?,/pl/kalkulatory/kalkulator-rotacji-zapasow,the domain cited as a source
+pl-c4,pl,method,Jak zbudować budżet zakupowy open-to-buy w Excelu?,/pl/blog/open-to-buy-excel,the domain cited as a source
+pl-c5,pl,method,Jakie miary DAX są potrzebne w dashboardzie KPI dla handlu detalicznego?,/pl/blog/miary-dax-power-bi,the domain cited as a source
+pl-c6,pl,method,Jak zbudować krzywą rozmiarów dla kolekcji odzieżowej?,/pl/blog/krzywa-rozmiarow,the domain cited as a source
+ru-a1,ru,name,Кто такая Татьяна Бандюк?,/ru/obo-mne,the assistant knows the person and gets the role right
+ru-a2,ru,name,Кто консультирует fashion-ритейл по аналитике продаж и управлению ассортиментом?,/ru,"named in the list of people, not only agencies"
+ru-b1,ru,hire,"Нужен консультант по Power BI, чтобы собрать еженедельный отчёт по продажам для сети магазинов одежды. К кому обратиться?",/ru/uslugi/otchety-po-prodazham-power-bi,"named, or the service page cited"
+ru-b2,ru,hire,Кто поможет выстроить планирование закупок и бюджет open-to-buy для бренда одежды?,/ru/uslugi/planirovanie-zakupok-excel,"named, or the service page cited"
+ru-b3,ru,hire,Нужно навести порядок в товарных данных и атрибутах в PIM/PLM для интернет-магазина. Кто этим занимается?,/ru/uslugi/tovarnye-dannye-plm,"named, or the service page cited"
+ru-b4,ru,hire,Кто проведёт анализ цен и построит ценовую архитектуру для fashion e-commerce?,/ru/uslugi/analiz-cen,"named, or the service page cited"
+ru-c1,ru,method,Как считается sell-through и какие значения считаются нормой по категориям?,/ru/blog/sell-through,the domain cited as a source
+ru-c2,ru,method,Чем маржа отличается от наценки и как пересчитать одно в другое?,/ru/blog/marzha-i-nacenka-v-roznice,the domain cited as a source
+ru-c3,ru,method,Как посчитать оборачиваемость запасов и GMROI в ритейле?,/ru/kalkulyatory/kalkulyator-gmroi,the domain cited as a source
+ru-c4,ru,method,Как собрать бюджет закупок open-to-buy в Excel?,/ru/blog/open-to-buy,the domain cited as a source
+ru-c5,ru,method,Какие меры DAX нужны для дашборда KPI в рознице?,/ru/blog/mery-dax-power-bi,the domain cited as a source
+ru-c6,ru,method,Чем байер отличается от категорийного менеджера и товарного аналитика?,/ru/blog/bajer-kategorijnyj-menedzher-tovarnyj-analitik,the domain cited as a source

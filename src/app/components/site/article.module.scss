@@ -33,7 +33,9 @@
   border-radius: 12px;
   padding: 22px 26px;
   margin: 0 0 26px;
-  font: 400 14px/1.7 var(--font-mono), monospace;
+  font:
+    400 14px/1.7 var(--font-mono),
+    monospace;
   overflow-x: auto;
 }
 
@@ -43,7 +45,9 @@
   color: #d9e8e0;
   border-radius: 12px;
   padding: 26px 28px;
-  font: 400 13.5px/1.9 var(--font-mono), monospace;
+  font:
+    400 13.5px/1.9 var(--font-mono),
+    monospace;
   overflow-x: auto;
   white-space: pre;
 
@@ -56,7 +60,9 @@
 .codeCaption {
   display: block;
   margin: 0 0 26px;
-  font: 400 12.5px/1.6 var(--font-mono), monospace;
+  font:
+    400 12.5px/1.6 var(--font-mono),
+    monospace;
   color: var(--text-tertiary);
 }
 
@@ -74,7 +80,9 @@
   gap: 12px;
   flex-wrap: wrap;
   margin-bottom: 16px;
-  font: 400 10.5px/1 var(--font-mono), monospace;
+  font:
+    400 10.5px/1 var(--font-mono),
+    monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-secondary);
@@ -167,13 +175,17 @@
 
   strong {
     display: block;
-    font: 500 16px/1.2 var(--font-heading), serif;
+    font:
+      500 16px/1.2 var(--font-heading),
+      serif;
   }
 
   em {
     display: block;
     margin-top: 4px;
-    font: 400 11px/1.4 var(--font-mono), monospace;
+    font:
+      400 11px/1.4 var(--font-mono),
+      monospace;
     font-style: normal;
     color: var(--accent);
   }
@@ -232,4 +244,24 @@
 
 .table {
   margin: 8px 0 4px;
+}
+
+.figure {
+  margin: 0 0 26px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  figcaption {
+    margin-top: 10px;
+    font:
+      400 12.5px/1.6 var(--font-mono),
+      monospace;
+    color: var(--text-tertiary);
+  }
 }

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="960" height="480" role="img" aria-label="Weeks of cover for one style over nine weeks, calculated two ways. On a four-week rate of sale cover rises from 4.8 to 10.1 weeks. On a season-to-date rate of sale it stays flat between 4.8 and 3.8 weeks.">
+<rect width="960" height="480" fill="#faf8f4"/>
+<text x="76" y="34" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="600" fill="#17181c">Same stock, two averaging windows</text>
+<text x="76" y="55" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#4f5a53">Weeks of cover for one style. The two methods agree in week 4 and part from week 5.</text>
+<line x1="76" y1="420.0" x2="792.0" y2="420.0" stroke="#e4e0d6" stroke-width="1"/>
+<text x="64" y="424.0" text-anchor="end" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">0</text>
+<line x1="76" y1="356.7" x2="792.0" y2="356.7" stroke="#e4e0d6" stroke-width="1"/>
+<text x="64" y="360.7" text-anchor="end" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">2</text>
+<line x1="76" y1="293.5" x2="792.0" y2="293.5" stroke="#e4e0d6" stroke-width="1"/>
+<text x="64" y="297.5" text-anchor="end" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">4</text>
+<line x1="76" y1="230.2" x2="792.0" y2="230.2" stroke="#e4e0d6" stroke-width="1"/>
+<text x="64" y="234.2" text-anchor="end" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">6</text>
+<line x1="76" y1="166.9" x2="792.0" y2="166.9" stroke="#e4e0d6" stroke-width="1"/>
+<text x="64" y="170.9" text-anchor="end" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">8</text>
+<line x1="76" y1="103.6" x2="792.0" y2="103.6" stroke="#e4e0d6" stroke-width="1"/>
+<text x="64" y="107.6" text-anchor="end" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">10</text>
+<text x="64" y="87.6" text-anchor="end" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5f6b63">weeks</text>
+<line x1="76" y1="420.0" x2="792.0" y2="420.0" stroke="#c9c3b6" stroke-width="1"/>
+<text x="76.0" y="444.0" text-anchor="middle" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">w4</text>
+<text x="165.5" y="444.0" text-anchor="middle" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">w5</text>
+<text x="255.0" y="444.0" text-anchor="middle" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">w6</text>
+<text x="344.5" y="444.0" text-anchor="middle" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">w7</text>
+<text x="434.0" y="444.0" text-anchor="middle" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">w8</text>
+<text x="523.5" y="444.0" text-anchor="middle" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">w9</text>
+<text x="613.0" y="444.0" text-anchor="middle" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">w10</text>
+<text x="702.5" y="444.0" text-anchor="middle" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">w11</text>
+<text x="792.0" y="444.0" text-anchor="middle" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5f6b63">w12</text>
+<path d="M 76.0 267.8 L 165.5 274.5 L 255.0 282.1 L 344.5 287.1 L 434.0 290.9 L 523.5 295.7 L 613.0 297.6 L 702.5 298.8 L 792.0 299.1" fill="none" stroke="#17957a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="76.0" cy="267.8" r="4.5" fill="#17957a" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="165.5" cy="274.5" r="4.5" fill="#17957a" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="255.0" cy="282.1" r="4.5" fill="#17957a" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="344.5" cy="287.1" r="4.5" fill="#17957a" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="434.0" cy="290.9" r="4.5" fill="#17957a" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="523.5" cy="295.7" r="4.5" fill="#17957a" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="613.0" cy="297.6" r="4.5" fill="#17957a" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="702.5" cy="298.8" r="4.5" fill="#17957a" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="792.0" cy="299.1" r="4.5" fill="#17957a" stroke="#faf8f4" stroke-width="2"/>
+<path d="M 76.0 267.8 L 165.5 256.4 L 255.0 245.1 L 344.5 230.2 L 434.0 215.0 L 523.5 200.1 L 613.0 170.7 L 702.5 139.7 L 792.0 100.8" fill="none" stroke="#b85c2e" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="76.0" cy="267.8" r="4.5" fill="#b85c2e" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="165.5" cy="256.4" r="4.5" fill="#b85c2e" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="255.0" cy="245.1" r="4.5" fill="#b85c2e" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="344.5" cy="230.2" r="4.5" fill="#b85c2e" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="434.0" cy="215.0" r="4.5" fill="#b85c2e" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="523.5" cy="200.1" r="4.5" fill="#b85c2e" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="613.0" cy="170.7" r="4.5" fill="#b85c2e" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="702.5" cy="139.7" r="4.5" fill="#b85c2e" stroke="#faf8f4" stroke-width="2"/>
+<circle cx="792.0" cy="100.8" r="4.5" fill="#b85c2e" stroke="#faf8f4" stroke-width="2"/>
+<text x="808.0" y="96.8" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#b85c2e">10.1 weeks</text>
+<text x="808.0" y="115.8" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#4f5a53">four-week</text>
+<text x="808.0" y="295.1" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#17957a">3.8 weeks</text>
+<text x="808.0" y="314.1" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#4f5a53">season to date</text>
+<text x="76" y="466" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#5f6b63">Stock falls from 655 to 290 units; weekly sales fall from 95 to 20. The stock is the same number in both lines - only the rate of sale differs.</text>
+</svg>

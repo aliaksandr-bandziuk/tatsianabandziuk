@@ -11,9 +11,11 @@ export const ARTICLE_BLOCK_TYPES: Record<ArticleBlock["type"], string> = {
   calculator: "articleCalculator",
   video: "articleVideo",
   table: "articleTable",
+  figure: "articleFigure",
 };
 
 /** Sanity object type → ArticleBlock `type`. */
-export const ARTICLE_BLOCK_KINDS: Record<string, ArticleBlock["type"]> = Object.fromEntries(
-  Object.entries(ARTICLE_BLOCK_TYPES).map(([kind, type]) => [type, kind]),
-) as Record<string, ArticleBlock["type"]>;
+export const ARTICLE_BLOCK_KINDS: Record<string, ArticleBlock["type"]> =
+  Object.fromEntries(
+    Object.entries(ARTICLE_BLOCK_TYPES).map(([kind, type]) => [type, kind]),
+  ) as Record<string, ArticleBlock["type"]>;

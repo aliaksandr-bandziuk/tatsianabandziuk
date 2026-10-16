@@ -1,0 +1,37 @@
+id,aio_shown,in_aio,host_rank,top_hosts,note
+en-a1,yes,yes,1,"linkedin.com, facebook.com, instagram.com, bandziuk.com",AI Overview describes her correctly and cites the site
+en-a2,yes,no,,"consulton.pl, russellreynolds.com, annaraczynska.pl, kearney.com, bcg.com","the answer lists agencies and head-hunters, no individual consultants"
+en-b1,yes,no,,"selectdistinct.co.uk, boltconsulting.co.uk, upwork.com, fiverr.com, malt.com",freelance marketplaces win this one
+en-b2,yes,no,,"planpivotcollective.com, argonandco.com, stylearcade.com, inventory-planner.com, centricsoftware.com","software vendors, not people"
+en-b3,yes,no,,"pivotree.com, mercuryminds.com, sammdataservices.com, data4ecom.com, saleslayer.com",data-entry agencies
+en-b4,yes,no,2,"pricedbydesign.com, toptal.com, edited.com, blackcurve.com, consultport.com","on the page as an organic result, not in the AI answer"
+en-c1,yes,no,,"toolio.com, qogita.com, nul.global, wearview.co, aims360.com",our own article is nowhere; vendor blogs own the formula
+en-c2,yes,no,,"sellickpartnership.co.uk, nrsplus.com, investopedia.com, xero.com","generic finance sites, nothing retail-specific"
+en-c3,yes,no,,"spscommerce.com, toolio.com, irisfinance.co, wair.ai, slimstock.com",
+en-c4,yes,no,,"retaildogma.com, shopify.com, inventory-planner.com, toolio.com",retaildogma owns open-to-buy in English
+en-c5,yes,yes,3,"retailopstoolkit.com, youtube.com, okundata.com, learn.microsoft.com",the one real AI-answer citation: the DAX article
+en-c6,yes,no,7,"learn.microsoft.com, datatako.com, community.fabric.microsoft.com, reddit.com",organic only; Microsoft documentation dominates
+pl-a1,no,,1,"bandziuk.com, facebook.com",no AI Overview on the brand query; the site is first
+pl-a2,yes,no,,"nataliaskrzypska.pl, annaraczynska.pl, agencjamodylcm.pl, agencjaperformance.pl",Polish consultants by name - this is the list to get into
+pl-b1,yes,no,,"powerbi.com.pl, innowise.com, ttms.com, valuetank.com, hex16.pl","Power BI houses, none of them fashion"
+pl-b2,yes,no,1,"leafio.ai, visix.pl, attomy.io, medializer.pl","organic first place, but outside the AI answer"
+pl-b3,yes,no,,"linkedin.com, wisepim.com, besite.pl, smartbees.pl",e-commerce agencies
+pl-b4,yes,no,,"ecom.house, mindu.pl, ideacto.pl, suasio.pl",e-commerce agencies
+pl-c1,yes,no,1,"finansopolis.pl, fashionunited.pl, reddit.com","organic first place, outside the AI answer"
+pl-c2,yes,no,,"symfonia.pl, eservice.pl, bankier.pl, fakturownia.pl",accounting software owns margin vs markup in Polish
+pl-c3,yes,no,,"suasio.pl, jungheinrich.pl, humansoft.pl, dataconsult.pl","warehouse logistics, not retail"
+pl-c4,no,,1,"youtube.com, excel.cloud.microsoft, learn.microsoft.com","first place, no AI Overview on this query"
+pl-c5,no,,1,"cognity.pl, learn.microsoft.com, bidesignlab.com","first place, no AI Overview on this query"
+pl-c6,no,,,"youtube.com, ansin.pl, szwalnia-isabell.pl, occubee.com","sewing workshops; the query reads as garment construction, not planning"
+ru-a1,yes,unverified,5,"school.kontur.ru, audit-it.ru, buhonline.ru, seminar-kadry.ru","name clash: the AI answer is about a different Tatsiana Bandziuk, a pensions expert"
+ru-a2,yes,no,,"galinakravchenko.ru, fashion-advisers.ru, shtab.eu, odysseyconsgroup.com",Russian fashion consultants by name
+ru-b1,yes,no,,"reddit.com, alexkolokolov.com, biconsult.ru, iwis.io, finalytics.pro",
+ru-b2,yes,no,,"inventory-planner.com, invogroup.com, art-rb.ru, billz.io",
+ru-b3,yes,no,,"insales.ru, kt-team.ru, korusconsulting.ru, retail.ru",
+ru-b4,yes,no,,"fashion.deziiign.com, vc.ru, smartpricing.cloud, fashionconsulting.pro",
+ru-c1,yes,no,,"carriyo.com, lightspeedhq.com, apshan.com, shopify.com",English-language sources answer the Russian query
+ru-c2,no,,,"youtube.com, school.bigbird.ru, moedelo.org, datawiz.io",
+ru-c3,yes,no,,"billz.io, abmcloud.com, vc.ru, planohero.com",
+ru-c4,yes,no,,"customexcelspreadsheets.com, inventory-planner.com, planetaexcel.ru",
+ru-c5,no,,,"reddit.com, habr.com, s-rocket.com, dashboard-24.com",
+ru-c6,no,,,"1-ofd.ru, reddit.com, journal.sovcombank.ru, rb.ru",

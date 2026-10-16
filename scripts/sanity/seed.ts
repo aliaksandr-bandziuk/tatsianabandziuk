@@ -4,6 +4,10 @@
  *   npx tsx scripts/sanity/seed.ts --dry-run          # build and check documents, write nothing
  *   npx tsx scripts/sanity/seed.ts                    # write everything
  *   npx tsx scripts/sanity/seed.ts --only=post,service
+ *   npx tsx scripts/sanity/seed.ts --only=post --keys=weeks-of-cover --lang=en
+ *
+ * --keys and --lang narrow the write to single documents, which is how a new
+ * article reaches Sanity without replacing the ones an editor has since changed.
  *
  * - Deterministic ids: `service-assortment-planning.en`, `siteSettings.pl`, …
  *   and createOrReplace, so a second run replaces instead of duplicating.
@@ -34,13 +38,26 @@ type Doc = Json & { _id: string; _type: string };
 const args = process.argv.slice(2);
 const DRY = args.includes("--dry-run");
 const onlyArg = args.find((a) => a.startsWith("--only="));
-const ONLY = onlyArg ? new Set(onlyArg.slice("--only=".length).split(",").filter(Boolean)) : null;
+const ONLY = onlyArg
+  ? new Set(onlyArg.slice("--only=".length).split(",").filter(Boolean))
+  : null;
+const keysArg = args.find((a) => a.startsWith("--keys="));
+/** Collection item keys (post-<key>, service-<key>, …). Singletons never match one. */
+const KEYS = keysArg
+  ? new Set(keysArg.slice("--keys=".length).split(",").filter(Boolean))
+  : null;
+const langArg = args.find((a) => a.startsWith("--lang="));
+const LANGS_ONLY = langArg
+  ? new Set(langArg.slice("--lang=".length).split(",").filter(Boolean))
+  : null;
 const BATCH = 10;
 
 const CONTENT: Record<Locale, SiteContent> = { en, pl, ru };
 const LANGS: Locale[] = ["en", "pl", "ru"];
 
-const TYPES = new Map<string, Def>((schemaTypes as unknown as Def[]).map((t) => [t.name!, t]));
+const TYPES = new Map<string, Def>(
+  (schemaTypes as unknown as Def[]).map((t) => [t.name!, t]),
+);
 const problems: string[] = [];
 
 /* ---------- images ---------- */
@@ -58,12 +75,17 @@ async function imageAsset(publicPath: string): Promise<Json> {
     if (DRY) {
       ref = `image-${sha1}-dry-run`;
     } else {
-      const existing = await writeClient.fetch<string | null>(`*[_type == "sanity.imageAsset" && sha1hash == $sha1][0]._id`, { sha1 });
+      const existing = await writeClient.fetch<string | null>(
+        `*[_type == "sanity.imageAsset" && sha1hash == $sha1][0]._id`,
+        { sha1 },
+      );
       if (existing) {
         ref = existing;
         reused++;
       } else {
-        const asset = await writeClient.assets.upload("image", buf, { filename: path.basename(file) });
+        const asset = await writeClient.assets.upload("image", buf, {
+          filename: path.basename(file),
+        });
         ref = asset._id;
         uploaded++;
       }
@@ -79,11 +101,21 @@ async function imageAsset(publicPath: string): Promise<Json> {
 function reshape(value: Json): Json {
   const out: Json = { ...value };
   // Article block: `type` → Sanity object type; calculator labels record → list.
-  if (typeof out.type === "string" && ARTICLE_BLOCK_TYPES[out.type as keyof typeof ARTICLE_BLOCK_TYPES]) {
-    out._type = ARTICLE_BLOCK_TYPES[out.type as keyof typeof ARTICLE_BLOCK_TYPES];
+  if (
+    typeof out.type === "string" &&
+    ARTICLE_BLOCK_TYPES[out.type as keyof typeof ARTICLE_BLOCK_TYPES]
+  ) {
+    out._type =
+      ARTICLE_BLOCK_TYPES[out.type as keyof typeof ARTICLE_BLOCK_TYPES];
     delete out.type;
-    if (out._type === "articleCalculator" && out.labels && !Array.isArray(out.labels)) {
-      out.labels = Object.entries(out.labels as Record<string, string>).map(([id, label]) => ({ id, label }));
+    if (
+      out._type === "articleCalculator" &&
+      out.labels &&
+      !Array.isArray(out.labels)
+    ) {
+      out.labels = Object.entries(out.labels as Record<string, string>).map(
+        ([id, label]) => ({ id, label }),
+      );
     }
   }
   return out;
@@ -91,7 +123,11 @@ function reshape(value: Json): Json {
 
 let keySeq = 0;
 
-async function convert(value: unknown, def: Def, where: string): Promise<unknown> {
+async function convert(
+  value: unknown,
+  def: Def,
+  where: string,
+): Promise<unknown> {
   if (value === undefined || value === null) return undefined;
   const named = TYPES.get(def.type);
 
@@ -99,7 +135,8 @@ async function convert(value: unknown, def: Def, where: string): Promise<unknown
     case "string":
     case "text":
       if (typeof value === "number") return String(value);
-      if (typeof value !== "string") problems.push(`${where}: expected text, got ${typeof value}`);
+      if (typeof value !== "string")
+        problems.push(`${where}: expected text, got ${typeof value}`);
       return value;
     case "number":
     case "boolean":
@@ -120,18 +157,33 @@ async function convert(value: unknown, def: Def, where: string): Promise<unknown
       for (let i = 0; i < value.length; i++) {
         const item = value[i];
         if (item === null || typeof item !== "object") {
-          const member = members.find((m) => m.type === "string" || m.type === "text");
-          out.push(member ? await convert(item, member, `${where}[${i}]`) : item);
+          const member = members.find(
+            (m) => m.type === "string" || m.type === "text",
+          );
+          out.push(
+            member ? await convert(item, member, `${where}[${i}]`) : item,
+          );
           continue;
         }
         const shaped = reshape(item as Json);
-        const typeName = typeof shaped._type === "string" ? shaped._type : undefined;
-        const member = typeName ? members.find((m) => (m.name ?? m.type) === typeName || m.type === typeName) : members.find((m) => m.type !== "string" && m.type !== "text");
+        const typeName =
+          typeof shaped._type === "string" ? shaped._type : undefined;
+        const member = typeName
+          ? members.find(
+              (m) => (m.name ?? m.type) === typeName || m.type === typeName,
+            )
+          : members.find((m) => m.type !== "string" && m.type !== "text");
         if (!member) {
-          problems.push(`${where}[${i}]: no list member for ${typeName ?? "object"}`);
+          problems.push(
+            `${where}[${i}]: no list member for ${typeName ?? "object"}`,
+          );
           continue;
         }
-        const converted = (await convert(shaped, member, `${where}[${i}]`)) as Json;
+        const converted = (await convert(
+          shaped,
+          member,
+          `${where}[${i}]`,
+        )) as Json;
         // Inline members are typed by their own name; named types set _type themselves.
         const _type = member.type === "object" ? member.name : converted._type;
         out.push({ _key: `k${(keySeq++).toString(36)}`, ...converted, _type });
@@ -156,7 +208,12 @@ async function convert(value: unknown, def: Def, where: string): Promise<unknown
     default:
       if (named) {
         const c = await convert(value, named, where);
-        return c && typeof c === "object" && !Array.isArray(c) && named.type === "object" ? { _type: named.name, ...(c as Json) } : c;
+        return c &&
+          typeof c === "object" &&
+          !Array.isArray(c) &&
+          named.type === "object"
+          ? { _type: named.name, ...(c as Json) }
+          : c;
       }
       problems.push(`${where}: unknown schema type ${def.type}`);
       return undefined;
@@ -165,14 +222,25 @@ async function convert(value: unknown, def: Def, where: string): Promise<unknown
 
 /* ---------- documents ---------- */
 
-type Source = { type: string; base: string; lang: Locale; data: Json; order?: number; slug?: string };
+type Source = {
+  type: string;
+  base: string;
+  lang: Locale;
+  data: Json;
+  order?: number;
+  slug?: string;
+};
 
 function sources(lang: Locale): Source[] {
   const c = CONTENT[lang];
   const out: Source[] = [];
-  const topics = Object.entries(c.ui.topics).map(([key, label]) => ({ key, label }));
+  const topics = Object.entries(c.ui.topics).map(([key, label]) => ({
+    key,
+    label,
+  }));
   // Photos: model { src, alt, focus } → schema { file (image asset), alt }; focus stays in the fallback modules.
-  const photo = (p?: { src: string; alt: string }) => (p ? { file: p.src, alt: p.alt } : undefined);
+  const photo = (p?: { src: string; alt: string }) =>
+    p ? { file: p.src, alt: p.alt } : undefined;
   const person = {
     ...c.person,
     photoPrimary: photo(c.person.photoPrimary),
@@ -196,21 +264,45 @@ function sources(lang: Locale): Source[] {
   out.push({ type: "homepage", base: "homepage", lang, data: c.home });
   const credentials = {
     ...c.about.credentials,
-    items: c.about.credentials.items.map(({ width: _w, height: _h, ...rest }) => rest),
+    items: c.about.credentials.items.map(
+      ({ width: _w, height: _h, ...rest }) => rest,
+    ),
   };
-  out.push({ type: "aboutPage", base: "aboutPage", lang, data: { ...c.about, credentials } });
+  out.push({
+    type: "aboutPage",
+    base: "aboutPage",
+    lang,
+    data: { ...c.about, credentials },
+  });
   const listings: [string, SiteContent["servicesPage"]][] = [
     ["services", c.servicesPage],
     ["caseStudies", c.caseStudiesPage],
     ["blog", c.blogPage],
     ["calculators", c.calculatorsPage],
   ];
-  for (const [key, page] of listings) out.push({ type: "listingPage", base: `listingPage-${key}`, lang, data: { key, ...page } });
+  for (const [key, page] of listings)
+    out.push({
+      type: "listingPage",
+      base: `listingPage-${key}`,
+      lang,
+      data: { key, ...page },
+    });
   out.push({ type: "contactPage", base: "contactPage", lang, data: c.contact });
   out.push({ type: "coursesPage", base: "coursesPage", lang, data: c.courses });
-  out.push({ type: "templatesPage", base: "templatesPage", lang, data: c.templates });
+  out.push({
+    type: "templatesPage",
+    base: "templatesPage",
+    lang,
+    data: c.templates,
+  });
   const { slug: privacySlug, ...privacy } = c.privacy;
-  out.push({ type: "legalPage", base: "legalPage-privacy", lang, data: { key: "privacy", ...privacy }, slug: privacySlug });
+  out.push({
+    type: "legalPage",
+    base: "legalPage-privacy",
+    lang,
+    data: { key: "privacy", ...privacy },
+    slug: privacySlug,
+  });
 
   const collections: [string, { key: string; slug: string }[]][] = [
     ["service", c.services],
@@ -222,7 +314,14 @@ function sources(lang: Locale): Source[] {
   for (const [type, items] of collections) {
     items.forEach((item, i) => {
       const { slug, ...data } = item as Json & { key: string; slug: string };
-      out.push({ type, base: `${type}-${item.key}`, lang, data, order: i, slug });
+      out.push({
+        type,
+        base: `${type}-${item.key}`,
+        lang,
+        data,
+        order: i,
+        slug,
+      });
     });
   }
   return out;
@@ -230,10 +329,23 @@ function sources(lang: Locale): Source[] {
 
 async function toDoc(s: Source): Promise<Doc> {
   const def = TYPES.get(s.type)!;
-  const body = (await convert(s.data, { ...def, type: "object" }, `${s.base}.${s.lang}`)) as Json;
-  const doc: Doc = { _id: `${s.base}.${s.lang}`, _type: s.type, language: s.lang, ...body };
+  const body = (await convert(
+    s.data,
+    { ...def, type: "object" },
+    `${s.base}.${s.lang}`,
+  )) as Json;
+  const doc: Doc = {
+    _id: `${s.base}.${s.lang}`,
+    _type: s.type,
+    language: s.lang,
+    ...body,
+  };
   if (s.order !== undefined) doc.order = s.order;
-  if (s.slug) doc.slug = { _type: "localizedSlug", [s.lang]: { _type: "slug", current: s.slug } };
+  if (s.slug)
+    doc.slug = {
+      _type: "localizedSlug",
+      [s.lang]: { _type: "slug", current: s.slug },
+    };
   return doc;
 }
 
@@ -261,11 +373,19 @@ function metadataDocs(docs: Doc[]): Doc[] {
 }
 
 async function main() {
-  const all = LANGS.flatMap(sources).filter((s) => !ONLY || ONLY.has(s.type));
+  const all = LANGS.flatMap(sources)
+    .filter((s) => !ONLY || ONLY.has(s.type))
+    .filter((s) => !LANGS_ONLY || LANGS_ONLY.has(s.lang))
+    .filter((s) => !KEYS || KEYS.has(s.base.slice(s.base.indexOf("-") + 1)));
   if (ONLY) {
-    const unknown = Array.from(ONLY).filter((t) => !TRANSLATED_TYPES.includes(t));
-    if (unknown.length) throw new Error(`--only: unknown type(s) ${unknown.join(", ")}`);
+    const unknown = Array.from(ONLY).filter(
+      (t) => !TRANSLATED_TYPES.includes(t),
+    );
+    if (unknown.length)
+      throw new Error(`--only: unknown type(s) ${unknown.join(", ")}`);
   }
+  if (!all.length)
+    throw new Error("nothing matched the filters, nothing written");
   const docs: Doc[] = [];
   for (const s of all) docs.push(await toDoc(s));
 
@@ -283,21 +403,34 @@ async function main() {
   const meta = metadataDocs(docs);
   const writes = [...docs, ...meta];
   const counts = new Map<string, number>();
-  for (const d of writes) counts.set(`${d._type}${d.language ? " " + d.language : ""}`, (counts.get(`${d._type}${d.language ? " " + d.language : ""}`) ?? 0) + 1);
+  for (const d of writes)
+    counts.set(
+      `${d._type}${d.language ? " " + d.language : ""}`,
+      (counts.get(`${d._type}${d.language ? " " + d.language : ""}`) ?? 0) + 1,
+    );
   const size = Buffer.byteLength(JSON.stringify(writes));
 
   if (DRY) {
     mkdirSync("backups", { recursive: true });
-    writeFileSync("backups/seed-dry-run.ndjson", writes.map((d) => JSON.stringify(d)).join("\n"));
-    console.log(`DRY RUN (dataset "${dataset}"): ${writes.length} documents, ${(size / 1024).toFixed(0)} KB, ${imageRefs.size} image file(s)`);
+    writeFileSync(
+      "backups/seed-dry-run.ndjson",
+      writes.map((d) => JSON.stringify(d)).join("\n"),
+    );
+    console.log(
+      `DRY RUN (dataset "${dataset}"): ${writes.length} documents, ${(size / 1024).toFixed(0)} KB, ${imageRefs.size} image file(s)`,
+    );
   } else {
     for (let i = 0; i < writes.length; i += BATCH) {
       const tx = writeClient.transaction();
       writes.slice(i, i + BATCH).forEach((d) => tx.createOrReplace(d));
       await tx.commit({ visibility: "async" });
-      process.stdout.write(`\rwritten ${Math.min(i + BATCH, writes.length)}/${writes.length}`);
+      process.stdout.write(
+        `\rwritten ${Math.min(i + BATCH, writes.length)}/${writes.length}`,
+      );
     }
-    console.log(`\nWROTE to dataset "${dataset}": ${writes.length} documents, images uploaded ${uploaded}, reused ${reused}`);
+    console.log(
+      `\nWROTE to dataset "${dataset}": ${writes.length} documents, images uploaded ${uploaded}, reused ${reused}`,
+    );
   }
   Array.from(counts.entries())
     .sort()
