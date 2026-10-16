@@ -27,16 +27,29 @@ const SUBMENU_LABEL: Record<string, (label: string) => string> = {
   pl: (l) => `Otwórz podmenu: ${l}`,
   ru: (l) => `Открыть подменю «${l}»`,
 };
-const submenuLabel = (lang: string, label: string) => (SUBMENU_LABEL[lang] ?? SUBMENU_LABEL.en)(label);
+const submenuLabel = (lang: string, label: string) =>
+  (SUBMENU_LABEL[lang] ?? SUBMENU_LABEL.en)(label);
 
 // React 19: `inert` is a boolean prop (React 18 needed the "" string form).
 const INERT = { inert: true };
 
-/** Path without the locale prefix: "/pl/services" → "/services". */
+/**
+ * Path without the locale prefix: "/pl/services" → "/services".
+ *
+ * `en` is in the list even though English URLs carry no prefix in public: the
+ * i18n middleware rewrites them to `/en/...` internally and `usePathname`
+ * returns the rewritten path, so without stripping it the language switch
+ * builds `/pl/en/...` and nothing that compares paths matches.
+ */
 function stripLocale(pathname: string): string {
-  const m = pathname.match(/^\/(pl|ru)(?=\/|$)/);
+  const m = pathname.match(/^\/(en|pl|ru)(?=\/|$)/);
   const rest = m ? pathname.slice(m[0].length) : pathname;
   return rest || "/";
+}
+
+/** The public path of the current page, whatever the router reports internally. */
+function usePublicPath(lang: string): string {
+  return withPrefix(lang, stripLocale(usePathname() ?? "/"));
 }
 
 /** Public path (no prefix) → URL with prefix. */
@@ -54,8 +67,10 @@ function withLocale(lang: string, path: string): string {
 function useLanguageLinks(lang: string, aliases: LanguageAlias[]) {
   const rest = stripLocale(usePathname() ?? "/");
   return LANGS.filter((l) => l !== lang).map((l) => {
-    const alias = aliases.find((a) => a.paths[lang as keyof LanguageAlias["paths"]] === rest);
-    const target = alias ? alias.paths[l] ?? alias.fallback[l] : rest;
+    const alias = aliases.find(
+      (a) => a.paths[lang as keyof LanguageAlias["paths"]] === rest,
+    );
+    const target = alias ? (alias.paths[l] ?? alias.fallback[l]) : rest;
     return { lang: l, href: withPrefix(l, target) };
   });
 }
@@ -65,8 +80,26 @@ export function BrandMark({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 64 64" aria-hidden="true">
       <rect width="64" height="64" rx="12" fill="#faf8f4" />
-      <rect x="7" y="7" width="47" height="47" rx="3" fill="#fff" stroke="#0f5943" strokeWidth="5" />
-      <rect x="47" y="47" width="13" height="13" rx="2" fill="#0f5943" stroke="#faf8f4" strokeWidth="3" />
+      <rect
+        x="7"
+        y="7"
+        width="47"
+        height="47"
+        rx="3"
+        fill="#fff"
+        stroke="#0f5943"
+        strokeWidth="5"
+      />
+      <rect
+        x="47"
+        y="47"
+        width="13"
+        height="13"
+        rx="2"
+        fill="#0f5943"
+        stroke="#faf8f4"
+        strokeWidth="3"
+      />
       <path
         fill="#0f5943"
         transform="translate(17.782 44) scale(0.03814 -0.03814)"
@@ -76,8 +109,16 @@ export function BrandMark({ className }: { className?: string }) {
   );
 }
 
-export function LangSwitch({ lang, aliases, label }: { lang: string; aliases: LanguageAlias[]; label: string }) {
-  const pathname = usePathname() ?? "/";
+export function LangSwitch({
+  lang,
+  aliases,
+  label,
+}: {
+  lang: string;
+  aliases: LanguageAlias[];
+  label: string;
+}) {
+  const pathname = usePublicPath(lang);
   const links = useLanguageLinks(lang, aliases);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -86,7 +127,8 @@ export function LangSwitch({ lang, aliases, label }: { lang: string; aliases: La
 
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
     };
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     document.addEventListener("mousedown", onDown);
@@ -99,17 +141,41 @@ export function LangSwitch({ lang, aliases, label }: { lang: string; aliases: La
 
   return (
     <div className={s.langs} ref={ref}>
-      <button type="button" className={s.langButton} aria-label={label} aria-haspopup="true" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+      <button
+        type="button"
+        className={s.langButton}
+        aria-label={label}
+        aria-haspopup="true"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+      >
         {lang}
-        <svg className={s.langArrow} width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-          <path d="M2 3.5 5 6.5 8 3.5" fill="none" stroke="currentColor" strokeWidth="1.4" />
+        <svg
+          className={s.langArrow}
+          width="10"
+          height="10"
+          viewBox="0 0 10 10"
+          aria-hidden="true"
+        >
+          <path
+            d="M2 3.5 5 6.5 8 3.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.4"
+          />
         </svg>
       </button>
       {/* The list stays in the server HTML (hidden with CSS) so crawlers see links to the other languages. */}
       <ul className={s.langList} data-open={open}>
         {links.map((l) => (
           <li key={l.lang}>
-            <Link href={l.href} hrefLang={l.lang} lang={l.lang} prefetch={false} onClick={() => setOpen(false)}>
+            <Link
+              href={l.href}
+              hrefLang={l.lang}
+              lang={l.lang}
+              prefetch={false}
+              onClick={() => setOpen(false)}
+            >
               {l.lang}
             </Link>
           </li>
@@ -129,9 +195,31 @@ function isActive(pathname: string, lang: string, href: string) {
  * the chevron is a separate button that opens the panel (hover opens it too).
  * The panel is always in the HTML, so crawlers see every link.
  */
-function NavItemWithSubmenu({ lang, item, active, isOpen, onOpenChange }: { lang: string; item: NavEntry; active: boolean; isOpen: boolean; onOpenChange: (open: boolean) => void }) {
-  const pathname = usePathname() ?? "/";
-  const { rootRef, buttonRef, panelId, clearTimer, onMouseEnter, onMouseLeave, onButtonClick, onKeyDown, onBlur } = useNavDropdown(isOpen, onOpenChange);
+function NavItemWithSubmenu({
+  lang,
+  item,
+  active,
+  isOpen,
+  onOpenChange,
+}: {
+  lang: string;
+  item: NavEntry;
+  active: boolean;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const pathname = usePublicPath(lang);
+  const {
+    rootRef,
+    buttonRef,
+    panelId,
+    clearTimer,
+    onMouseEnter,
+    onMouseLeave,
+    onButtonClick,
+    onKeyDown,
+    onBlur,
+  } = useNavDropdown(isOpen, onOpenChange);
   return (
     <div
       ref={rootRef}
@@ -143,7 +231,10 @@ function NavItemWithSubmenu({ lang, item, active, isOpen, onOpenChange }: { lang
       onKeyDown={onKeyDown}
     >
       <span className={s.navTrigger}>
-        <Link href={withLocale(lang, item.href)} aria-current={active ? "page" : undefined}>
+        <Link
+          href={withLocale(lang, item.href)}
+          aria-current={active ? "page" : undefined}
+        >
           {item.label}
         </Link>
         <button
@@ -155,14 +246,23 @@ function NavItemWithSubmenu({ lang, item, active, isOpen, onOpenChange }: { lang
           aria-label={submenuLabel(lang, item.label)}
           onClick={onButtonClick}
         >
-          <span className={s.chevron} data-open={isOpen || undefined} aria-hidden="true" />
+          <span
+            className={s.chevron}
+            data-open={isOpen || undefined}
+            aria-hidden="true"
+          />
         </button>
       </span>
       <div id={panelId} className={s.submenu} data-open={isOpen || undefined}>
         <ul>
           {item.children!.map((child) => (
             <li key={child.href}>
-              <Link href={child.href} aria-current={pathname === child.href ? "page" : undefined} tabIndex={isOpen ? undefined : -1} onClick={() => onOpenChange(false)}>
+              <Link
+                href={child.href}
+                aria-current={pathname === child.href ? "page" : undefined}
+                tabIndex={isOpen ? undefined : -1}
+                onClick={() => onOpenChange(false)}
+              >
                 {child.label}
               </Link>
             </li>
@@ -174,7 +274,7 @@ function NavItemWithSubmenu({ lang, item, active, isOpen, onOpenChange }: { lang
 }
 
 export function DesktopNav({ lang, nav }: { lang: string; nav: NavEntry[] }) {
-  const pathname = usePathname() ?? "/";
+  const pathname = usePublicPath(lang);
   const [openItem, setOpenItem] = useState<string | null>(null);
 
   useEffect(() => setOpenItem(null), [pathname]);
@@ -189,10 +289,20 @@ export function DesktopNav({ lang, nav }: { lang: string; nav: NavEntry[] }) {
             item={item}
             active={isActive(pathname, lang, item.href)}
             isOpen={openItem === item.href}
-            onOpenChange={(open) => setOpenItem((cur) => (open ? item.href : cur === item.href ? null : cur))}
+            onOpenChange={(open) =>
+              setOpenItem((cur) =>
+                open ? item.href : cur === item.href ? null : cur,
+              )
+            }
           />
         ) : (
-          <Link key={item.href} href={withLocale(lang, item.href)} aria-current={isActive(pathname, lang, item.href) ? "page" : undefined}>
+          <Link
+            key={item.href}
+            href={withLocale(lang, item.href)}
+            aria-current={
+              isActive(pathname, lang, item.href) ? "page" : undefined
+            }
+          >
             {item.label}
           </Link>
         ),
@@ -201,10 +311,16 @@ export function DesktopNav({ lang, nav }: { lang: string; nav: NavEntry[] }) {
   );
 }
 
-export function MobileMenu({ lang, nav, cta, labels, aliases }: Props & { aliases: LanguageAlias[] }) {
+export function MobileMenu({
+  lang,
+  nav,
+  cta,
+  labels,
+  aliases,
+}: Props & { aliases: LanguageAlias[] }) {
   const [open, setOpen] = useState(false);
   const [section, setSection] = useState<string | null>(null);
-  const pathname = usePathname() ?? "/";
+  const pathname = usePublicPath(lang);
   const languages = useLanguageLinks(lang, aliases);
 
   useEffect(() => {
@@ -235,15 +351,32 @@ export function MobileMenu({ lang, nav, cta, labels, aliases }: Props & { aliase
         <span />
         <span />
       </button>
-      <div id="mobile-menu" className={s.mobile} data-lenis-prevent data-open={open} aria-hidden={!open}>
+      <div
+        id="mobile-menu"
+        className={s.mobile}
+        data-lenis-prevent
+        data-open={open}
+        aria-hidden={!open}
+      >
         <nav aria-label="Mobile">
           {nav.map((item) => {
             const link = (
-              <Link href={withLocale(lang, item.href)} aria-current={isActive(pathname, lang, item.href) ? "page" : undefined} tabIndex={open ? 0 : -1}>
+              <Link
+                href={withLocale(lang, item.href)}
+                aria-current={
+                  isActive(pathname, lang, item.href) ? "page" : undefined
+                }
+                tabIndex={open ? 0 : -1}
+              >
                 {item.label}
               </Link>
             );
-            if (!item.children?.length) return <div key={item.href} className={s.mobileItem}>{link}</div>;
+            if (!item.children?.length)
+              return (
+                <div key={item.href} className={s.mobileItem}>
+                  {link}
+                </div>
+              );
             const expanded = section === item.href;
             const panelId = `mobile-sub-${item.href.replace(/\W/g, "")}`;
             return (
@@ -259,14 +392,28 @@ export function MobileMenu({ lang, nav, cta, labels, aliases }: Props & { aliase
                     tabIndex={open ? 0 : -1}
                     onClick={() => setSection(expanded ? null : item.href)}
                   >
-                    <span className={s.chevron} data-open={expanded || undefined} aria-hidden="true" />
+                    <span
+                      className={s.chevron}
+                      data-open={expanded || undefined}
+                      aria-hidden="true"
+                    />
                   </button>
                 </div>
-                <div id={panelId} className={s.mobileSub} data-open={expanded || undefined} {...(expanded && open ? {} : INERT)}>
+                <div
+                  id={panelId}
+                  className={s.mobileSub}
+                  data-open={expanded || undefined}
+                  {...(expanded && open ? {} : INERT)}
+                >
                   <ul>
                     {item.children.map((child) => (
                       <li key={child.href}>
-                        <Link href={child.href} aria-current={pathname === child.href ? "page" : undefined}>
+                        <Link
+                          href={child.href}
+                          aria-current={
+                            pathname === child.href ? "page" : undefined
+                          }
+                        >
                           {child.label}
                         </Link>
                       </li>
@@ -278,15 +425,31 @@ export function MobileMenu({ lang, nav, cta, labels, aliases }: Props & { aliase
           })}
         </nav>
         {/* On phones the language switch lives here instead of the header bar. */}
-        <div className={s.mobileLangs} role="group" aria-label={labels.language}>
+        <div
+          className={s.mobileLangs}
+          role="group"
+          aria-label={labels.language}
+        >
           <span aria-current="true">{lang}</span>
           {languages.map((l) => (
-            <Link key={l.lang} href={l.href} hrefLang={l.lang} lang={l.lang} prefetch={false} tabIndex={open ? 0 : -1}>
+            <Link
+              key={l.lang}
+              href={l.href}
+              hrefLang={l.lang}
+              lang={l.lang}
+              prefetch={false}
+              tabIndex={open ? 0 : -1}
+            >
               {l.lang}
             </Link>
           ))}
         </div>
-        <ConsultationButton href={cta.href} className={`btn btn-block ${s.btn}`} tabIndex={open ? 0 : -1} onOpen={() => setOpen(false)}>
+        <ConsultationButton
+          href={cta.href}
+          className={`btn btn-block ${s.btn}`}
+          tabIndex={open ? 0 : -1}
+          onOpen={() => setOpen(false)}
+        >
           {cta.label}
         </ConsultationButton>
       </div>

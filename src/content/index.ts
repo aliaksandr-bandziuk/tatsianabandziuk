@@ -1,7 +1,21 @@
 import * as React from "react";
 import type { Metadata } from "next";
-import { INDEXING_ALLOWED, NOINDEX_ROBOTS, SITE_NAME, SITE_URL, isLocale } from "@/lib/site";
-import type { CalculatorPage, CaseStudy, Category, Locale, Post, Service, SiteContent } from "./types";
+import {
+  INDEXING_ALLOWED,
+  NOINDEX_ROBOTS,
+  SITE_NAME,
+  SITE_URL,
+  isLocale,
+} from "@/lib/site";
+import type {
+  CalculatorPage,
+  CaseStudy,
+  Category,
+  Locale,
+  Post,
+  Service,
+  SiteContent,
+} from "./types";
 import { en } from "./fallback/en";
 import { pl } from "./fallback/pl";
 import { ru } from "./fallback/ru";
@@ -25,12 +39,14 @@ export const FALLBACK: Record<Locale, SiteContent> = { en, pl, ru };
 
 export const LOCALES: Locale[] = ["en", "pl", "ru"];
 
-const toLocale = (lang: string): Locale => ((lang as Locale) in FALLBACK ? (lang as Locale) : "en");
+const toLocale = (lang: string): Locale =>
+  (lang as Locale) in FALLBACK ? (lang as Locale) : "en";
 
 // React's per-request memo where it exists (Next server rendering), a pass-through elsewhere (scripts).
 type AnyFn = (...args: never[]) => unknown;
 type Memo = <T extends AnyFn>(fn: T) => T;
-const perRequest: Memo = (React as unknown as { cache?: Memo }).cache ?? ((fn) => fn);
+const perRequest: Memo =
+  (React as unknown as { cache?: Memo }).cache ?? ((fn) => fn);
 
 const lastWarning = new Map<string, number>();
 function warn(message: string) {
@@ -47,10 +63,15 @@ const loadContent = perRequest(async (lang: Locale): Promise<SiteContent> => {
       warn(`Sanity has no content for "${lang}", using the fallback modules`);
       return FALLBACK[lang];
     }
-    if (result.missing.length) warn(`Sanity "${lang}" is missing ${result.missing.join(", ")}; using the fallback for them`);
+    if (result.missing.length)
+      warn(
+        `Sanity "${lang}" is missing ${result.missing.join(", ")}; using the fallback for them`,
+      );
     return result.content;
   } catch (err) {
-    warn(`Sanity fetch failed for "${lang}", using the fallback modules: ${err instanceof Error ? err.message : String(err)}`);
+    warn(
+      `Sanity fetch failed for "${lang}", using the fallback modules: ${err instanceof Error ? err.message : String(err)}`,
+    );
     return FALLBACK[lang];
   }
 });
@@ -71,14 +92,21 @@ export function localizeHref(lang: string, href: string): string {
   return lang === "en" ? path || "/" : `/${lang}${path}`;
 }
 
-export const serviceHref = (lang: string, slug: string) => localizeHref(lang, `/services/${slug}`);
-export const caseHref = (lang: string, slug: string) => localizeHref(lang, `/case-studies/${slug}`);
-export const postHref = (lang: string, slug: string) => localizeHref(lang, `/blog/${slug}`);
-export const categoryHref = (lang: string, slug: string) => localizeHref(lang, `/blog/category/${slug}`);
-export const calculatorHref = (lang: string, slug: string) => localizeHref(lang, `/tools/${slug}`);
-export const privacyHref = (c: SiteContent) => localizeHref(c.locale, `/${c.privacy.slug}`);
+export const serviceHref = (lang: string, slug: string) =>
+  localizeHref(lang, `/services/${slug}`);
+export const caseHref = (lang: string, slug: string) =>
+  localizeHref(lang, `/case-studies/${slug}`);
+export const postHref = (lang: string, slug: string) =>
+  localizeHref(lang, `/blog/${slug}`);
+export const categoryHref = (lang: string, slug: string) =>
+  localizeHref(lang, `/blog/category/${slug}`);
+export const calculatorHref = (lang: string, slug: string) =>
+  localizeHref(lang, `/tools/${slug}`);
+export const privacyHref = (c: SiteContent) =>
+  localizeHref(c.locale, `/${c.privacy.slug}`);
 
-export type RoutableKind = "service" | "caseStudy" | "post" | "category" | "calculator";
+export type RoutableKind =
+  "service" | "caseStudy" | "post" | "category" | "calculator";
 
 type Routable = Service | CaseStudy | Post | Category | CalculatorPage;
 
@@ -91,9 +119,15 @@ const LIST: Record<RoutableKind, (c: SiteContent) => Routable[]> = {
 };
 
 /** Path without the locale prefix, and the listing page used when a translation is missing. */
-const PATH: Record<RoutableKind, { path: (slug: string) => string; index: string }> = {
+const PATH: Record<
+  RoutableKind,
+  { path: (slug: string) => string; index: string }
+> = {
   service: { path: (slug) => `/services/${slug}`, index: "/services" },
-  caseStudy: { path: (slug) => `/case-studies/${slug}`, index: "/case-studies" },
+  caseStudy: {
+    path: (slug) => `/case-studies/${slug}`,
+    index: "/case-studies",
+  },
   post: { path: (slug) => `/blog/${slug}`, index: "/blog" },
   category: { path: (slug) => `/blog/category/${slug}`, index: "/blog" },
   calculator: { path: (slug) => `/tools/${slug}`, index: "/tools" },
@@ -106,15 +140,22 @@ const PATH: Record<RoutableKind, { path: (slug: string) => string; index: string
  */
 export const MIN_CATEGORY_POSTS = 3;
 
-export const categoryPostCount = (c: SiteContent, key: string) => c.posts.filter((p) => p.category === key).length;
+export const categoryPostCount = (c: SiteContent, key: string) =>
+  c.posts.filter((p) => p.category === key).length;
 
-export const categoryIsThin = (c: SiteContent, key: string) => categoryPostCount(c, key) < MIN_CATEGORY_POSTS;
+export const categoryIsThin = (c: SiteContent, key: string) =>
+  categoryPostCount(c, key) < MIN_CATEGORY_POSTS;
 
-export const serviceByKey = (c: SiteContent, key?: string) => (key ? c.services.find((x) => x.key === key) : undefined);
-export const caseByKey = (c: SiteContent, key?: string) => (key ? c.caseStudies.find((x) => x.key === key) : undefined);
-export const postByKey = (c: SiteContent, key?: string) => (key ? c.posts.find((x) => x.key === key) : undefined);
-export const calculatorByKind = (c: SiteContent, kind: string) => c.calculators.find((x) => x.kind === kind);
-export const categoryByKey = (c: SiteContent, key?: string) => (key ? c.categories.find((x) => x.key === key) : undefined);
+export const serviceByKey = (c: SiteContent, key?: string) =>
+  key ? c.services.find((x) => x.key === key) : undefined;
+export const caseByKey = (c: SiteContent, key?: string) =>
+  key ? c.caseStudies.find((x) => x.key === key) : undefined;
+export const postByKey = (c: SiteContent, key?: string) =>
+  key ? c.posts.find((x) => x.key === key) : undefined;
+export const calculatorByKind = (c: SiteContent, kind: string) =>
+  c.calculators.find((x) => x.kind === kind);
+export const categoryByKey = (c: SiteContent, key?: string) =>
+  key ? c.categories.find((x) => x.key === key) : undefined;
 
 type RoutableOf<K extends RoutableKind> = K extends "service"
   ? Service
@@ -126,8 +167,13 @@ type RoutableOf<K extends RoutableKind> = K extends "service"
         ? CalculatorPage
         : Category;
 
-export function bySlug<K extends RoutableKind>(kind: K, c: SiteContent, slug: string) {
-  return LIST[kind](c).find((x) => x.slug === slug) as RoutableOf<K> | undefined;
+export function bySlug<K extends RoutableKind>(
+  kind: K,
+  c: SiteContent,
+  slug: string,
+) {
+  return LIST[kind](c).find((x) => x.slug === slug) as
+    RoutableOf<K> | undefined;
 }
 
 /**
@@ -137,7 +183,11 @@ export function bySlug<K extends RoutableKind>(kind: K, c: SiteContent, slug: st
  * slug (/case-studies/<pl slug>). The route answers 308 to the real URL
  * instead of 404, so the signal is kept instead of thrown away.
  */
-export async function crossLanguageHref(kind: RoutableKind, lang: string, slug: string): Promise<string | undefined> {
+export async function crossLanguageHref(
+  kind: RoutableKind,
+  lang: string,
+  slug: string,
+): Promise<string | undefined> {
   const all = await getAllContent();
   for (const l of LOCALES) {
     if (l === lang) continue;
@@ -147,7 +197,11 @@ export async function crossLanguageHref(kind: RoutableKind, lang: string, slug: 
   return undefined;
 }
 
-function pathsFrom(all: Record<Locale, SiteContent>, kind: RoutableKind, key: string): Partial<Record<Locale, string>> {
+function pathsFrom(
+  all: Record<Locale, SiteContent>,
+  kind: RoutableKind,
+  key: string,
+): Partial<Record<Locale, string>> {
   const out: Partial<Record<Locale, string>> = {};
   for (const l of LOCALES) {
     const item = LIST[kind](all[l]).find((x) => x.key === key);
@@ -157,14 +211,19 @@ function pathsFrom(all: Record<Locale, SiteContent>, kind: RoutableKind, key: st
 }
 
 /** Paths (without locale prefix) of every existing language version of an item. */
-export async function alternatePaths(kind: RoutableKind, key: string): Promise<Partial<Record<Locale, string>>> {
+export async function alternatePaths(
+  kind: RoutableKind,
+  key: string,
+): Promise<Partial<Record<Locale, string>>> {
   return pathsFrom(await getAllContent(), kind, key);
 }
 
 /** Static params for a dynamic route: every slug in every language. */
 export async function slugParams(kind: RoutableKind) {
   const all = await getAllContent();
-  return LOCALES.flatMap((lang) => LIST[kind](all[lang]).map((x) => ({ lang, slug: x.slug })));
+  return LOCALES.flatMap((lang) =>
+    LIST[kind](all[lang]).map((x) => ({ lang, slug: x.slug })),
+  );
 }
 
 export type RoutableGroup = {
@@ -179,7 +238,9 @@ export async function routableGroups(): Promise<RoutableGroup[]> {
   const all = await getAllContent();
   const groups: RoutableGroup[] = [];
   for (const kind of Object.keys(LIST) as RoutableKind[]) {
-    const keys = new Set(LOCALES.flatMap((l) => LIST[kind](all[l]).map((x) => x.key)));
+    const keys = new Set(
+      LOCALES.flatMap((l) => LIST[kind](all[l]).map((x) => x.key)),
+    );
     keys.forEach((key) => {
       const updatedAt: Partial<Record<Locale, string>> = {};
       for (const l of LOCALES) {
@@ -198,8 +259,14 @@ export async function routableGroups(): Promise<RoutableGroup[]> {
     });
   }
   groups.push({
-    paths: Object.fromEntries(LOCALES.map((l) => [l, `/${all[l].privacy.slug}`])),
-    updatedAt: Object.fromEntries(LOCALES.flatMap((l) => (all[l].privacy.updatedAt ? [[l, all[l].privacy.updatedAt]] : []))),
+    paths: Object.fromEntries(
+      LOCALES.map((l) => [l, `/${all[l].privacy.slug}`]),
+    ),
+    updatedAt: Object.fromEntries(
+      LOCALES.flatMap((l) =>
+        all[l].privacy.updatedAt ? [[l, all[l].privacy.updatedAt]] : [],
+      ),
+    ),
   });
   return groups;
 }
@@ -218,10 +285,16 @@ export type LanguageAlias = {
 export async function languageAliases(): Promise<LanguageAlias[]> {
   const all = await getAllContent();
   const pub = (l: Locale, p: string) => localizePath(l, p);
-  const everywhere = (p: string) => Object.fromEntries(LOCALES.map((l) => [l, pub(l, p)])) as Record<Locale, string>;
+  const everywhere = (p: string) =>
+    Object.fromEntries(LOCALES.map((l) => [l, pub(l, p)])) as Record<
+      Locale,
+      string
+    >;
   const groups: LanguageAlias[] = [];
   for (const kind of Object.keys(LIST) as RoutableKind[]) {
-    const keys = new Set(LOCALES.flatMap((l) => LIST[kind](all[l]).map((x) => x.key)));
+    const keys = new Set(
+      LOCALES.flatMap((l) => LIST[kind](all[l]).map((x) => x.key)),
+    );
     keys.forEach((key) => {
       const alt = pathsFrom(all, kind, key);
       const paths: Partial<Record<Locale, string>> = {};
@@ -229,8 +302,14 @@ export async function languageAliases(): Promise<LanguageAlias[]> {
       groups.push({ paths, fallback: everywhere(PATH[kind].index) });
     });
   }
-  for (const p of STATIC_PATHS.filter(Boolean)) groups.push({ paths: everywhere(p), fallback: everywhere("/") });
-  groups.push({ paths: Object.fromEntries(LOCALES.map((l) => [l, `/${all[l].privacy.slug}`])), fallback: everywhere("/") });
+  for (const p of STATIC_PATHS.filter(Boolean))
+    groups.push({ paths: everywhere(p), fallback: everywhere("/") });
+  groups.push({
+    paths: Object.fromEntries(
+      LOCALES.map((l) => [l, `/${all[l].privacy.slug}`]),
+    ),
+    fallback: everywhere("/"),
+  });
   return groups;
 }
 
@@ -244,7 +323,10 @@ export async function languageAliases(): Promise<LanguageAlias[]> {
 const OG_CARD = {
   en: { name: SITE_NAME, role: "Retail and Fashion Analytics Consultant" },
   pl: { name: SITE_NAME, role: "Konsultantka analityki retail i fashion" },
-  ru: { name: "Татьяна Бандюк", role: "Консультант по аналитике ритейла и fashion" },
+  ru: {
+    name: "Татьяна Бандюк",
+    role: "Консультант по аналитике ритейла и fashion",
+  },
 } as const;
 
 export function ogImage(lang: string) {
@@ -258,7 +340,17 @@ export function ogImage(lang: string) {
 }
 
 /** Fixed pages that exist in every language (internal paths). */
-export const STATIC_PATHS = ["", "/services", "/case-studies", "/blog", "/about", "/contact", "/courses", "/free-templates", "/tools"];
+export const STATIC_PATHS = [
+  "",
+  "/services",
+  "/case-studies",
+  "/blog",
+  "/about",
+  "/contact",
+  "/courses",
+  "/free-templates",
+  "/tools",
+];
 
 /**
  * Metadata with canonical and hreflang. `pathFor(lang)` returns the path
@@ -282,7 +374,11 @@ export function pageMetadata(
     title: opts.absoluteTitle ? { absolute: seo.title } : seo.title,
     description: seo.description,
     alternates: { canonical, languages },
-    robots: !INDEXING_ALLOWED ? NOINDEX_ROBOTS : seo.noindex ? { index: false, follow: true } : undefined,
+    robots: !INDEXING_ALLOWED
+      ? NOINDEX_ROBOTS
+      : seo.noindex
+        ? { index: false, follow: true }
+        : undefined,
     openGraph: {
       title: seo.title,
       description: seo.description,
@@ -292,7 +388,12 @@ export function pageMetadata(
       type: opts.type ?? "website",
       images: [ogImage(lang)],
     },
-    twitter: { card: "summary_large_image", title: seo.title, description: seo.description, images: [ogImage(lang).url] },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.title,
+      description: seo.description,
+      images: [ogImage(lang).url],
+    },
   };
 }
 
@@ -308,16 +409,32 @@ export async function itemMetadata(
 }
 
 /** Newest articles, finished ones first (stand-ins only fill the remaining slots). */
-export function latestPosts(c: SiteContent, count: number, exceptKey?: string): Post[] {
+export function latestPosts(
+  c: SiteContent,
+  count: number,
+  exceptKey?: string,
+): Post[] {
   return c.posts
     .filter((p) => p.key !== exceptKey)
-    .sort((a, b) => Number(!!a.placeholder) - Number(!!b.placeholder) || b.date.localeCompare(a.date))
+    .sort(
+      (a, b) =>
+        Number(!!a.placeholder) - Number(!!b.placeholder) ||
+        b.date.localeCompare(a.date),
+    )
     .slice(0, count);
 }
 
 export const localeParams = () => LOCALES.map((lang) => ({ lang }));
 
-export function dateLabel(lang: string, iso: string, style: "short" | "long" = "short"): string {
+export function dateLabel(
+  lang: string,
+  iso: string,
+  style: "short" | "long" = "short",
+): string {
   const locale = { en: "en-GB", pl: "pl-PL", ru: "ru-RU" }[lang] ?? "en-GB";
-  return new Intl.DateTimeFormat(locale, { month: style === "short" ? "short" : "long", year: "numeric" }).format(new Date(iso));
+  const opts: Intl.DateTimeFormatOptions =
+    style === "long"
+      ? { day: "numeric", month: "long", year: "numeric" }
+      : { day: "numeric", month: "short", year: "numeric" };
+  return new Intl.DateTimeFormat(locale, opts).format(new Date(iso));
 }
