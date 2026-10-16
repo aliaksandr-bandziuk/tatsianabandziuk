@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 962 324" width="962" height="324" role="img" aria-label="Five stores over thirteen weeks, last year beside this year. A week counts as like-for-like only where the store traded in both years. Store A counts in all thirteen weeks. Store B, opened this year, counts in none. Store C, opened last year in week 7, counts from week 7. Store D, closed from week 10, counts in weeks 1 to 9. Store E, shut for a refit in weeks 5 to 7, counts in every week except those three.">
+<rect width="962" height="324" fill="#faf8f4"/>
+<text x="36" y="36" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="19" font-weight="600" fill="#17181c">Which store-weeks are like-for-like</text>
+<text x="36" y="58" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#4f5a53">A week counts only where the store traded in both years. The outline marks those weeks on both sides.</text>
+<text x="266.0" y="82" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6b63" letter-spacing="0.1em">LAST YEAR</text>
+<text x="276.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">1</text>
+<text x="300.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">2</text>
+<text x="324.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">3</text>
+<text x="348.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">4</text>
+<text x="372.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">5</text>
+<text x="396.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">6</text>
+<text x="420.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">7</text>
+<text x="444.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">8</text>
+<text x="468.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">9</text>
+<text x="492.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">10</text>
+<text x="516.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">11</text>
+<text x="540.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">12</text>
+<text x="564.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">13</text>
+<text x="615.0" y="82" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5f6b63" letter-spacing="0.1em">THIS YEAR</text>
+<text x="625.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">1</text>
+<text x="649.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">2</text>
+<text x="673.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">3</text>
+<text x="697.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">4</text>
+<text x="721.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">5</text>
+<text x="745.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">6</text>
+<text x="769.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">7</text>
+<text x="793.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">8</text>
+<text x="817.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">9</text>
+<text x="841.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">10</text>
+<text x="865.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">11</text>
+<text x="889.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">12</text>
+<text x="913.5" y="100" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#5f6b63">13</text>
+<text x="36" y="125.0" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#17181c">Store A</text>
+<text x="104" y="125.0" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#4f5a53">open throughout</text>
+<rect x="266.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="290.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="314.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="338.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="362.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="386.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="410.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="434.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="458.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="482.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="506.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="530.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="554.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="615.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="639.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="663.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="687.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="711.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="735.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="759.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="783.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="807.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="831.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="855.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="879.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="903.0" y="108.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<text x="36" y="155.0" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#17181c">Store B</text>
+<text x="104" y="155.0" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#4f5a53">opened this year, w5</text>
+<rect x="266.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="290.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="314.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="338.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="362.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="386.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="410.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="434.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="458.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="482.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="506.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="530.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="554.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="615.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="639.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="663.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="687.0" y="138.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="711.0" y="138.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="735.0" y="138.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="759.0" y="138.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="783.0" y="138.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="807.0" y="138.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="831.0" y="138.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="855.0" y="138.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="879.0" y="138.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="903.0" y="138.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<text x="36" y="185.0" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#17181c">Store C</text>
+<text x="104" y="185.0" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#4f5a53">opened last year, w7</text>
+<rect x="266.0" y="168.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="290.0" y="168.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="314.0" y="168.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="338.0" y="168.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="362.0" y="168.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="386.0" y="168.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="410.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="434.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="458.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="482.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="506.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="530.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="554.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="615.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="639.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="663.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="687.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="711.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="735.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="759.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="783.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="807.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="831.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="855.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="879.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="903.0" y="168.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<text x="36" y="215.0" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#17181c">Store D</text>
+<text x="104" y="215.0" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#4f5a53">closed from w10</text>
+<rect x="266.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="290.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="314.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="338.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="362.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="386.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="410.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="434.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="458.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="482.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="506.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="530.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="554.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="615.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="639.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="663.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="687.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="711.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="735.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="759.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="783.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="807.0" y="198.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="831.0" y="198.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="855.0" y="198.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="879.0" y="198.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="903.0" y="198.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<text x="36" y="245.0" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#17181c">Store E</text>
+<text x="104" y="245.0" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#4f5a53">refit, shut w5-w7</text>
+<rect x="266.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="290.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="314.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="338.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="362.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="386.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="410.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="434.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="458.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="482.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="506.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="530.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="554.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="615.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="639.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="663.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="687.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="711.0" y="228.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="735.0" y="228.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="759.0" y="228.0" width="21" height="22" rx="4" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<rect x="783.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="807.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="831.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="855.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="879.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<rect x="903.0" y="228.0" width="21" height="22" rx="4" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<text x="36" y="290" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#5f6b63">39 of 65 store-weeks are comparable. Store B contributes nothing: it has no last year to compare with.</text>
+<rect x="36" y="302" width="16" height="16" rx="3" fill="#d3e4d9" stroke="#ded9cf" stroke-width="1"/>
+<text x="59" y="315" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#4f5a53">traded</text>
+<rect x="129" y="302" width="16" height="16" rx="3" fill="#f1efe9" stroke="#ded9cf" stroke-width="1"/>
+<text x="152" y="315" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#4f5a53">not trading</text>
+<rect x="256" y="302" width="16" height="16" rx="3" fill="#d3e4d9" stroke="#17957a" stroke-width="1.5"/>
+<text x="279" y="315" font-family="Inter Tight, Inter, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#4f5a53">counts as like-for-like</text>
+</svg>
