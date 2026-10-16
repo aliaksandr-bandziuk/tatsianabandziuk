@@ -65,7 +65,7 @@ export const post: Post = {
       src: "/images/blog/retail-calendar-454.svg",
       alt: "The 52 weeks of a retail year in four rows, one per quarter. Each quarter holds thirteen weeks split into months of four, five and four, so the five-week month always falls in the middle. A 53rd week is shown with a dashed outline after week 52.",
       width: 960,
-      height: 478,
+      height: 494,
       caption:
         "One retail year. The five-week month sits in the middle of every quarter.",
     },
