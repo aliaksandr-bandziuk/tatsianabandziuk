@@ -47,9 +47,15 @@ function stripLocale(pathname: string): string {
   return rest || "/";
 }
 
-/** The public path of the current page, whatever the router reports internally. */
+/**
+ * The public path of the current page, whatever the router reports internally.
+ *
+ * `usePathname` returns the internal route ("/case-studies"), not the localised
+ * URL the visitor sees ("/pl/case-study"), so the segment has to be translated
+ * back before anything is compared against a public href.
+ */
 function usePublicPath(lang: string): string {
-  return withPrefix(lang, stripLocale(usePathname() ?? "/"));
+  return withLocale(lang, stripLocale(usePathname() ?? "/"));
 }
 
 /** Public path (no prefix) → URL with prefix. */
@@ -65,12 +71,20 @@ function withLocale(lang: string, path: string): string {
 
 /** Links to the same page in the other languages (translated slugs through the aliases). */
 function useLanguageLinks(lang: string, aliases: LanguageAlias[]) {
-  const rest = stripLocale(usePathname() ?? "/");
+  // The aliases are keyed by the public path, so the internal one is localised
+  // into the current language before the lookup. A page that is not in the alias
+  // list at all is localised into the target language directly - without that
+  // step the link carries the internal segment and only arrives because a 308
+  // redirect catches it.
+  const internal = stripLocale(usePathname() ?? "/");
+  const here = localizePath(lang, internal);
   return LANGS.filter((l) => l !== lang).map((l) => {
     const alias = aliases.find(
-      (a) => a.paths[lang as keyof LanguageAlias["paths"]] === rest,
+      (a) => a.paths[lang as keyof LanguageAlias["paths"]] === here,
     );
-    const target = alias ? (alias.paths[l] ?? alias.fallback[l]) : rest;
+    const target = alias
+      ? (alias.paths[l] ?? alias.fallback[l])
+      : localizePath(l, internal);
     return { lang: l, href: withPrefix(l, target) };
   });
 }
