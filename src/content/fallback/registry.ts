@@ -236,6 +236,13 @@ export const POSTS: PostPlan[] = [
     },
   },
   {
+    key: "retail-star-schema",
+    category: "power-bi",
+    serviceKey: "power-bi-dashboards",
+    cover: "swatches",
+    slugs: { en: "retail-star-schema-power-bi" },
+  },
+  {
     key: "like-for-like-dax",
     category: "power-bi",
     serviceKey: "power-bi-dashboards",
